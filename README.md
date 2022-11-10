@@ -27,7 +27,7 @@
 
 ### BE
 
-- NestJS
+- NestJS #E0234E
 - TypeORM
 - Jest
 
