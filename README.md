@@ -15,7 +15,7 @@
 # Team 요구르트
 |J083_박세현|J101_서혜민|J153_이재권|J194_조진우|
 |---|---|---|---|
-|1|1|![62196278](https://user-images.githubusercontent.com/62196278/200988892-86c0d6bf-4daa-46b7-a429-1d857b1003d8.jpg)
+|1|![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/250c468b-d1c9-4c02-906b-8bc0ef948e56/Untitled.png)|![62196278](https://user-images.githubusercontent.com/62196278/200988892-86c0d6bf-4daa-46b7-a429-1d857b1003d8.jpg)
 |https://ca.slack-edge.com/T01FZU4LB4Y-U039K9G8HCG-5c29cc31e001-512|
 |대답!|외않되?!|어?!|코딩!|
 
