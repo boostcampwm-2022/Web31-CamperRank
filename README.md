@@ -4,6 +4,8 @@
 <br/><br/>개발 기간: 2022.11.07 ~ 2022.12.16
 > 
 
+<br/>
+
 # ✨프로젝트 소개
 
 코딩테스트 연습/학습 플랫폼 CamperRank 입니다!
@@ -12,14 +14,19 @@
 
 라이브 코딩을 연습해 볼 수 있습니다!
 
+<br/>
+
 # 🥛Team 요구르트
 |J083_박세현|J101_서혜민|J153_이재권|J194_조진우|
 |---|---|---|---|
-|<img src="https://user-images.githubusercontent.com/46220202/200989306-054bb7c9-ff16-4258-a146-ce1cd6baac12.PNG" width="240">|<img src="https://user-images.githubusercontent.com/75344562/200989394-68ff559e-ce85-46b7-ae8c-4d9ea0d6e5f6.png" width="240">|<img src="https://user-images.githubusercontent.com/62196278/200988892-86c0d6bf-4daa-46b7-a429-1d857b1003d8.jpg" width="240">|<img src="https://user-images.githubusercontent.com/56079377/200989077-7aacef03-2b3a-4b56-b0b3-866ee07f0e79.jpg" width="240">
+|<img src="https://user-images.githubusercontent.com/46220202/200989306-054bb7c9-ff16-4258-a146-ce1cd6baac12.PNG" width="180">|<img src="https://user-images.githubusercontent.com/75344562/200989394-68ff559e-ce85-46b7-ae8c-4d9ea0d6e5f6.png" width="180">|<img src="https://user-images.githubusercontent.com/62196278/200988892-86c0d6bf-4daa-46b7-a429-1d857b1003d8.jpg" width="180">|<img src="https://user-images.githubusercontent.com/56079377/200989077-7aacef03-2b3a-4b56-b0b3-866ee07f0e79.jpg" width="180">
 |대답!|외않되?!|어?!|코딩!|
 
+<br/>
 
 # ⚒️개발환경 및 라이브러리
+
+<br/>
 
 <div align="center">
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white"/>
@@ -38,6 +45,8 @@
   <img src="https://img.shields.io/badge/NCloud-03C75A?style=flat-square&logo=Naver&logoColor=white">
 </div>
 
+<br/>
+<br/>
 
 # 🎯프로젝트 주요 기능
 
