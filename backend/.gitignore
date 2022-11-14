@@ -394,5 +394,5 @@ Temporary Items
 
 =======
 # Local
-src/config/env/.database.env
+src/.env
 dist
