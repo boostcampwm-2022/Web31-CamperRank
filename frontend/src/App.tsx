@@ -1,13 +1,12 @@
 import {Route, Routes} from "react-router-dom";
 import {MainPage} from "./pages/MainPage";
+import { Home } from "./pages";
 
-function App() {
+const App = () => {
     return (
-        <div className="App">
             <Routes>
-                <Route path="/" element={<MainPage/>}/>
+                <Route path="/" element={<Home/>}/>
             </Routes>
-        </div>
     )
 }
 

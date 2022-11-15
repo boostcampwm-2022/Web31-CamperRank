@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const MainHeaderContainer = styled.div`
   box-sizing: border-box;
-  width: 100vw;
+  width: 100%;
   padding: 0 96px;
   height: 120px;
   display: flex;
@@ -36,21 +36,21 @@ export const AnchorLogo = styled.a`
 `;
 
 export const GreenMark = styled.mark`
-  color: #1F7A41;
+  color: #1f7a41;
   background: none;
 `;
 
 export const MenuContainer = styled.div`
   margin-bottom: 64px;
-  button{
+  button {
     cursor: pointer;
-    font-family: Noto Sans KR,serif;
+    font-family: Noto Sans KR, serif;
     font-weight: 500;
     font-size: 12px;
     border: none;
     background: none;
-    &:nth-child(1){
+    &:nth-child(1) {
       border-right: solid 1px silver;
-    };
+    }
   }
 `;
