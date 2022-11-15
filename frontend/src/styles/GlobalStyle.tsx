@@ -1,4 +1,4 @@
-import {createGlobalStyle} from "styled-components";
+import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
   
@@ -7,5 +7,6 @@ export const GlobalStyle = createGlobalStyle`
     font-family: Noto Sans KR,serif;
     list-style: none;
     color: #000000;
+    box-sizing: border-box;
   }
 `;

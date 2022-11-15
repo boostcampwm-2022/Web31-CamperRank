@@ -11,25 +11,23 @@ const ListWrapper = styled.div`
 `;
 
 const ListTitle = styled.div`
-  box-sizing: border-box;
-  font-weight: 400;
-  font-size: 32px;
+  font-weight: 500;
+  font-size: 42px;
   line-height: 46px;
   text-align: center;
   position: absolute;
-  left: 96px;
-  top: 128px;
+  left: 88px;
+  top: 112px;
 `;
 
 const ProblemListWrapper = styled.div`
-  box-sizing: border-box;
   position: absolute;
-  top: 243px;
+  top: 240px;
   display: grid;
   grid-template-columns: 880px 880px;
   grid-template-rows: 240px 240px 240px;
   column-gap: 80px;
-  row-gap: 37px;
+  row-gap: 48px;
 `;
 
 const problem = {
