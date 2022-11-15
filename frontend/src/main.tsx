@@ -4,7 +4,7 @@ import App from './App'
 
 import {BrowserRouter} from "react-router-dom";
 import {RecoilRoot} from 'recoil';
-import {GlobalStyle} from "@src/styles/GlobalStyle";
+import {GlobalStyle} from "./styles/GlobalStyle";
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
