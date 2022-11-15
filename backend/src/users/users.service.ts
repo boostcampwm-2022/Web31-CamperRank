@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersRepository } from './users.repository';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
@@ -22,9 +22,19 @@ export class UsersService {
       const savedUser = await this.usersRepository.saveUser(user);
       //TODO: 반환 값에 대한 정의가 되어있지 않아서 임시방편으로 로그를 찍고 그대로 반환한다.
       console.log(savedUser);
-      return savedUser;
+      return { result: true, msg: '존재하는 아이디' };
     } catch (e) {
-      return JSON.stringify({ msg: '이미 존재하는 아이디' });
+      return { result: false, msg: '존재하지 않는 아이디' };
+    }
+  }
+
+  async findUserByLoginId(loginId: string) {
+    try {
+      return await this.usersRepository.findOneBy({
+        loginId: loginId,
+      });
+    } catch (e) {
+      console.error(e);
     }
   }
 
