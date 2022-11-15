@@ -1,4 +1,4 @@
-import {ButtonContainer, FooterContainer, KeyPhrase, MainText} from "../styles/Footer";
+import {ButtonContainer, FooterContainer, KeyPhrase, MainText} from "../styles/Footer.style";
 
 export const Footer = () => {
   return (

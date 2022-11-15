@@ -4,13 +4,13 @@ export const MainHeaderContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
   padding: 0 96px;
-  height: 120px;
+  height: 160px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   nav {
-    margin-right: 128px;
+    margin-right: 172px;
     ul {
       justify-content: space-between;
       align-items: center;
@@ -33,6 +33,7 @@ export const MainHeaderContainer = styled.div`
 export const AnchorLogo = styled.a`
   font-weight: 700;
   font-size: 32px;
+  cursor: pointer;
 `;
 
 export const GreenMark = styled.mark`
@@ -41,7 +42,7 @@ export const GreenMark = styled.mark`
 `;
 
 export const MenuContainer = styled.div`
-  margin-bottom: 64px;
+  margin-bottom: 112px;
   button {
     cursor: pointer;
     font-family: Noto Sans KR, serif;

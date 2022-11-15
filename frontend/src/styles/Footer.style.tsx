@@ -1,10 +1,16 @@
 import styled from "styled-components";
 
 export const FooterContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  width: 100vw;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 96px;
+  padding-bottom: 96px;
 `;
 
 export const KeyPhrase = styled.p`
@@ -13,13 +19,9 @@ export const KeyPhrase = styled.p`
   font-size: 32px;
   text-align: center;
   color: #0A142F;
-  margin-top: 32px;
-  margin-bottom: 32px;
 `;
 
 export const MainText = styled.p`
-  margin-top: 32px;
-  margin-bottom: 32px;
   width: 100%;
   font-weight: 500;
   font-size: 16px;
@@ -28,8 +30,6 @@ export const MainText = styled.p`
 `;
 
 export const ButtonContainer = styled.div`
-  margin-top: 32px;
-  margin-bottom: 32px;
   width: 100%;
   display: flex;
   justify-content: center;

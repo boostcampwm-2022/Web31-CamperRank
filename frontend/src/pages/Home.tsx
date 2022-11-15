@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { Banner, List } from "../components/Home";
-import { MainHeader } from "../components/MainHeader";
+import {Banner, List} from "../components/Home";
+import {MainHeader} from "../components/MainHeader";
+import {Footer} from "../components/Footer";
 
 const MainWrapper = styled.div`
   width: 1920px;
@@ -52,7 +53,9 @@ const Main = () => {
       <ListWrapper>
         <List></List>
       </ListWrapper>
-      <FooterWrapper>footer</FooterWrapper>
+      <FooterWrapper>
+        <Footer/>
+      </FooterWrapper>
     </MainWrapper>
   );
 };
