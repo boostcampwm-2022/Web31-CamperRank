@@ -1,11 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProblemDto } from './dto/create-problem.dto';
 import { UpdateProblemDto } from './dto/update-problem.dto';
+import { Problem } from './entities/problem.entity';
+import { ProblemRepository } from './problem.repository';
 
 @Injectable()
 export class ProblemService {
-  create(createProblemDto: CreateProblemDto) {
-    return 'This action adds a new problem';
+  constructor(private problemRepository: ProblemRepository) {}
+
+  async create(createProblemDto: CreateProblemDto) {
+    try {
+      const problem = Problem.createProblem({
+        title: createProblemDto.title,
+        description: createProblemDto.description,
+        inputFormat: createProblemDto.inputFormat,
+        constraints: createProblemDto.constraints,
+        sampleInput: createProblemDto.sampleInput,
+        sampleOutput: createProblemDto.sampleOutput,
+        sampleExplanation: createProblemDto.sampleExplanation,
+      });
+      const savedProblem = await this.problemRepository.saveProblem(problem);
+      return { result: true, problem: savedProblem };
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   findAll() {
