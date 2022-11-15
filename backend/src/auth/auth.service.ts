@@ -19,13 +19,13 @@ export class AuthService {
       const payload = { loginId };
       const accesstoken = await this.jwtService.sign(payload);
 
-      return JSON.stringify({
+      return {
         userId: loginId,
         accesstoken,
         msg: '로그인 성공',
-      });
+      };
     } else {
-      return JSON.stringify({ msg: '로그인 실패' });
+      return { msg: '로그인 실패' };
     }
   }
 }
