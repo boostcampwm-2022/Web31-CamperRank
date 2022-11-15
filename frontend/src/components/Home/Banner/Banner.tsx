@@ -9,11 +9,9 @@ type BannerType = {
 };
 
 const BannerContainer = styled.div<BannerType>`
-  box-sizing: border-box;
   width: ${1920 * 3}px;
   height: 100%;
   display: flex;
-  border: 2px solid blue;
   ${(props) =>
     css`
       transform: translate(${props.page * -1920}px, 0);

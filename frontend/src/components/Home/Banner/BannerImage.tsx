@@ -6,7 +6,6 @@ type BannerImageType = {
 };
 
 const SliderImage = styled.img`
-  box-sizing: border-box;
   height: 350px;
   width: 508px;
   right: 282px;

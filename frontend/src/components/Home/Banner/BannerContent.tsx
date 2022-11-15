@@ -8,7 +8,6 @@ type BannerWrapperProp = {
 };
 
 const BannerWrapper = styled.div<BannerWrapperProp>`
-  box-sizing: border-box;
   width: 100%;
   height: 100%;
   display: flex;

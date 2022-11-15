@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { ProblemType } from "@types";
 
 const ProblemWrapper = styled.div`
-  box-sizing: border-box;
   border: 3px solid #888888;
   border-radius: 16px;
   position: relative;
@@ -11,7 +10,6 @@ const ProblemWrapper = styled.div`
 `;
 
 const Level = styled.div`
-  box-sizing: border-box;
   position: absolute;
   width: 132px;
   height: 48px;
@@ -20,7 +18,7 @@ const Level = styled.div`
   border: 2px solid #33c363;
   border-radius: 8px;
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 24px;
   line-height: 35px;
 `;
@@ -31,7 +29,7 @@ const Name = styled.div`
   height: 48px;
   left: 32px;
   top: 96px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 32px;
   line-height: 46px;
   text-align: center;
@@ -42,18 +40,17 @@ const Description = styled.div`
   width: 466px;
   height: 24px;
   left: 32px;
-  bottom: 48px;
+  bottom: 32px;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 20px;
   line-height: 23px;
 `;
 
 const Button = styled.button`
-  box-sizing: border-box;
   position: absolute;
   width: 176px;
   height: 60px;
-  right: 64px;
+  right: 48px;
   bottom: 32px;
   border: 1px solid #888888;
   border-radius: 8px;

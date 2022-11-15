@@ -21,14 +21,12 @@ const SliderController = styled.img`
 `;
 
 const SliderPage = styled.div`
-  height: 25px;
-  width: 72px;
+  height: 29px;
+  width: 112px;
   text-align: center;
   color: #0b6113;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 20px;
-  line-height: 24px;
-  padding: 0 28px;
 `;
 
 const BannerController = ({ pageNum, onClickButton }: BannerControllerType) => {
