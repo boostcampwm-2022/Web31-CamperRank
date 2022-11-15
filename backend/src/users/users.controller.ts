@@ -17,6 +17,7 @@ export class UsersController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
+    //TODO: 입력받은 loginId와 password가 규격을 따르는지 검증한다.
     return this.usersService.create(createUserDto);
   }
 
