@@ -16,14 +16,14 @@ export const MainHeaderContainer = styled.div`
       align-items: center;
 
       li {
-        float: left;
+        display: inline;
         margin-left: 96px;
 
         a {
           text-decoration: none;
           font-weight: 600;
           font-size: 24px;
-          color: black;
+          color: #000000;
         }
       }
     }
