@@ -7,6 +7,8 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
+  // UsersRepository를 재작성하거나 재사용하려는 부분이 많을 것 같아서 만들었다.
+  // 만역에 굳이 repository 단에서 재사용할 메서드를 만들지 않아도 된다면 InjectRepository 를 사용하는 것이 더 좋을 것 같다.
   constructor(private usersRepository: UsersRepository) {}
 
   async create(createUserDto: CreateUserDto) {
