@@ -6,14 +6,31 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthUserDto } from './dto/auth-user.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Post('/signin')
+  signIn(@Body() authUserDto: AuthUserDto) {
+    return this.usersService.login(authUserDto);
+  }
+
+  // jwt 인증을 위한 useGuards + AuthGuard .. passport 활용
+  // 토큰이 없거나 일치하지 않으면 401
+  @Post('/authTest')
+  @UseGuards(AuthGuard())
+  authTest(@Req() req) {
+    console.log(req);
+  }
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
