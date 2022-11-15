@@ -25,4 +25,12 @@ export class User {
 
   @UpdateDateColumn({ name: 'update_at', comment: '수정일' })
   updatedAt: Date;
+
+  public static createUser({ loginId, password, userStatus }) {
+    const user = new User();
+    user.loginId = loginId;
+    user.password = password;
+    user.userStatus = userStatus;
+    return user;
+  }
 }
