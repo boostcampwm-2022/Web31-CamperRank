@@ -3,13 +3,14 @@ import styled from "styled-components";
 import Problem from "./Problem";
 import PageController from "./PageController";
 import { ProblemInfo } from "@types";
+import SearchBox from "./SearchBox";
 
 type ListType = {
   list: ProblemInfo[];
 };
 
 const ListWrapper = styled.div`
-  width: 70%;
+  width: 75%;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -17,6 +18,13 @@ const ListWrapper = styled.div`
   gap: 40px;
   height: 100%;
   position: relative;
+`;
+
+const SubWrapper = styled.div`
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 `;
 
 const List = ({ list }: ListType) => {
@@ -33,14 +41,19 @@ const List = ({ list }: ListType) => {
     });
   }, [list]);
   return (
-    <ListWrapper>
-      {pagedList.length <= 7 &&
-        pagedList.map((elem, idx) => <Problem key={idx} problem={elem} />)}
-      <PageController
-        page={page}
-        onClickPage={(now: number) => setPage({ ...page, now })}
-      ></PageController>
-    </ListWrapper>
+    <>
+      <ListWrapper>
+        {pagedList.length <= 7 &&
+          pagedList.map((elem, idx) => <Problem key={idx} problem={elem} />)}
+        <PageController
+          page={page}
+          onClickPage={(now: number) => setPage({ ...page, now })}
+        ></PageController>
+      </ListWrapper>
+      <SubWrapper>
+        <SearchBox></SearchBox>
+      </SubWrapper>
+    </>
   );
 };
 

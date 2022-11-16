@@ -5,7 +5,7 @@ import { ProblemType } from "@types";
 const ProblemWrapper = styled.div`
   width: 100%;
   height: 136px;
-  border: 1px solid #888888;
+  border: 2px solid #888888;
   border-radius: 8px;
   background: #fff;
   position: relative;
@@ -43,13 +43,14 @@ const Button = styled.button`
   outline: none;
   width: 144px;
   height: 48px;
-  border: 1px solid #32c766;
+  border: 2px solid #32c766;
   border-radius: 8px;
   background: #fff;
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
   text-align: center;
+  box-shadow: 0.5px 0.5px 0.5px 0.5px #75efa2;
 `;
 
 const Problem = ({ problem }: ProblemType) => {
