@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseTimeEntity } from '../../commons/entities/baseTime.entity';
+import { Solved } from '../../solved/entities/solved.entity';
 
 @Entity()
 export class User extends BaseTimeEntity {
@@ -14,6 +15,8 @@ export class User extends BaseTimeEntity {
 
   @Column({ name: 'user_status' })
   userStatus: number;
+
+  solvedList: Solved[];
 
   public static createUser({ loginId, password, userStatus }) {
     const user = new User();
