@@ -25,14 +25,17 @@ export class ProblemController {
     return this.problemService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.problemService.findOne(+id);
+  @Get(':problemId')
+  findOne(@Param('problemId') problemId: string) {
+    return this.problemService.findProblem(+problemId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProblemDto: UpdateProblemDto) {
-    return this.problemService.update(+id, updateProblemDto);
+  @Patch(':problemId')
+  update(
+    @Param('problemId') problemId: string,
+    @Body() updateProblemDto: UpdateProblemDto,
+  ) {
+    return this.problemService.update(+problemId, updateProblemDto);
   }
 
   @Delete(':id')

@@ -1,9 +1,5 @@
 export class CreateProblemDto {
   title: string;
+  level: number;
   description: string;
-  inputFormat: string;
-  constraints: string;
-  sampleInput: string;
-  sampleOutput: string;
-  sampleExplanation: string;
 }
