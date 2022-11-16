@@ -11,7 +11,6 @@ const FiltersWrapper = styled.div`
   height: 256px;
   position: relative;
   background: #e5ebdf;
-  border: 2px solid white;
 `;
 
 const FilterTitle = styled.div`
@@ -61,7 +60,7 @@ const SearchFilter = () => {
           <Filter key={idx} content={elem}></Filter>
         ))}
         <Search></Search>
-        <Button onClick={handleButtonClick}>검색초기화</Button>
+        <Button onClick={handleButtonClick}>검색 초기화</Button>
       </FilterContent>
     </FiltersWrapper>
   );

@@ -11,5 +11,6 @@ export const filterState = atom<Filter>({
   default: {
     solved: "푼 상태",
     level: "문제 레벨",
+    search: "",
   },
 });

@@ -34,6 +34,7 @@ const SearchButton = styled.button`
   font-size: 20px;
   height: 48px;
   cursor: pointer;
+  width: 72px;
 `;
 
 const Search = () => {

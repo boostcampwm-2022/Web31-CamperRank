@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { ProblemType } from "@types";
 
 const ProblemWrapper = styled.div`
   width: 100%;
@@ -51,11 +52,11 @@ const Button = styled.button`
   text-align: center;
 `;
 
-const Problem = () => {
+const Problem = ({ problem }: ProblemType) => {
   return (
     <ProblemWrapper>
-      <Title>A + B = ?</Title>
-      <Description>Lv1, Python, Javascript, Success Rate: 95.12%</Description>
+      <Title>{problem.title}</Title>
+      <Description>{problem.description}</Description>
       <ButtonWrapper>
         <Button>혼자 풀기</Button>
         <Button>같이 풀기</Button>

@@ -1,6 +1,6 @@
 declare module "@types" {
   interface ProblemInfo {
-    level: number;
+    level?: number;
     title: string;
     description: string;
   }
