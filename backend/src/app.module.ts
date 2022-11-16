@@ -7,6 +7,7 @@ import { ProblemModule } from './problem/problem.module';
 import { typeormConfig } from './config/typeorm.config';
 import { TestCaseModule } from './test-case/test-case.module';
 import { SolvedModule } from './solved/solved.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SolvedModule } from './solved/solved.module';
     ProblemModule,
     TestCaseModule,
     SolvedModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
