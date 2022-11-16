@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { FilterButton } from "../../assets/icons";
 import Filter from "./Filter";
-import FiltersInfo from "../../utils/FiltersInfo";
+import FiltersInfo from "../../../utils/FiltersInfo";
 
 const FiltersWrapper = styled.div`
   width: 100%;
   height: 256px;
   position: relative;
-  background: #f8faf5;
+  background: #e5ebdf;
   border: 2px solid white;
 `;
 
@@ -46,7 +45,7 @@ const SearchInput = styled.input`
   height: 48px;
   cursor: pointer;
   outline: none;
-  border: 3px solid #c6dfbb;
+  border: 3px solid #b5d4a8;
   border-radius: 10px;
   text-align: right;
   font-size: 24px;
@@ -56,7 +55,7 @@ const SearchButton = styled.button`
   border: none;
   outline: none;
   background: #fff;
-  border: 3px solid #c6dfbb;
+  border: 3px solid #b5d4a8;
   border-radius: 10px;
   font-size: 20px;
   height: 48px;

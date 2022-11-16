@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { FilterButton } from "../../assets/icons";
+import { FilterButton } from "../../../assets/icons";
 import Modal from "./Modal";
 import { FilterType } from "@types";
 
 const FilterWrapper = styled.div`
   width: 160px;
   height: 48px;
-  border: 3px solid #c6dfbb;
+  border: 3px solid #b5d4a8;
   border-radius: 10px;
   background: #fff;
   text-align: center;

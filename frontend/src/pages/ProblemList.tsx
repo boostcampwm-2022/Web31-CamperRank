@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { MainHeader } from "../components/MainHeader";
-import SearchFilter from "../components/ProblemList/SearchFilter";
+import { SearchFilter, List } from "../components/ProblemList";
+import { Footer } from "../components/Footer";
 
 const MainWrapper = styled.div`
   width: 1920px;
@@ -14,20 +15,17 @@ const MainWrapper = styled.div`
 const HeaderWrapper = styled.div`
   width: 100%;
   height: 160px;
-  box-sizing: border-box;
 `;
 
 const ListWrapper = styled.div`
   width: 100%;
   flex: 1;
-  box-sizing: border-box;
-  background: #e4e8e0;
+  background: #f1f5ee;
 `;
 
 const FooterWrapper = styled.div`
   width: 100%;
-  height: 160px;
-  box-sizing: border-box;
+  height: 400px;
 `;
 
 const ProblemList = () => {
@@ -37,8 +35,12 @@ const ProblemList = () => {
         <MainHeader></MainHeader>
       </HeaderWrapper>
       <SearchFilter></SearchFilter>
-      <ListWrapper>List</ListWrapper>
-      <FooterWrapper>Footer</FooterWrapper>
+      <ListWrapper>
+        <List></List>
+      </ListWrapper>
+      <FooterWrapper>
+        <Footer></Footer>
+      </FooterWrapper>
     </MainWrapper>
   );
 };

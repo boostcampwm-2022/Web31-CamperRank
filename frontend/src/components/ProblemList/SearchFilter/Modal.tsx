@@ -12,6 +12,7 @@ const ModalWrapper = styled.div`
   border: 2px solid #c6dfbb;
   background: rgba(256, 256, 256, 0.8);
   border-radius: 10px;
+  z-index: 1;
 `;
 
 const ModalElement = styled.div`
