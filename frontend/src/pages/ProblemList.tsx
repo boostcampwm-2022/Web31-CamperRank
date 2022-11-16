@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useRecoilState } from "recoil";
 import { MainHeader } from "../components/MainHeader";
 import { SearchFilter, List } from "../components/ProblemList";
 import { Footer } from "../components/Footer";
+import { filterState } from "../recoils";
 
 const MainWrapper = styled.div`
   width: 1920px;
@@ -29,6 +31,7 @@ const FooterWrapper = styled.div`
 `;
 
 const ProblemList = () => {
+  const [filter, setFilter] = useRecoilState(filterState);
   return (
     <MainWrapper>
       <HeaderWrapper>

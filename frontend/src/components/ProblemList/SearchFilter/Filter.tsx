@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FilterButton } from "../../../assets/icons";
 import Modal from "./Modal";
 import { FilterType } from "@types";
+import { useRecoilState } from "recoil";
+import { filterState } from "../../../recoils";
 
 const FilterWrapper = styled.div`
   width: 160px;
@@ -29,14 +31,22 @@ const ModalButton = styled.img`
 const Filter = ({ content }: FilterType) => {
   const { name, elements } = content;
   const [open, setOpen] = useState(false);
+  const [filter] = useRecoilState(filterState);
+  const { solved, level } = filter;
   return (
     <FilterWrapper>
-      {name}
+      {name === "상태" ? solved : level}
       <ModalButton
         src={FilterButton}
         onClick={() => setOpen(!open)}
       ></ModalButton>
-      {open && <Modal elements={elements}></Modal>}
+      {open && (
+        <Modal
+          onClick={() => setOpen(!open)}
+          name={name}
+          elements={elements}
+        ></Modal>
+      )}
     </FilterWrapper>
   );
 };

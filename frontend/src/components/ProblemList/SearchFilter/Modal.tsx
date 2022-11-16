@@ -1,8 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import { useRecoilState } from "recoil";
+import { filterState } from "../../../recoils";
 
 type ModalElements = {
+  name: string;
   elements: string[];
+  onClick: () => void;
 };
 
 const ModalWrapper = styled.div`
@@ -20,11 +24,24 @@ const ModalElement = styled.div`
   cursor: pointer;
 `;
 
-const Modal = ({ elements }: ModalElements) => {
+const Modal = ({ onClick, name, elements }: ModalElements) => {
+  const [filter, setFilter] = useRecoilState(filterState);
+  const handleClickElement = (element: string) => {
+    name === "상태" ? changeStatus(element) : changeLevel(element);
+    onClick();
+  };
+  const changeLevel = (level: string) => {
+    setFilter({ ...filter, level });
+  };
+  const changeStatus = (solved: string) => {
+    setFilter({ ...filter, solved });
+  };
   return (
     <ModalWrapper>
       {elements.map((elem, idx) => (
-        <ModalElement key={idx}>{elem}</ModalElement>
+        <ModalElement key={idx} onClick={() => handleClickElement(elem)}>
+          {elem}
+        </ModalElement>
       ))}
     </ModalWrapper>
   );
