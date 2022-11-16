@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { TestCaseService } from './test-case.service';
 import { CreateTestCaseDto } from './dto/create-test-case.dto';
 import { UpdateTestCaseDto } from './dto/update-test-case.dto';
@@ -13,17 +22,21 @@ export class TestCaseController {
   }
 
   @Get()
-  findAll() {
-    return this.testCaseService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.testCaseService.findOne(+id);
+  findTestCase(
+    @Query('testCaseId') testCaseId: string,
+    @Query('problemId') problemId: string,
+  ) {
+    return this.testCaseService.findTestCaseOpt({
+      testCaseId: testCaseId,
+      problemId: problemId,
+    });
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTestCaseDto: UpdateTestCaseDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateTestCaseDto: UpdateTestCaseDto,
+  ) {
     return this.testCaseService.update(+id, updateTestCaseDto);
   }
 
