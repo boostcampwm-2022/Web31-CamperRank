@@ -1,1 +1,4 @@
-export class CreateSolvedDto {}
+export class CreateSolvedDto {
+  problemId: number;
+  userId: number;
+}

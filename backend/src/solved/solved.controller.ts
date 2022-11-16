@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { SolvedService } from './solved.service';
 import { CreateSolvedDto } from './dto/create-solved.dto';
 import { UpdateSolvedDto } from './dto/update-solved.dto';
@@ -13,22 +22,23 @@ export class SolvedController {
   }
 
   @Get()
-  findAll() {
-    return this.solvedService.findAll();
+  findOne(
+    @Query('problemId') problemId: string,
+    @Query('userId') userId: string,
+  ) {
+    return this.solvedService.findSolvedByOpt({ problemId, userId });
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.solvedService.findOne(+id);
+  @Patch(':solvedId')
+  update(
+    @Param('solvedId') solvedId: string,
+    @Body() updateSolvedDto: UpdateSolvedDto,
+  ) {
+    return this.solvedService.update(+solvedId, updateSolvedDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSolvedDto: UpdateSolvedDto) {
-    return this.solvedService.update(+id, updateSolvedDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.solvedService.remove(+id);
+  @Delete(':solvedId')
+  remove(@Param('solvedId') solvedId: string) {
+    return this.solvedService.remove(+solvedId);
   }
 }
