@@ -1,17 +1,31 @@
-import {MainHeaderContainer, AnchorLogo, GreenMark, MenuContainer} from "../styles/MainHeader.style";
+import {
+  MainHeaderContainer,
+  AnchorLogo,
+  GreenMark,
+  MenuContainer,
+} from "../styles/MainHeader.style";
+import { Link } from "react-router-dom";
 
 export const MainHeader = () => {
   //isloggedin 필요
   return (
     <MainHeaderContainer>
       <AnchorLogo>
-        Camper<GreenMark>Rank</GreenMark>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          Camper<GreenMark>Rank</GreenMark>
+        </Link>
       </AnchorLogo>
       <nav>
         <ul>
-          <li><a href="/html/intro">문제 리스트</a></li>
-          <li><a href="/css/intro">랭킹</a></li>
-          <li><a href="/javascript/intro">대회</a></li>
+          <li>
+            <Link to="/problems">문제 리스트</Link>
+          </li>
+          <li>
+            <Link to="/ranking">랭킹</Link>
+          </li>
+          <li>
+            <Link to="/contest">대회</Link>
+          </li>
         </ul>
       </nav>
       <MenuContainer>
@@ -20,4 +34,4 @@ export const MainHeader = () => {
       </MenuContainer>
     </MainHeaderContainer>
   );
-}
+};
