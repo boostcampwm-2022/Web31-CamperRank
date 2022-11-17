@@ -9,4 +9,7 @@ export const GlobalStyle = createGlobalStyle`
     color: #000000;
     box-sizing: border-box;
   }
+  button {
+    cursor: pointer;
+  }
 `;
