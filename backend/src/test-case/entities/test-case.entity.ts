@@ -1,8 +1,9 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Problem } from '../../problem/entities/problem.entity';
+import { BaseTimeEntity } from '../../commons/entities/baseTime.entity';
 
 @Entity()
-export class TestCase {
+export class TestCase extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
   const swaggerDocumentBuilder = new DocumentBuilder()
     .setTitle('CamperRank APIs')
     .setDescription('CamperRank API 관련 문서입니다.')
@@ -13,7 +14,7 @@ async function bootstrap() {
     app,
     swaggerDocumentBuilder,
   );
-  SwaggerModule.setup('api', app, swaggerDocument);
+  SwaggerModule.setup('swagger', app, swaggerDocument);
 
   await app.listen(3000);
 }

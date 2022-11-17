@@ -17,8 +17,8 @@ export class TestCaseController {
   constructor(private readonly testCaseService: TestCaseService) {}
 
   @Post()
-  create(@Body() createTestCaseDto: CreateTestCaseDto) {
-    return this.testCaseService.create(createTestCaseDto);
+  async create(@Body() createTestCaseDto: CreateTestCaseDto) {
+    await this.testCaseService.create(createTestCaseDto);
   }
 
   @Get()
