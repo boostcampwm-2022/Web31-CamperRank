@@ -31,6 +31,7 @@ export class SolvedService {
         problem: foundProblem,
         user: foundUser,
         userCode: createSolvedDto.userCode,
+        result: createSolvedDto.result,
       });
       const savedSolved = await this.solvedRepository.save(solved);
       return new SimpleSolvedDto(savedSolved);
@@ -84,6 +85,14 @@ export class SolvedService {
           id: updateSolvedDto.problemId,
         });
       }
+
+      if (
+        updateSolvedDto.result !== undefined &&
+        updateSolvedDto.result !== null
+      ) {
+        foundSolved.result = updateSolvedDto.result;
+      }
+
       const updatedSolved = await this.solvedRepository.save(foundSolved);
       return new SimpleSolvedDto(updatedSolved);
     } else {
