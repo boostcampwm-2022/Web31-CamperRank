@@ -1,30 +1,22 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseTimeEntity } from '../../commons/entities/baseTime.entity';
+import { Solved } from '../../solved/entities/solved.entity';
 
 @Entity()
-export class User {
+export class User extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 20, nullable: false, unique: true })
+  @Column({ name: 'login_id', length: 20, nullable: false, unique: true })
   loginId: string;
 
   @Column({ nullable: false })
   password: string;
 
-  @Column()
+  @Column({ name: 'user_status' })
   userStatus: number;
 
-  @CreateDateColumn({ name: 'create_at', comment: '생성일' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'update_at', comment: '수정일' })
-  updatedAt: Date;
+  solvedList: Solved[];
 
   public static createUser({ loginId, password, userStatus }) {
     const user = new User();
