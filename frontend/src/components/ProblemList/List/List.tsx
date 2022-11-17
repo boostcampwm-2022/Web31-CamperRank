@@ -14,8 +14,8 @@ const ListWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 64px;
-  gap: 40px;
+  padding: 4rem;
+  gap: 2.5rem;
   height: 100%;
   position: relative;
 `;

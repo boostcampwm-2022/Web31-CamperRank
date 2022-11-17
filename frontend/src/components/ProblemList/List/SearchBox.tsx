@@ -8,14 +8,14 @@ const SearchWrapper = styled.div`
   width: fit-content;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 64px;
-  margin-right: 64px;
+  gap: 1rem;
+  margin-top: 4rem;
+  margin-right: 4rem;
 `;
 
 const Title = styled.div`
   color: #888;
-  font-size: 24px;
+  font-size: 1.3rem;
   font-weight: bold;
   margin-right: 36px;
 `;
@@ -26,20 +26,20 @@ const Box = styled.div`
 `;
 
 const Search = styled.div`
-  width: 176px;
-  height: 50px;
+  width: 10rem;
+  height: 2.7rem;
   border: 3px solid #b5d4a8;
   border-radius: 8px;
   background: #fff;
-  font-size: 24px;
+  font-size: 1.5rem;
   text-align: center;
-  line-height: 50px;
-  margin-left: 32px;
+  line-height: 2.5rem;
+  margin-left: 2rem;
 `;
 
 const DeleteIcon = styled.img`
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   filter: invert(0.3);
   cursor: pointer;
 `;

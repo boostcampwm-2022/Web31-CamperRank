@@ -8,28 +8,29 @@ import { filterState } from "../recoils";
 import problems from "../utils/ProblemsDummy";
 
 const MainWrapper = styled.div`
-  width: 1920px;
-  height: 2160px;
+  width: 100%;
+  height: 135rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  min-width: 1100px;
 `;
 
 const HeaderWrapper = styled.div`
   width: 100%;
-  height: 160px;
+  height: 8rem;
 `;
 
 const ListWrapper = styled.div`
   width: 100%;
-  height: 1600px;
+  height: 95rem;
   background: #f1f5ee;
   display: flex;
 `;
 
 const FooterWrapper = styled.div`
   width: 100%;
-  height: 400px;
+  height: 20rem;
 `;
 
 const ProblemList = () => {

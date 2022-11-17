@@ -4,25 +4,27 @@ import { useRecoilState } from "recoil";
 import { filterState } from "../../../recoils";
 
 const SearchWrapper = styled.div`
-  height: 48px;
-  width: 376px;
+  height: 3rem;
   display: flex;
   align-items: center;
   gap: 16px;
-  font-size: 24px;
+  font-size: 1rem;
   cursor: pointer;
 `;
 
 const SearchInput = styled.input`
-  width: 300px;
-  height: 48px;
+  width: 18rem;
+  height: 3rem;
   cursor: pointer;
   outline: none;
   border: 3px solid #b5d4a8;
   border-radius: 10px;
   text-align: right;
-  font-size: 24px;
-  padding-right: 8px;
+  font-size: 1.5rem;
+  padding-right: 0.5rem;
+  &: hover {
+    border: 3px solid #80a471;
+  }
 `;
 
 const SearchButton = styled.button`
@@ -32,9 +34,12 @@ const SearchButton = styled.button`
   border: 3px solid #b5d4a8;
   border-radius: 10px;
   font-size: 20px;
-  height: 48px;
+  height: 3rem;
   cursor: pointer;
-  width: 72px;
+  width: 4rem;
+  &: hover {
+    border: 3px solid #80a471;
+  }
 `;
 
 const Search = () => {
