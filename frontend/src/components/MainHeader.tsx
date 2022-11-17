@@ -29,8 +29,12 @@ export const MainHeader = () => {
         </ul>
       </nav>
       <MenuContainer>
-        <button type={"button"}>{"회원가입"}</button>
-        <button type={"button"}>{"로그인"}</button>
+        <Link to="/signup">
+          <button type={"button"}>{"회원가입"}</button>
+        </Link>
+        <Link to="/signin">
+          <button type={"button"}>{"로그인"}</button>
+        </Link>
       </MenuContainer>
     </MainHeaderContainer>
   );
