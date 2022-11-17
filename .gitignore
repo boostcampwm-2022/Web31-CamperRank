@@ -154,7 +154,8 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+backend/src/.env
+backend/src/**/.env
 .env.test
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -200,3 +201,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+.idea
