@@ -12,22 +12,23 @@ const ListWrapper = styled.div`
 
 const ListTitle = styled.div`
   font-weight: 500;
-  font-size: 42px;
-  line-height: 46px;
+  font-size: 2.6rem;
+  line-height: 2.9rem;
   text-align: center;
   position: absolute;
-  left: 88px;
-  top: 112px;
+  left: 5rem;
+  top: 6rem;
 `;
 
 const ProblemListWrapper = styled.div`
   position: absolute;
-  top: 240px;
+  top: 15rem;
   display: grid;
-  grid-template-columns: 880px 880px;
-  grid-template-rows: 240px 240px 240px;
-  column-gap: 80px;
-  row-gap: 48px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 15rem 15rem 15rem;
+  column-gap: 5rem;
+  row-gap: 3rem;
+  width: 95%;
 `;
 
 const problem = {

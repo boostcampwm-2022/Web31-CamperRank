@@ -6,16 +6,16 @@ type BannerTextType = {
 };
 
 const TextWrapper = styled.div`
-  height: 160px;
-  width: 444px;
-  left: 336px;
-  top: 120px;
+  height: 6rem;
+  width: 30%;
+  left: 18rem;
+  top: 5rem;
   position: absolute;
   font-weight: 400;
-  font-size: 48px;
+  font-size: 2.8rem;
   text-align: center;
   white-space: pre-wrap;
-  line-height: 72px;
+  line-height: 4.5rem;
 `;
 
 const BannerText = ({ text }: BannerTextType) => {
