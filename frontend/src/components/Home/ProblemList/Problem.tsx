@@ -65,7 +65,7 @@ const Button = styled.button`
   text-align: center;
   cursor: pointer;
   &: hover {
-    background: #6e9f7d;
+    background: #aad4b6;
     color: white;
     font-weight: bold;
     box-shadow: 2px 2px 2px 2px #b9b9b9;

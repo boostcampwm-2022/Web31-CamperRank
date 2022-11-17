@@ -8,27 +8,26 @@ import { filterState } from "../../../recoils";
 
 const FiltersWrapper = styled.div`
   width: 100%;
-  height: 256px;
+  height: 15rem;
   position: relative;
   background: #e5ebdf;
 `;
 
 const FilterTitle = styled.div`
   font-weight: 700;
-  font-size: 40px;
+  font-size: 2.5rem;
   position: absolute;
-  top: 40px;
-  left: 144px;
+  top: 2.5rem;
+  left: 8rem;
 `;
 
 const FilterContent = styled.div`
   position: absolute;
-  bottom: 24px;
-  left: 96px;
-  width: 900px;
-  height: 80px;
+  bottom: 1.2rem;
+  left: 6rem;
+  height: 5rem;
   display: flex;
-  gap: 24px;
+  gap: 1.5rem;
   align-items: center;
 `;
 
@@ -41,6 +40,9 @@ const Button = styled.button`
   font-size: 20px;
   height: 48px;
   cursor: pointer;
+  &: hover {
+    border: 3px solid #80a471;
+  }
 `;
 
 const SearchFilter = () => {

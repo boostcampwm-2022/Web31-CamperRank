@@ -7,24 +7,27 @@ import { useRecoilState } from "recoil";
 import { filterState } from "../../../recoils";
 
 const FilterWrapper = styled.div`
-  width: 160px;
-  height: 48px;
+  width: 10rem;
+  height: 3rem;
   border: 3px solid #b5d4a8;
   border-radius: 10px;
   background: #fff;
   text-align: center;
   font-weight: 500;
-  font-size: 24px;
-  line-height: 48px;
+  font-size: 1.5rem;
+  line-height: 3rem;
   display: flex;
   align-items: center;
   justify-content: space-around;
   position: relative;
+  &: hover {
+    border: 3px solid #80a471;
+  }
 `;
 
 const ModalButton = styled.img`
-  width: 16px;
-  height: 16px;
+  width: 1rem;
+  height: 1rem;
   cursor: pointer;
 `;
 
