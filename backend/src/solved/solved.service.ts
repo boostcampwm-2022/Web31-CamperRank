@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 import { Solved } from './entities/solved.entity';
 import { Problem } from '../problem/entities/problem.entity';
 import { User } from '../users/entities/user.entity';
+import { SimpleSolvedDto } from './dto/simple-solved.dto';
+import { isFalsy } from '../utils/boolUtils';
 
 @Injectable()
 export class SolvedService {
@@ -16,78 +18,97 @@ export class SolvedService {
   ) {}
 
   async create(createSolvedDto: CreateSolvedDto) {
-    try {
+    const foundProblem = await this.problemRepository.findOneBy({
+      id: createSolvedDto.problemId,
+    });
+
+    const foundUser = await this.userRepository.findOneBy({
+      id: createSolvedDto.userId,
+    });
+
+    if (foundProblem !== null && foundUser !== null) {
       const solved = Solved.createSolved({
-        problem: await this.problemRepository.findOneBy({
-          id: createSolvedDto.problemId,
-        }),
-        user: await this.userRepository.findOneBy({
-          id: createSolvedDto.userId,
-        }),
+        problem: foundProblem,
+        user: foundUser,
         userCode: createSolvedDto.userCode,
+        result: createSolvedDto.result,
       });
       const savedSolved = await this.solvedRepository.save(solved);
-      return { result: true, solved: savedSolved };
-    } catch (e) {
-      console.error(e);
+      return new SimpleSolvedDto(savedSolved);
+    } else {
+      return null;
     }
   }
 
   async findAll() {
-    return await this.solvedRepository.find();
+    const solvedList = await this.solvedRepository.find();
+    return solvedList.map((value: Solved) => {
+      return new SimpleSolvedDto(value);
+    });
   }
 
   async findSolvedById(solvedId) {
-    return await this.solvedRepository.findOneBy({ id: solvedId });
+    const solved = await this.solvedRepository.findOneBy({ id: solvedId });
+    return new SimpleSolvedDto(solved);
   }
 
   async findSolvedByOpt({ problemId, userId }) {
-    try {
-      const solved = await this.solvedRepository.find({
-        where: {
-          problem: {
-            id: problemId,
-          },
-          user: {
-            id: userId,
-          },
+    const solvedList = await this.solvedRepository.find({
+      where: {
+        problem: {
+          id: problemId,
         },
-      });
-      return { result: true, solved };
-    } catch (e) {}
+        user: {
+          id: userId,
+        },
+      },
+    });
+    return solvedList.map((value: Solved) => {
+      return new SimpleSolvedDto(value);
+    });
   }
 
   async update(solvedId: number, updateSolvedDto: UpdateSolvedDto) {
-    try {
-      const foundSolved = await this.solvedRepository.findOneBy({
-        id: solvedId,
-      });
+    const foundSolved = await this.solvedRepository.findOneBy({
+      id: solvedId,
+    });
 
-      //TODO: 입력받은 옵션인지 검증 필요
-      foundSolved.user = await this.userRepository.findOneBy({
-        id: updateSolvedDto.userId,
-      });
+    if (foundSolved !== null) {
+      if (!isFalsy(updateSolvedDto.userId)) {
+        foundSolved.user = await this.userRepository.findOneBy({
+          id: updateSolvedDto.userId,
+        });
+      }
 
-      //TODO: 입력받은 옵션인지 검증 필요
-      foundSolved.problem = await this.problemRepository.findOneBy({
-        id: updateSolvedDto.problemId,
-      });
+      if (!isFalsy(updateSolvedDto.problemId)) {
+        foundSolved.problem = await this.problemRepository.findOneBy({
+          id: updateSolvedDto.problemId,
+        });
+      }
+
+      if (
+        updateSolvedDto.result !== undefined &&
+        updateSolvedDto.result !== null
+      ) {
+        foundSolved.result = updateSolvedDto.result;
+      }
 
       const updatedSolved = await this.solvedRepository.save(foundSolved);
-      return { result: true, solved: updatedSolved };
-    } catch (e) {
-      console.error(e);
+      return new SimpleSolvedDto(updatedSolved);
+    } else {
+      return null;
     }
   }
 
   async remove(solvedId: number) {
-    try {
-      const solved = await this.solvedRepository.remove(
-        await this.solvedRepository.findOneBy({ id: solvedId }),
-      );
-      return { result: true, solved };
-    } catch (e) {
-      console.error(e);
+    const foundSolved = await this.solvedRepository.findOneBy({
+      id: solvedId,
+    });
+    if (foundSolved !== null) {
+      const removedSolved = await this.solvedRepository.remove(foundSolved);
+      return new SimpleSolvedDto(removedSolved);
+    } else {
+      return null;
     }
   }
 }

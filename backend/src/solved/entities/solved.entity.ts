@@ -20,11 +20,15 @@ export class Solved extends BaseTimeEntity {
   })
   userCode: string;
 
-  public static createSolved({ problem, user, userCode }) {
+  @Column({ nullable: false })
+  result: boolean;
+
+  public static createSolved({ problem, user, userCode, result }) {
     const solved = new Solved();
     solved.problem = problem;
     solved.user = user;
     solved.userCode = userCode;
+    solved.result = result;
     return solved;
   }
 }
