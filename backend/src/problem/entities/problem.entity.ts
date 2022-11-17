@@ -8,13 +8,18 @@ export class Problem extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    nullable: false,
+  })
   title: string;
 
-  @Column()
+  @Column({ nullable: false })
   level: number;
 
-  @Column()
+  @Column({
+    nullable: false,
+    type: 'text',
+  })
   description: string;
 
   testcaseList: TestCase[];

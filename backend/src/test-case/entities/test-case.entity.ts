@@ -10,13 +10,25 @@ export class TestCase extends BaseTimeEntity {
   @ManyToOne(() => Problem, (problem) => problem.testcaseList)
   problem: Problem;
 
-  @Column({ name: 'case_number' })
+  @Column({
+    name: 'case_number',
+    nullable: false,
+    type: 'text',
+  })
   caseNumber: number;
 
-  @Column({ name: 'test_input' })
+  @Column({
+    name: 'test_input',
+    nullable: false,
+    type: 'text',
+  })
   testInput: string;
 
-  @Column({ name: 'test_output' })
+  @Column({
+    name: 'test_output',
+    nullable: false,
+    type: 'text',
+  })
   testOutput: string;
 
   public static createTestCase({ problem, caseNumber, testInput, testOutput }) {

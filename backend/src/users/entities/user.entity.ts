@@ -13,7 +13,7 @@ export class User extends BaseTimeEntity {
   @Column({ nullable: false })
   password: string;
 
-  @Column({ name: 'user_status' })
+  @Column({ nullable: false, name: 'user_status' })
   userStatus: number;
 
   solvedList: Solved[];
