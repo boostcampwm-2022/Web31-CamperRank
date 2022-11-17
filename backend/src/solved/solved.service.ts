@@ -24,6 +24,7 @@ export class SolvedService {
         user: await this.userRepository.findOneBy({
           id: createSolvedDto.userId,
         }),
+        userCode: createSolvedDto.userCode,
       });
       const savedSolved = await this.solvedRepository.save(solved);
       return { result: true, solved: savedSolved };

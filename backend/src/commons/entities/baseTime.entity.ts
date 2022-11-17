@@ -1,7 +1,6 @@
-import { CreateDateColumn, Entity, UpdateDateColumn } from 'typeorm';
+import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity()
-export class BaseTimeEntity {
+export abstract class BaseTimeEntity {
   @CreateDateColumn({ name: 'create_at', comment: '생성일' })
   createdAt: Date;
 
