@@ -15,7 +15,7 @@ export const InputFormContainer = styled.form`
   flex-direction: column;
   justify-content: space-between;
   position: relative;
-  
+
   button {
     background: #E1EBDB;
     border: 2px solid #AEAEAE;
@@ -30,6 +30,7 @@ export const IDInputContainer = styled.div`
   display: flex;
   justify-content: right;
   margin-right: 48px;
+
   input {
     margin-right: 16px;
     background: #F1F9EB;
@@ -37,7 +38,15 @@ export const IDInputContainer = styled.div`
     border-radius: 10px;
     width: 256px;
     height: 36px;
+
+    &::placeholder {
+      font-weight: 300;
+      font-size: 14px;
+      text-align: center;
+      color: #919191;
+    }
   }
+
   p {
     margin-right: 16px;
   }
@@ -47,13 +56,22 @@ export const PasswordInputContainer = styled.div`
   display: flex;
   justify-content: right;
   margin-right: 176px;
+
   input {
     background: #F1F9EB;
     border: 3px solid #9CCAAF;
     border-radius: 10px;
     width: 256px;
     height: 36px;
+
+    &::placeholder {
+      font-weight: 300;
+      font-size: 14px;
+      text-align: center;
+      color: #919191;
+    }
   }
+
   p {
     margin-right: 16px;
   }
