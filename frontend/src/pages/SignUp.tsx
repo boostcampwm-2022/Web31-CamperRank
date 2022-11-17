@@ -2,10 +2,10 @@ import {MainHeader} from "../components/MainHeader";
 import {Footer} from "../components/Footer";
 import React from "react";
 import styled from "styled-components";
+import {InputForm} from "../components/SignUp/InputForm";
 
 const MainWrapper = styled.div`
   width: 1920px;
-  //height: 2160px;
   height: auto;
   border: 1px solid black;
   margin: 0 auto;
@@ -24,6 +24,8 @@ const ContentWrapper = styled.div`
   flex: 1;
   box-sizing: border-box;
   background: #e4e8e0;
+  display: flex;
+  justify-content: center;
 `;
 
 const FooterWrapper = styled.div`
@@ -39,7 +41,7 @@ export const SignUp = () => {
         <MainHeader></MainHeader>
       </HeaderWrapper>
       <ContentWrapper>
-
+        <InputForm/>
       </ContentWrapper>
       <FooterWrapper>
         <Footer/>

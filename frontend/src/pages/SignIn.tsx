@@ -6,7 +6,6 @@ import {InputForm} from "../components/SignIn/InputForm";
 
 const MainWrapper = styled.div`
   width: 1920px;
-  //height: 2160px;
   height: auto;
   border: 1px solid black;
   margin: 0 auto;
