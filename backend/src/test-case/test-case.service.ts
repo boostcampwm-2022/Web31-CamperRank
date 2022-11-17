@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TestCase } from './entities/test-case.entity';
 import { Problem } from '../problem/entities/problem.entity';
+import { SimpleTestCaseDto } from './dto/simple-testCase.dto';
 
 @Injectable()
 export class TestCaseService {
@@ -16,20 +17,26 @@ export class TestCaseService {
   ) {}
 
   async create(createTestCaseDto: CreateTestCaseDto) {
-    try {
-      const testCase = TestCase.createTestCase({
-        problem: await this.problemRepository.findOneBy({
-          id: createTestCaseDto.problemId,
-        }),
-        caseNumber: createTestCaseDto.caseNumber,
-        testInput: createTestCaseDto.testInput,
-        testOutput: createTestCaseDto.testOutput,
-      });
-      const savedTestCase = await this.testCaseRepository.save(testCase);
-      return { result: true, testCase: savedTestCase };
-    } catch (e) {
-      console.error(e);
+    const foundTestCase = await this.testCaseRepository.findOneBy({
+      problem: {
+        id: createTestCaseDto.problemId,
+      },
+      caseNumber: createTestCaseDto.caseNumber,
+    });
+    if (foundTestCase) {
+      return null;
     }
+
+    const testCase = TestCase.createTestCase({
+      problem: await this.problemRepository.findOneBy({
+        id: createTestCaseDto.problemId,
+      }),
+      caseNumber: createTestCaseDto.caseNumber,
+      testInput: createTestCaseDto.testInput,
+      testOutput: createTestCaseDto.testOutput,
+    });
+    const savedTestCase = await this.testCaseRepository.save(testCase);
+    return new SimpleTestCaseDto(savedTestCase);
   }
 
   async findTestCaseOpt({ testCaseId, problemId }) {
