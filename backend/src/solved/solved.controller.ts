@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -17,28 +18,53 @@ export class SolvedController {
   constructor(private readonly solvedService: SolvedService) {}
 
   @Post()
-  create(@Body() createSolvedDto: CreateSolvedDto) {
-    return this.solvedService.create(createSolvedDto);
+  async create(@Body() createSolvedDto: CreateSolvedDto) {
+    const simpleSolvedDto = await this.solvedService.create(createSolvedDto);
+    return {
+      statusCode:
+        simpleSolvedDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
+      ...simpleSolvedDto,
+    };
   }
 
   @Get()
-  findOne(
+  async findOne(
     @Query('problemId') problemId: string,
     @Query('userId') userId: string,
   ) {
-    return this.solvedService.findSolvedByOpt({ problemId, userId });
+    const simpleSolvedDtos = await this.solvedService.findSolvedByOpt({
+      problemId,
+      userId,
+    });
+    return {
+      statusCode: HttpStatus.OK,
+      ...simpleSolvedDtos,
+    };
   }
 
   @Patch(':solvedId')
-  update(
+  async update(
     @Param('solvedId') solvedId: string,
     @Body() updateSolvedDto: UpdateSolvedDto,
   ) {
-    return this.solvedService.update(+solvedId, updateSolvedDto);
+    const simpleSolvedDto = await this.solvedService.update(
+      +solvedId,
+      updateSolvedDto,
+    );
+    return {
+      statusCode:
+        simpleSolvedDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
+      ...simpleSolvedDto,
+    };
   }
 
   @Delete(':solvedId')
-  remove(@Param('solvedId') solvedId: string) {
-    return this.solvedService.remove(+solvedId);
+  async remove(@Param('solvedId') solvedId: string) {
+    const simpleSolvedDto = await this.solvedService.remove(+solvedId);
+    return {
+      statusCode:
+        simpleSolvedDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
+      ...simpleSolvedDto,
+    };
   }
 }

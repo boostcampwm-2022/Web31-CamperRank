@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -16,30 +17,58 @@ export class ProblemController {
   constructor(private readonly problemService: ProblemService) {}
 
   @Post()
-  create(@Body() createProblemDto: CreateProblemDto) {
-    return this.problemService.create(createProblemDto);
+  async create(@Body() createProblemDto: CreateProblemDto) {
+    const simpleProblemDto = await this.problemService.create(createProblemDto);
+    return {
+      statusCode:
+        simpleProblemDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
+      ...simpleProblemDto,
+    };
   }
 
   @Get()
-  findAll() {
-    return this.problemService.findAll();
+  async findAll() {
+    const simpleProblemDtos = await this.problemService.findAll();
+    return {
+      statusCode: HttpStatus.OK,
+      ...simpleProblemDtos,
+    };
   }
 
   @Get(':problemId')
-  findOne(@Param('problemId') problemId: string) {
-    return this.problemService.findProblem(+problemId);
+  async findOne(@Param('problemId') problemId: string) {
+    const simpleProblemDto = await this.problemService.findProblem(+problemId);
+    return {
+      statusCode:
+        simpleProblemDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
+      ...simpleProblemDto,
+    };
   }
 
   @Patch(':problemId')
-  update(
+  async update(
     @Param('problemId') problemId: string,
     @Body() updateProblemDto: UpdateProblemDto,
   ) {
-    return this.problemService.update(+problemId, updateProblemDto);
+    const simpleProblemDto = await this.problemService.update(
+      +problemId,
+      updateProblemDto,
+    );
+
+    return {
+      statusCode:
+        simpleProblemDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
+      ...simpleProblemDto,
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.problemService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const simpleProblemDto = await this.problemService.remove(+id);
+    return {
+      statusCode:
+        simpleProblemDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
+      ...simpleProblemDto,
+    };
   }
 }

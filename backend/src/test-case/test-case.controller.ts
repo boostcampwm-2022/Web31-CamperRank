@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -18,30 +19,54 @@ export class TestCaseController {
 
   @Post()
   async create(@Body() createTestCaseDto: CreateTestCaseDto) {
-    await this.testCaseService.create(createTestCaseDto);
+    const simpleTestCaseDto = await this.testCaseService.create(
+      createTestCaseDto,
+    );
+    return {
+      statusCode:
+        simpleTestCaseDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
+      ...simpleTestCaseDto,
+    };
   }
 
   @Get()
-  findTestCase(
+  async findTestCase(
     @Query('testCaseId') testCaseId: string,
     @Query('problemId') problemId: string,
   ) {
-    return this.testCaseService.findTestCaseOpt({
+    const simpleTestCaseDtos = await this.testCaseService.findTestCaseOpt({
       testCaseId: testCaseId,
       problemId: problemId,
     });
+    return {
+      statusCode: HttpStatus.OK,
+      ...simpleTestCaseDtos,
+    };
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
+  @Patch(':testCaseId')
+  async update(
+    @Param('testCaseId') testCaseId: string,
     @Body() updateTestCaseDto: UpdateTestCaseDto,
   ) {
-    return this.testCaseService.update(+id, updateTestCaseDto);
+    const simpleTestCaseDto = await this.testCaseService.update(
+      +testCaseId,
+      updateTestCaseDto,
+    );
+    return {
+      statusCode:
+        simpleTestCaseDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
+      ...simpleTestCaseDto,
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.testCaseService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const simpleTestCaseDto = await this.testCaseService.remove(+id);
+    return {
+      statusCode:
+        simpleTestCaseDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
+      ...simpleTestCaseDto,
+    };
   }
 }
