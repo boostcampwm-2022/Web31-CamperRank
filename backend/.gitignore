@@ -396,3 +396,8 @@ Temporary Items
 # Local
 src/.env
 dist
+
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
