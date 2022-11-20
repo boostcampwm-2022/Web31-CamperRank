@@ -1,0 +1,30 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  push:
+    branches: [ 'main', 'dev' ]
+  pull_request:
+    branched: [ 'main', 'dev' ]
+jobs:
+  deployment:
+    name: deployment
+    runs-on: ubuntu-latest
+    steps:
+      name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: |
+          whoami
+          cd /home/code/Web31-CamperRank
+          git pull origin dev
+          pm2 kill
+          cd /home/code/Web31-CamperRank/frontend
+          npm install
+          npm run build
+          cd /home/code/Web31-CamperRank/backend
+          pm2 start -n server npm -- start
+          sudo nginx -s restart
