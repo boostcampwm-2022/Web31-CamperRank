@@ -1,0 +1,31 @@
+name: ci
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  pull_request:
+    branched: [ 'main', 'dev' ]
+jobs:
+  ci:
+    name: ci
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        node-version: [ 16 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+        #      - name: Client CI
+        #      - run: cd /home/code/Web31-CamperRank/frontend
+        #      - run: yarn install --immutable --immutable-cache --check-cache
+        #      - run: npm run build --if-present
+        #      - run: npm test
+      - name: Server CI
+      - run: cd /home/code/Web31-CamperRank/backend
+      - run: npm install
+      - run: npm ci
+      - run: npm run build --if-present
+#      - run: npm test
