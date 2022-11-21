@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import Filter from "./Filter";
 import FiltersInfo from "../../../utils/FiltersInfo";
 import Search from "./Search";
-import { useRecoilState } from "recoil";
-import { filterState } from "../../../recoils";
+import {useRecoilState} from "recoil";
+import {filterState} from "../../../recoils";
 
 const FiltersWrapper = styled.div`
   width: 100%;
@@ -32,7 +32,6 @@ const FilterContent = styled.div`
 `;
 
 const Button = styled.button`
-  border: none;
   outline: none;
   background: #fff;
   border: 3px solid #b5d4a8;
@@ -40,6 +39,7 @@ const Button = styled.button`
   font-size: 20px;
   height: 48px;
   cursor: pointer;
+
   &: hover {
     border: 3px solid #80a471;
   }
