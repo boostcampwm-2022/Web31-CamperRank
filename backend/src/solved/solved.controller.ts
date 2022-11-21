@@ -68,7 +68,7 @@ export class SolvedController {
   @Patch(':solvedId')
   @ApiOperation({
     summary: '문제 답안 제출 기록 수정 API',
-    description: '문제 답안 제출 기록을 수정한다.',
+    description: '답안 제출 이후에 채점이 완료되면 상태를 변경한다..',
   })
   @ApiResponse({
     description: '문제 식별 아이디를 이용하여 문제 답안 제출 기록을 수정한다.',
