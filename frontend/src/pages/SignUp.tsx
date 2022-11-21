@@ -1,13 +1,12 @@
-import {MainHeader} from "../components/MainHeader";
-import {Footer} from "../components/Footer";
+import { MainHeader } from "../components/MainHeader";
+import { Footer } from "../components/Footer";
 import React from "react";
 import styled from "styled-components";
-import {InputForm} from "../components/SignUp/InputForm";
+import { InputForm } from "../components/SignUp/InputForm";
 
 const MainWrapper = styled.div`
-  width: 1920px;
+  width: 100%;
   height: auto;
-  border: 1px solid black;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -15,23 +14,20 @@ const MainWrapper = styled.div`
 
 const HeaderWrapper = styled.div`
   width: 100%;
-  height: 160px;
-  box-sizing: border-box;
+  height: 10rem;
 `;
 
 const ContentWrapper = styled.div`
   width: 100%;
   flex: 1;
-  box-sizing: border-box;
-  background: #e4e8e0;
+  background: #ecf5e3;
   display: flex;
   justify-content: center;
 `;
 
 const FooterWrapper = styled.div`
   width: 100%;
-  height: 400px;
-  box-sizing: border-box;
+  height: 25rem;
 `;
 
 export const SignUp = () => {
@@ -41,10 +37,10 @@ export const SignUp = () => {
         <MainHeader></MainHeader>
       </HeaderWrapper>
       <ContentWrapper>
-        <InputForm/>
+        <InputForm />
       </ContentWrapper>
       <FooterWrapper>
-        <Footer/>
+        <Footer />
       </FooterWrapper>
     </MainWrapper>
   );
