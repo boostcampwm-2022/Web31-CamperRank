@@ -10,10 +10,8 @@ export const MainHeader = () => {
   //isloggedin 필요
   return (
     <MainHeaderContainer>
-      <AnchorLogo>
-        <Link to="/" style={{ textDecoration: "none" }}>
+      <AnchorLogo to={"/"}>
           Camper<GreenMark>Rank</GreenMark>
-        </Link>
       </AnchorLogo>
       <nav>
         <ul>
