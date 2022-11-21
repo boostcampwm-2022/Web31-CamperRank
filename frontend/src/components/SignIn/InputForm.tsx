@@ -1,35 +1,44 @@
 import {IDInputContainer, InputFormContainer, PasswordInputContainer} from "../../styles/SignIn.style";
-import React, {useCallback, useState} from "react";
-import * as events from "events";
+import React, {useCallback, useMemo, useState} from "react";
 
 export const InputForm = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/api/signin", []);
 
   const handleIdChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
-    console.log(456);
   }, []);
 
   const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-    console.log(123);
   }, []);
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
+    const result = await fetch(requestURL, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+        password
+      })
 
-  }, []);
+    }).then(response => response.json());
+
+  }, [id, password, requestURL]);
 
   return (
     <InputFormContainer>
       <p>로그인</p>
       <IDInputContainer>
         <p>아이디</p>
-        <input type={"text"}/>
+        <input type={"text"} onChange={handleIdChange}/>
       </IDInputContainer>
       <PasswordInputContainer>
         <p>비밀번호</p>
-        <input type={"password"}/>
+        <input type={"password"} onChange={handlePasswordChange}/>
       </PasswordInputContainer>
       <button type={"submit"} onSubmit={handleSubmit}>로그인</button>
     </InputFormContainer>
