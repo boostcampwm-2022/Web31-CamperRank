@@ -1,12 +1,6 @@
 import {render, screen} from "@testing-library/react";
 import App from "../src/App";
 
-// test("Renders main element", () => {
-// render(<App/>);
-// const mainElement = screen.getByRole("button");
-// expect(mainElement).toBeInTheDocument();
-// });
-
 describe("js test", () => {
   it("number test", () => {
     expect(3 + 4).toBe(7); // 3+4가 7인지 테스트
