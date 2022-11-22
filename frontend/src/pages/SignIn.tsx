@@ -3,7 +3,6 @@ import {Footer} from "../components/Footer";
 import React, {useEffect} from "react";
 import styled from "styled-components";
 import {InputForm} from "../components/SignIn/InputForm";
-import {useNavigate} from "react-router-dom";
 
 const MainWrapper = styled.div`
   width: 1920px;

@@ -1,42 +1,41 @@
 import {IDInputContainer, InputFormContainer, PasswordInputContainer} from "../../styles/SignIn.style";
-import React, {useCallback, useMemo, useState} from "react";
+import React, {useCallback, useMemo, useState, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 
 export const InputForm = () => {
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
-  const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/api/signin", []);
+  const [isLoading, setLoading] = useState(false);
+  const id = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
+  const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/auth/signin", []);
   const navigate = useNavigate();
-
-  const handleIdChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setId(e.target.value);
-  }, []);
-
-  const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  }, []);
 
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(requestURL);
+    //islogin 탈출 필요
+    // @ts-ignore
+    setLoading(true);
     fetch(requestURL, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        id,
-        password
+        loginId: id!.current.value,
+        password: password!.current.value
       })
-    }).then(res => {
-      if (res.ok) {
-        navigate('/');
-      } else {
-        res.json().then(data => {
-          alert("로그인에 실패하였습니다.");
-        })
-      }
-    })
+    }).then(res => res.json())
+      .then(data => {
+        setLoading(false);
+        if (data.msg === 'success') {
+          //토큰 설정
+          navigate('/');
+          return;
+        }
+        alert('로그인에 실패하였습니다.');
+      }).catch((e) => {
+      setLoading(false);
+      console.log(e);
+    });
   }, [id, password, requestURL]);
 
   return (
@@ -44,13 +43,13 @@ export const InputForm = () => {
       <p>로그인</p>
       <IDInputContainer>
         <p>아이디</p>
-        <input type={"text"} onChange={handleIdChange}/>
+        <input type={"text"} ref={id}/>
       </IDInputContainer>
       <PasswordInputContainer>
         <p>비밀번호</p>
-        <input type={"password"} onChange={handlePasswordChange}/>
+        <input type={"password"} ref={password}/>
       </PasswordInputContainer>
-      <button type={"submit"}>로그인</button>
+      {isLoading ? <span>sending...</span> : <button type={"submit"}>로그인</button>}
     </InputFormContainer>
   );
 }
