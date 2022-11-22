@@ -9,4 +9,10 @@ export class CreateProblemDto {
 
   @ApiProperty({ description: '문제 설명 및 제한 사항 등등..' })
   description: string;
+
+  constructor(title, level, description) {
+    this.title = title;
+    this.level = level;
+    this.description = description;
+  }
 }

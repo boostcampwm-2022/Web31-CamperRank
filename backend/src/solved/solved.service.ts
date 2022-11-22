@@ -8,6 +8,7 @@ import { Problem } from '../problem/entities/problem.entity';
 import { User } from '../users/entities/user.entity';
 import { SimpleSolvedDto } from './dto/simple-solved.dto';
 import { isFalsy } from '../utils/boolUtils';
+import { SolvedResult } from './entities/SolvedResult.enum';
 
 @Injectable()
 export class SolvedService {
@@ -31,7 +32,10 @@ export class SolvedService {
         problem: foundProblem,
         user: foundUser,
         userCode: createSolvedDto.userCode,
-        result: createSolvedDto.result,
+        language: createSolvedDto.language,
+        result: createSolvedDto.result
+          ? createSolvedDto.result
+          : SolvedResult.Ready,
       });
       const savedSolved = await this.solvedRepository.save(solved);
       return new SimpleSolvedDto(savedSolved);
