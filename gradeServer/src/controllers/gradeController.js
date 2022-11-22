@@ -5,11 +5,29 @@ const { spawnSync } = require('child_process');
 exports.startGrade = async function (req, res) {
     //
     try {
-        const codeText = req.body.code;
+        let { userCode, language, input, output } = req.body;
+        let filePath = '';
         const fileName = Math.floor(Math.random() * 100000000);
-        const filePath = __dirname +'../../../'+ fileName + '.py';
+        if (language === 'Python') {
+            const pythonText = fs.readFileSync(__dirname+'/python.txt', 'utf-8');
+            filePath = __dirname +'../../../'+ fileName + '.py';
+            userCode = 'import sys \n\n' + userCode +'\n\n' + pythonText;
+            
 
-        fs.writeFileSync(filePath, `${codeText}`, function(err) {
+            if (input !== undefined) {
+                for (let i = 0; i < input.length; i++) {
+                    if (i !== 0) {
+                        userCode += ','
+                    }
+                    userCode += `sys.argv[${i+1}]`
+                }
+            }
+            userCode += ')';
+            console.log(userCode)
+
+        }
+
+        fs.writeFileSync(filePath, `${userCode}`, function(err) {
             if (err === null) {
                 console.log('success');
             }
@@ -17,7 +35,7 @@ exports.startGrade = async function (req, res) {
                 console.log('fail');
             }
         })
-        const pythonResult = spawnSync('python', [`${filePath}`]);
+        const pythonResult = spawnSync('python', [`${filePath}`,'1','2']);
         const resultText = pythonResult.stdout.toString();
         const errText = pythonResult.stderr.toString();
 
