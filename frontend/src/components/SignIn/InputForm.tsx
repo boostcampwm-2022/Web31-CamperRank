@@ -1,10 +1,12 @@
 import {IDInputContainer, InputFormContainer, PasswordInputContainer} from "../../styles/SignIn.style";
 import React, {useCallback, useMemo, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 export const InputForm = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/api/signin", []);
+  const navigate = useNavigate();
 
   const handleIdChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
@@ -14,8 +16,10 @@ export const InputForm = () => {
     setPassword(e.target.value);
   }, []);
 
-  const handleSubmit = useCallback(async () => {
-    const result = await fetch(requestURL, {
+  const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(requestURL);
+    fetch(requestURL, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -24,13 +28,19 @@ export const InputForm = () => {
         id,
         password
       })
-
-    }).then(response => response.json());
-
+    }).then(res => {
+      if (res.ok) {
+        navigate('/');
+      } else {
+        res.json().then(data => {
+          alert("로그인에 실패하였습니다.");
+        })
+      }
+    })
   }, [id, password, requestURL]);
 
   return (
-    <InputFormContainer>
+    <InputFormContainer onSubmit={handleSubmit}>
       <p>로그인</p>
       <IDInputContainer>
         <p>아이디</p>
@@ -40,7 +50,7 @@ export const InputForm = () => {
         <p>비밀번호</p>
         <input type={"password"} onChange={handlePasswordChange}/>
       </PasswordInputContainer>
-      <button type={"submit"} onSubmit={handleSubmit}>로그인</button>
+      <button type={"submit"}>로그인</button>
     </InputFormContainer>
   );
 }

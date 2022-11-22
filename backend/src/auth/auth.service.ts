@@ -20,11 +20,11 @@ export class AuthService {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = { loginId };
-      const accesstoken = await this.jwtService.sign(payload);
+      const accessToken = this.jwtService.sign(payload);
 
       return {
         userId: loginId,
-        accesstoken,
+        accessToken,
         msg: '로그인 성공',
       };
     } else {
