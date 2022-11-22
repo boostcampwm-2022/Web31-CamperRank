@@ -1,0 +1,27 @@
+{
+  "name": "label_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sinterhoo/label_test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sinterhoo/label_test/issues"
+  },
+  "homepage": "https://github.com/sinterhoo/label_test#readme",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "method-override": "^3.0.0",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.19"
+  }
+}
