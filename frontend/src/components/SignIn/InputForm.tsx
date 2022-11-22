@@ -11,8 +11,6 @@ export const InputForm = () => {
 
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //islogin 탈출 필요
-    // @ts-ignore
     setLoading(true);
     fetch(requestURL, {
       method: "POST",
@@ -20,8 +18,8 @@ export const InputForm = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        loginId: id!.current.value,
-        password: password!.current.value
+        loginId: id.current!.value,
+        password: password.current!.value
       })
     }).then(res => res.json())
       .then(data => {

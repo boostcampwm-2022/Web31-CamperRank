@@ -1,16 +1,16 @@
 import {atom} from "recoil";
 
-interface Filter {
-  solved?: string;
-  level?: string;
-  search?: string;
+interface userInfo {
+  token: string,
+  isLoggedIn: boolean,
+  ID: string
 }
 
-export const filterState = atom<Filter>({
-  key: "filterState",
+export const userState = atom<userInfo>({
+  key: "user",
   default: {
-    solved: "푼 상태",
-    level: "문제 레벨",
-    search: "",
+    token: "",
+    isLoggedIn: false,
+    ID: ""
   },
 });
