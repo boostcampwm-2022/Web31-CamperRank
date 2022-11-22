@@ -1,6 +1,8 @@
 import {IDInputContainer, InputFormContainer, PasswordInputContainer} from "../../styles/SignIn.style";
-import React, {useCallback, useMemo, useState, useRef} from "react";
+import React, {useCallback, useMemo, useState, useRef, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
+import {useSetRecoilState} from "recoil";
+import {userState} from "../../recoils/userState";
 
 export const InputForm = () => {
   const [isLoading, setLoading] = useState(false);
@@ -8,6 +10,7 @@ export const InputForm = () => {
   const password = useRef<HTMLInputElement>(null);
   const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/auth/signin", []);
   const navigate = useNavigate();
+  const setUser = useSetRecoilState(userState);
 
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,7 +28,11 @@ export const InputForm = () => {
       .then(data => {
         setLoading(false);
         if (data.msg === 'success') {
-          //토큰 설정
+          setUser({
+            token: data.accessToken,
+            isLoggedIn: true,
+            ID: data.userId
+          });
           navigate('/');
           return;
         }

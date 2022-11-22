@@ -5,14 +5,12 @@ import {SignIn} from "./pages/SignIn";
 import {useState} from "react";
 
 const App = () => {
-  const [isLoggedIn, setLoggedIn] = useState(false);
-
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/signup" element={isLoggedIn ? <Home/> : <SignUp/>}/>
-        <Route path="/signin" element={isLoggedIn ? <Home/> : <SignIn/>}/>
+        <Route path="/signup" element={<SignUp/>}/>
+        <Route path="/signin" element={<SignIn/>}/>
         <Route path="/problems" element={<ProblemList/>}/>
       </Routes>
     </BrowserRouter>
