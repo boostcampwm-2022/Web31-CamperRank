@@ -23,8 +23,8 @@ jobs:
         #      - name: Client CI
         #      - run: cd /home/code/Web31-CamperRank/frontend
         #      - run: yarn install --immutable --immutable-cache --check-cache
-        #      - run: npm run build --if-present
-        #      - run: npm test
+        #      - run: yarn build --if-present
+        #      - run: yarn test
       - name: Server CI
       - run: cd /home/code/Web31-CamperRank/backend
       - run: npm install

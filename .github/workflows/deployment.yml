@@ -23,8 +23,9 @@ jobs:
           git pull origin dev
           pm2 kill
           cd /home/code/Web31-CamperRank/frontend
-          npm install
-          npm run build
+          yarn install
+          yarn build
           cd /home/code/Web31-CamperRank/backend
+          npm install
           pm2 start -n server npm -- start
           sudo nginx -s restart
