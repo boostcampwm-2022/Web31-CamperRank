@@ -1,6 +1,6 @@
 import {act, render, screen} from "@testing-library/react";
 import {SearchFilter} from "../src/components/ProblemList";
-import {RecoilRoot, useRecoilState} from "recoil";
+import {RecoilRoot} from "recoil";
 import {unmountComponentAtNode} from "react-dom";
 
 let container: any = null;
