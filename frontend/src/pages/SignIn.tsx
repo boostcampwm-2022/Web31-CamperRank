@@ -8,9 +8,8 @@ import {userState} from "../recoils/userState";
 import {useNavigate} from "react-router-dom";
 
 const MainWrapper = styled.div`
-  width: 1920px;
+  width: 100%;
   height: auto;
-  border: 1px solid black;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
