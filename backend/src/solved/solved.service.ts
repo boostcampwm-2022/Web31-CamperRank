@@ -9,6 +9,8 @@ import { User } from '../users/entities/user.entity';
 import { SimpleSolvedDto } from './dto/simple-solved.dto';
 import { isFalsy } from '../utils/boolUtils';
 import { SolvedResult } from './entities/SolvedResult.enum';
+import { TestCase } from '../test-case/entities/test-case.entity';
+import { GradeSolvedDto } from './dto/grade-solved.dto';
 
 @Injectable()
 export class SolvedService {
@@ -16,6 +18,8 @@ export class SolvedService {
     @InjectRepository(Solved) private solvedRepository: Repository<Solved>,
     @InjectRepository(Problem) private problemRepository: Repository<Problem>,
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(TestCase)
+    private testCaseRepository: Repository<TestCase>,
   ) {}
 
   async create(createSolvedDto: CreateSolvedDto) {
@@ -39,6 +43,42 @@ export class SolvedService {
       });
       const savedSolved = await this.solvedRepository.save(solved);
       return new SimpleSolvedDto(savedSolved);
+    } else {
+      return null;
+    }
+  }
+
+  async createToGrade(createSolvedDto: CreateSolvedDto) {
+    const foundProblem = await this.problemRepository.findOneBy({
+      id: createSolvedDto.problemId,
+    });
+
+    const foundUser = await this.userRepository.findOneBy({
+      id: createSolvedDto.userId,
+    });
+
+    if (foundProblem !== null && foundUser !== null) {
+      const solved = Solved.createSolved({
+        problem: foundProblem,
+        user: foundUser,
+        userCode: createSolvedDto.userCode,
+        language: createSolvedDto.language,
+        result: createSolvedDto.result
+          ? createSolvedDto.result
+          : SolvedResult.Ready,
+      });
+
+      const savedSolved = await this.solvedRepository.save(solved);
+      const foundTestCases = await this.testCaseRepository.find({
+        where: {
+          problem: {
+            id: createSolvedDto.problemId,
+          },
+        },
+      });
+      return foundTestCases.map((value) => {
+        return new GradeSolvedDto(savedSolved, value);
+      });
     } else {
       return null;
     }
