@@ -1,13 +1,15 @@
 import {MainHeader} from "../components/MainHeader";
 import {Footer} from "../components/Footer";
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import {InputForm} from "../components/SignIn/InputForm";
+import {useRecoilValue} from "recoil";
+import {userState} from "../recoils/userState";
+import {useNavigate} from "react-router-dom";
 
 const MainWrapper = styled.div`
-  width: 1920px;
+  width: 100%;
   height: auto;
-  border: 1px solid black;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -35,6 +37,14 @@ const FooterWrapper = styled.div`
 `;
 
 export const SignIn = () => {
+  const user = useRecoilValue(userState);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user.isLoggedIn) {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
   return (
     <MainWrapper>
       <HeaderWrapper>

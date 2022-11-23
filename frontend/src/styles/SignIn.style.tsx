@@ -16,7 +16,7 @@ export const InputFormContainer = styled.form`
   justify-content: space-between;
   position: relative;
   
-  button {
+  button{
     position: absolute;
     bottom: 16px;
     right: 104px;
@@ -28,11 +28,24 @@ export const InputFormContainer = styled.form`
     height: 40px;
     float: right;
   }
+
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    position: absolute;
+    bottom: 16px;
+    right: 104px;
+    width: 112px;
+    height: 40px;
+  }
 `;
 
 export const IDInputContainer = styled.div`
   display: flex;
   justify-content: right;
+
   input {
     margin-right: 80px;
     background: #F1F9EB;
@@ -41,6 +54,7 @@ export const IDInputContainer = styled.div`
     width: 256px;
     height: 36px;
   }
+
   p {
     margin-right: 16px;
   }
@@ -49,6 +63,7 @@ export const IDInputContainer = styled.div`
 export const PasswordInputContainer = styled.div`
   display: flex;
   justify-content: right;
+
   input {
     margin-right: 80px;
     background: #F1F9EB;
@@ -57,8 +72,10 @@ export const PasswordInputContainer = styled.div`
     width: 256px;
     height: 36px;
   }
+
   p {
     margin-right: 16px;
   }
+
   margin-bottom: 64px;
 `;
