@@ -2,16 +2,16 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
   push:
-    branches: [ 'main', 'dev' ]
+    branches: ["main", "dev"]
   pull_request:
-    branched: [ 'main', 'dev' ]
+    branches: ["main", "dev"]
 jobs:
   deployment:
     name: deployment
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands using password
-      - uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
