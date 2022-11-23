@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { ProblemType } from "@types";
+import { Link } from "react-router-dom";
 
 const ProblemWrapper = styled.div`
   width: 100%;
@@ -67,13 +68,20 @@ const Button = styled.button`
 `;
 
 const Problem = ({ problem }: ProblemType) => {
+  const id = 1;
+  const singleURL = `/problem/single/${id}`;
+  const multiURL = `/problem/multi/${id}`;
   return (
     <ProblemWrapper>
       <Title>{problem.title}</Title>
       <Description>{problem.description}</Description>
       <ButtonWrapper>
-        <Button>혼자 풀기</Button>
-        <Button>같이 풀기</Button>
+        <Link to={singleURL}>
+          <Button>혼자 풀기</Button>
+        </Link>
+        <Link to={multiURL}>
+          <Button>같이 풀기</Button>
+        </Link>
       </ButtonWrapper>
     </ProblemWrapper>
   );

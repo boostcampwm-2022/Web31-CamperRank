@@ -1,5 +1,5 @@
 import {Route, Routes, BrowserRouter, Navigate} from "react-router-dom";
-import {Home, ProblemList} from "./pages";
+import {Home, ProblemList, Problem} from "./pages";
 import {SignUp} from "./pages/SignUp";
 import {SignIn} from "./pages/SignIn";
 import {useRecoilState} from "recoil";
@@ -48,10 +48,11 @@ const App = () => {
         {!isLoggedIn && <Route path="/signin" element={<SignIn/>}/>}
         {/*{isLoggedIn && <Route path="/profile" element={<SignIn/>}/>}*/}
         <Route path="/problems" element={<ProblemList/>}/>
+        <Route path="/problem/:version/:id" element={<Problem />} />
         <Route path="*" element={<Navigate to="/"/>}/>
       </Routes>
     </BrowserRouter>
-  )
-}
+  );
+};
 
 export default App;
