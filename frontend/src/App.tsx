@@ -8,14 +8,36 @@ import {userState} from "./recoils/userState";
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState);
-  const isLoggedIn = useMemo(() => user.isLoggedIn, [user]);
+  const isLoggedIn = useMemo(() => user.isLoggedIn, [user.isLoggedIn]);
+  const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/auth/jwtLogin", []);
 
   useEffect(() => {
     const token = localStorage.getItem('camperRankToken');
     if (!token || user.isLoggedIn) {
       return;
     }
-    //페치 날려서 정보 받고 setUser
+    fetch(requestURL, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({})
+    }).then(res => {
+      if (!res.ok) {
+        localStorage.removeItem('camperRankToken');
+        return;
+      }
+      return res.json().then(data => {
+        setUser({
+          token,
+          isLoggedIn: true,
+          ID: data.userId
+        })
+      });
+    }).catch((e) => {
+      console.log(e);
+    });
   }, []);
 
   return (
