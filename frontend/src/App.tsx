@@ -53,8 +53,8 @@ const App = () => {
         {!isLoggedIn && <Route path="/signin" element={<SignIn />} />}
         {/*{isLoggedIn && <Route path="/profile" element={<SignIn/>}/>}*/}
         <Route path="/problems" element={<ProblemList />} />
-        <Route path="*" element={<Navigate to="/" />} />
         <Route path="/problem/:version/:id" element={<Problem />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import Buttons from "../components/Problem/ProblemButtons/Buttons";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -57,7 +58,9 @@ const ResultWrapper = styled.div`
 
 const ButtonsWrapper = styled.div`
   height: 6%;
-  border: 2px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 `;
 
 const ColSizeController = styled.div`
@@ -97,6 +100,7 @@ const Problem = () => {
     },
     onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => {
       if (moveColResize) resizeProblemWrapper(e.clientX);
+      else setMoveColResize(false);
     },
     onMouseUp: () => {
       setMoveColResize(false);
@@ -108,7 +112,9 @@ const Problem = () => {
       setMoveRowResize(true);
     },
     onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => {
+      console.log("MOVE");
       if (moveRowResize) resizeEditorWrapper(e.clientY);
+      else setMoveRowResize(false);
     },
     onMouseUp: (e: React.MouseEvent<HTMLDivElement>) => {
       setMoveRowResize(false);
@@ -125,7 +131,9 @@ const Problem = () => {
           <EditorWrapper ref={editorRef}>Editor</EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>Result</ResultWrapper>
-          <ButtonsWrapper>Buttons</ButtonsWrapper>
+          <ButtonsWrapper>
+            <Buttons></Buttons>
+          </ButtonsWrapper>
         </SolvingWrapper>
       </MainWrapper>
     </Wrapper>
