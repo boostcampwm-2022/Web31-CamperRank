@@ -28,7 +28,7 @@ exports.startGrade = async function (req, res) {
                     fileList.push(input[i]);
                 }
             }
-            userCode += ')';
+            userCode += '))';
             console.log(userCode)
 
         }
@@ -36,7 +36,7 @@ exports.startGrade = async function (req, res) {
             codeStyle = 'node';
             filePath = __dirname +'../../../'+ fileName + '.js';
             fileList.push(filePath);
-            userCode += '\n\n' + 'solution(';
+            userCode += '\n\n' + 'console.log(solution(';
             if (input !== undefined) {
                 for (let i = 1; i < input.length+1; i++) {
                     if (i !== 1) {
@@ -46,7 +46,7 @@ exports.startGrade = async function (req, res) {
                     fileList.push(input[i-1]);
                 }
             }
-            userCode += ')';
+            userCode += '))';
             console.log(userCode)
 
         }
