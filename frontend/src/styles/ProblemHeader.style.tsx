@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 
-export const MainHeaderContainer = styled.div`
+export const HeaderContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
   padding: 0 96px;
@@ -10,7 +10,7 @@ export const MainHeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  nav {
+  div {
     margin-right: 172px;
 
     ul {
