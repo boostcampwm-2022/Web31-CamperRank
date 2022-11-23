@@ -12,21 +12,30 @@ export const HeaderContainer = styled.div`
 
   div {
     margin-right: 172px;
+    height: 36px;
 
     ul {
+      display: flex;
       justify-content: space-between;
       align-items: center;
+      height: 32px;
 
       li {
-        display: inline;
-        margin-left: 96px;
+        height: 24px;
+        margin-left: 64px;
+
+        .greater {
+          margin-top: 2px;
+          height: 24px;
+          width: 12px;
+        }
 
         a {
           text-decoration: none;
-          font-weight: 600;
+          font-weight: 700;
           font-size: 24px;
           color: #000000;
-        }
+        } 
       }
     }
   }
