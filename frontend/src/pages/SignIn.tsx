@@ -1,6 +1,6 @@
 import {MainHeader} from "../components/MainHeader";
 import {Footer} from "../components/Footer";
-import React, {useEffect} from "react";
+import React from "react";
 import styled from "styled-components";
 import {InputForm} from "../components/SignIn/InputForm";
 
