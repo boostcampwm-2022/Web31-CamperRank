@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { ProblemType } from "@types";
+import { Link } from "react-router-dom";
 
 const ProblemWrapper = styled.div`
   border: 2px solid #888888;
@@ -75,12 +76,16 @@ const Button = styled.button`
 
 const Problem = ({ problem }: ProblemType) => {
   const { level, title, description } = problem;
+  const id = 1;
+  const problemURL = `/problem/single/${id}`;
   return (
     <ProblemWrapper>
       <Level>LV. {level}</Level>
       <Name>{title}</Name>
       <Description>{description}</Description>
-      <Button>문제 풀기</Button>
+      <Link to={problemURL}>
+        <Button>문제 풀기</Button>
+      </Link>
     </ProblemWrapper>
   );
 };
