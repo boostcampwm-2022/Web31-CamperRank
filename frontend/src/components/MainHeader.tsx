@@ -13,7 +13,7 @@ export const MainHeader = () => {
   const [user, setUser] = useRecoilState(userState);
 
   const handleLogoutClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    if (user.isLoggedIn) {
+    if (!user.isLoggedIn) {
       return;
     }
     setUser({

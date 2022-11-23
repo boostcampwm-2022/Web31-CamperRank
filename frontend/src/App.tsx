@@ -12,6 +12,7 @@ const App = () => {
   const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/auth/jwtLogin", []);
 
   useEffect(() => {
+    console.log(123);
     const token = localStorage.getItem('camperRankToken');
     if (!token || user.isLoggedIn) {
       return;
