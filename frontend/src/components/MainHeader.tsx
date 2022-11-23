@@ -8,7 +8,6 @@ import {Link} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
 import React, {useCallback} from "react";
-import {removeCookie} from "../utils/cookie";
 
 export const MainHeader = () => {
   const [user, setUser] = useRecoilState(userState);
@@ -17,12 +16,12 @@ export const MainHeader = () => {
     if (user.isLoggedIn) {
       return;
     }
-    removeCookie("accessToken");
     setUser({
       token: "",
       isLoggedIn: false,
       ID: ""
     })
+    localStorage.removeItem('camperRankToken');
   }, [user, setUser]);
 
   return (

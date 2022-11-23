@@ -3,7 +3,6 @@ import React, {useCallback, useMemo, useState, useRef, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {useSetRecoilState} from "recoil";
 import {userState} from "../../recoils/userState";
-import {setCookie} from "../../utils/cookie";
 
 export const InputForm = () => {
   const [isLoading, setLoading] = useState(false);
@@ -29,9 +28,7 @@ export const InputForm = () => {
       .then(data => {
         setLoading(false);
         if (data.msg === 'success') {
-          setCookie("accessToken", data.accessToken, {
-            httpOnly: true
-          });
+          localStorage.setItem('camperRankToken', data.accessToken);
           setUser({
             token: data.accessToken,
             isLoggedIn: true,

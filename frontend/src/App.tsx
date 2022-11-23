@@ -1,18 +1,18 @@
-import {Route, Routes, BrowserRouter} from "react-router-dom";
+import {Route, Routes, BrowserRouter, Navigate} from "react-router-dom";
 import {Home, ProblemList} from "./pages";
 import {SignUp} from "./pages/SignUp";
 import {SignIn} from "./pages/SignIn";
 import {useRecoilState} from "recoil";
-import {getCookie} from "./utils/cookie";
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 import {userState} from "./recoils/userState";
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState);
+  const isLoggedIn = useMemo(() => user.isLoggedIn, [user]);
 
   useEffect(() => {
-    const cookie = getCookie("accessToken");
-    if (!cookie || user.isLoggedIn) {
+    const token = localStorage.getItem('camperRankToken');
+    if (!token || user.isLoggedIn) {
       return;
     }
     //페치 날려서 정보 받고 setUser
@@ -22,9 +22,13 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/signup" element={<SignUp/>}/>
-        <Route path="/signin" element={<SignIn/>}/>
+        {!isLoggedIn && <Route path="/signup" element={<SignUp/>}/>}
+        {!isLoggedIn && <Route path="/signin" element={<SignIn/>}/>}
+        {/*{isLoggedIn && <Route path="/profile" element={<SignIn/>}/>}*/}
         <Route path="/problems" element={<ProblemList/>}/>
+        <Route path="*">
+          <Navigate to="/"/>
+        </Route>
       </Routes>
     </BrowserRouter>
   )
