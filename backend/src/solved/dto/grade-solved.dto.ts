@@ -26,10 +26,10 @@ export class GradeSolvedDto {
   testCaseNumber: number;
 
   @ApiProperty({ description: '테스트 케이스 입력' })
-  testCaseInput: string;
+  testCaseInput: any;
 
   @ApiProperty({ description: '테스트 케이스 출력' })
-  testCaseOutput: string;
+  testCaseOutput: any;
 
   constructor(solved: Solved, testCase: TestCase) {
     this.solvedId = solved.id;
@@ -40,7 +40,9 @@ export class GradeSolvedDto {
 
     this.testCaseId = testCase.id;
     this.testCaseNumber = testCase.caseNumber;
-    this.testCaseInput = testCase.testInput;
+    this.testCaseInput = testCase.testInput.split('\n').map((value) => {
+      return value.split(' ');
+    });
     this.testCaseOutput = testCase.testOutput;
   }
 }
