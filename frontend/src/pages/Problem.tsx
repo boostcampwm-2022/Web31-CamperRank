@@ -1,8 +1,13 @@
 import React from "react";
-import styled from "styled-components";
+import {ProblemHeader} from "../components/ProblemHeader";
 
 const Problem = () => {
-  return <div>Problem</div>;
+  return (
+    <>
+      <ProblemHeader URL={"123"} problemName={"456"} type={0}/>
+      <div>Problem</div>
+    </>
+  );
 };
 
 export default Problem;

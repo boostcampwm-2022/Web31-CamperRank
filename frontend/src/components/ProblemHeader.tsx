@@ -53,15 +53,14 @@ export const ProblemHeader = ({URL, problemName, type}: propsType) => {
           </li>
           {
             type &&
-            <li>
-              <Greater/>
-            </li>
-          }
-          {
-            type &&
-            <li>
-              <Link to={URL + "/question"}>질문</Link>
-            </li>
+            <>
+              <li>
+                <Greater/>
+              </li>
+              <li>
+                <Link to={URL + "/question"}>질문</Link>
+              </li>
+            </>
           }
         </ul>
       </div>
