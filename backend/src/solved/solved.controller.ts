@@ -14,11 +14,15 @@ import { CreateSolvedDto } from './dto/create-solved.dto';
 import { UpdateSolvedDto } from './dto/update-solved.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SimpleSolvedDto } from './dto/simple-solved.dto';
+import { HttpService } from '@nestjs/axios';
 
 @Controller('solved')
 @ApiTags('답안 제출 기록 관련 API')
 export class SolvedController {
-  constructor(private readonly solvedService: SolvedService) {}
+  constructor(
+    private readonly solvedService: SolvedService,
+    private readonly httpService: HttpService,
+  ) {}
 
   @Post()
   @ApiOperation({
@@ -32,12 +36,42 @@ export class SolvedController {
     type: SimpleSolvedDto,
   })
   async create(@Body() createSolvedDto: CreateSolvedDto) {
-    const simpleSolvedDto = await this.solvedService.create(createSolvedDto);
-    return {
-      statusCode:
-        simpleSolvedDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
-      ...simpleSolvedDto,
-    };
+    const gradeSolvedDtos = await this.solvedService.createToGrade(
+      createSolvedDto,
+    );
+
+    console.log(gradeSolvedDtos);
+
+    const results = [];
+
+    for (const gradeSolvedDto of gradeSolvedDtos) {
+      this.httpService.axiosRef
+        .post('http://localhost:4000/v1/grade', { data: gradeSolvedDto })
+        .then((response) => {
+          results.push(response.data);
+          console.log(response.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+
+    console.log(results);
+
+    // this.httpService.axiosRef
+    //   .post('http://localhost:4000/v1/grade', { data: gradeSolvedDtos })
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
+
+    // return {
+    //   statusCode:
+    //     gradeSolvedDtos.length > 0 ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
+    //   ...gradeSolvedDtos,
+    // };
   }
 
   @Get()
