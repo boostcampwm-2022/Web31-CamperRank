@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, isValidElement } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import {
   ButtonContainer,
   CheckButton,
@@ -9,6 +9,8 @@ import {
 } from "../../styles/SignUp.style";
 import useInput from "../../hooks/useInput";
 import { useNavigate } from "react-router-dom";
+
+const URL = import.meta.env.VITE_SERVER_URL;
 
 export const InputForm = () => {
   const id = useInput("");
@@ -21,14 +23,35 @@ export const InputForm = () => {
   const [isPwRight, setPwRight] = useState(false);
   const [idCheck, setIdCheck] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const { value } = id;
+    if (idValid(value) && idCheck) setIdRight(true);
+    else setIdRight(false);
+  }, [id]);
+
+  useEffect(() => {
+    const { value } = pw;
+    if (pwValid(value)) setPwRight(true);
+  }, [pw]);
+
+  useEffect(() => {
+    const { value } = pwCheck;
+    if (!pwValid(value) || value === "" || value !== pw.value)
+      setPwRight(false);
+    else setPwRight(true);
+  });
+
   const idValid = (str: string) => {
     return /[a-z0-9]{6,}/g.test(str);
   };
+
   const pwValid = (str: string) => {
     return /[a-z0-9\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]{8,}/g.test(
       str
     );
   };
+
   const handleKeyPress = (
     e: React.KeyboardEvent<HTMLElement>,
     ref: React.RefObject<HTMLInputElement>
@@ -38,40 +61,37 @@ export const InputForm = () => {
       ref.current.focus();
     }
   };
+
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
     id.onReset();
     pw.onReset();
     pwCheck.onReset();
     setIdRight(false);
     setPwRight(false);
+    setIdCheck(false);
   };
+
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!idValid(id.value)) {
-      alert("아이디를 다시 입력해주세요");
-      setIdRight(false);
-    } else if (!idCheck) {
-      alert("아이디의 중복을 확인해주세요");
-    } else if (!pwValid(pw.value) || pw.value !== pwCheck.value) {
-      alert("비밀번호를 다시 입력해주세요");
-      setIdRight(true);
-      setPwRight(false);
-    } else {
-      setIdRight(true);
-      setPwRight(true);
-      //http://localhost:3000/api/users
-      fetch("ip:port", {
+    if (!isIdRight) alert("아이디를 다시 입력해주세요");
+    else if (!idCheck) alert("아이디의 중복을 확인해주세요");
+    else if (!isPwRight) alert("비밀번호를 다시 입력해주세요");
+    else {
+      //useFetch
+      fetch(`${URL}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          loginId: id,
-          password: pw,
+          loginId: id.value,
+          password: pw.value,
         }),
       })
+        .then((res) => res.json())
         .then((response) => {
-          alert("로그인페이지로 이동합니다");
+          if (response.statusCode === 400) throw new Error();
+          alert("회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.");
           navigate("/signin");
         })
         .catch(() => {
@@ -81,16 +101,19 @@ export const InputForm = () => {
     }
   };
   const handleIdCheck = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!id.value) alert("아이디를 입력해주세요");
+    if (!idValid(id.value)) alert("올바른 아이디를 입력해주세요");
     else {
-      fetch(`ip:port/users?userId=${id.value}`)
+      fetch(`${URL}/users?loginId=${id.value}`)
         .then((res) => res.json())
         .then((res) => {
-          if (res.statusCode === 200) {
-            alert("아이디를 사용하실 수 있습니다");
-            setIdRight(true);
-            setIdCheck(true);
-          } else alert("아이디를 사용하실 수 없습니다");
+          if (res.statusCode === 200) throw new Error();
+          alert("아이디를 사용하실 수 있습니다");
+          setIdCheck(true);
+        })
+        .catch((err) => {
+          alert("아이디를 사용하실 수 없습니다");
+          setIdCheck(false);
+          setIdRight(false);
         });
     }
   };
