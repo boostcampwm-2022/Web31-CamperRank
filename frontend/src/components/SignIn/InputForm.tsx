@@ -34,7 +34,7 @@ export const InputForm = () => {
             isLoggedIn: true,
             ID: data.userId
           });
-          navigate('/');
+          navigate(-1);
           return;
         }
         alert('로그인에 실패하였습니다.');
