@@ -9,5 +9,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [UsersController],
   // users 안에서 사용하기 위한 provider
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}

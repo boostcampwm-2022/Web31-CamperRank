@@ -6,4 +6,9 @@ export class CreateUserDto {
 
   @ApiProperty({ description: '비밀번호' })
   password: string;
+
+  constructor(loginId, password) {
+    this.loginId = loginId;
+    this.password = password;
+  }
 }

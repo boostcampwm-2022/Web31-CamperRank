@@ -12,4 +12,11 @@ export class CreateTestCaseDto {
 
   @ApiProperty({ description: '테스트 케이스 출력' })
   testOutput: string;
+
+  constructor(problemId, caseNumber, testInput, testOutput) {
+    this.problemId = problemId;
+    this.caseNumber = caseNumber;
+    this.testInput = testInput;
+    this.testOutput = testOutput;
+  }
 }
