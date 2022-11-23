@@ -14,40 +14,50 @@ function PLClassifier(pl: string) {
   }
 }
 
-// function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
-//   if (cmd === "python") {
-//     const totalCode =
-//       "import sys" + "\n\n" + userCode + "\n\n" + "if __name__ == '__main__':";
-//     let argsStr = "    solution(";
-//     for (let i = 0; i < testCaseInput.length; i++) {
-//       if (i !== 0) {
-//         argsStr += ",";
-//       }
-//       argsStr += `sys.argv[${i + 1}]`;
-//     }
-//   } else if (cmd === "node") {
-//   }
-// }
+function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
+  if (cmd === "python") {
+    const totalCode =
+      "import sys" +
+      "\n\n" +
+      userCode +
+      "\n\n" +
+      "if __name__ == '__main__':\n\tsolution(";
+    const argsArr = [];
+    for (let i = 0; i < testCaseInput.length; i++) {
+      argsArr.push(`sys.argv[${i + 1}]`);
+    }
+    const argsStr = argsArr.join(",");
+    return totalCode + argsStr + ")";
+  } else if (cmd === "node") {
+  }
+}
 
 export const gradingController = async (req: any, res: any) => {
   try {
     // const codeText = req.body.code;
     const userCode = req.body.data.userCode;
-    console.log(userCode);
+    console.log("==========1==========");
     console.log(req.body.data);
+    console.log("==========2==========");
+
     const fileName = uuid();
     const plClassifier = PLClassifier(req.body.data.language);
     const filePath =
       "C:\\Users\\SeHyun\\Code\\boostcamp_Membership\\CamperRank\\tempCodes\\" +
       fileName +
       plClassifier.ext;
+    const totalCode = buildCode(
+      userCode,
+      req.body.data.testCaseInput,
+      plClassifier.cmd
+    );
 
-    fs.writeFileSync(filePath, `${userCode}`);
+    fs.writeFileSync(filePath, `${totalCode}`);
     const pythonResult = spawnSync(plClassifier.cmd, [`${filePath}`], {});
     console.log(pythonResult);
     const resultText = pythonResult.stdout.toString();
     const errText = pythonResult.stderr.toString();
-    fs.unlinkSync(filePath);
+    // fs.unlinkSync(filePath);
 
     if (errText.length === 0 && req.body.data.testCaseOutput === resultText) {
       res.status(200).json({

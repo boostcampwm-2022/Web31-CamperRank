@@ -46,7 +46,7 @@ export class SolvedController {
 
     for (const gradeSolvedDto of gradeSolvedDtos) {
       this.httpService.axiosRef
-        .post('http://localhost:4000/v1/grade', { data: gradeSolvedDto })
+        .post('http://localhost:4000/v1/grading', { data: gradeSolvedDto })
         .then((response) => {
           results.push(response.data);
           console.log(response.data);
