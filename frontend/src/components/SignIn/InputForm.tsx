@@ -1,6 +1,6 @@
 import {IDInputContainer, InputFormContainer, PasswordInputContainer} from "../../styles/SignIn.style";
-import React, {useCallback, useMemo, useState, useRef, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import React, {useCallback, useMemo, useState, useRef} from "react";
+import {useNavigate, useLocation} from "react-router-dom";
 import {useSetRecoilState} from "recoil";
 import {userState} from "../../recoils/userState";
 
@@ -11,9 +11,13 @@ export const InputForm = () => {
   const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/auth/signin", []);
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
+  let {state} = useLocation();
 
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(state);
+    state = state ?? -1;
+    console.log(state);
     setLoading(true);
     fetch(requestURL, {
       method: "POST",
@@ -34,7 +38,7 @@ export const InputForm = () => {
             isLoggedIn: true,
             ID: data.userId
           });
-          navigate(-1);
+          navigate(state);
           return;
         }
         alert('로그인에 실패하였습니다.');

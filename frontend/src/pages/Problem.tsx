@@ -5,6 +5,8 @@ import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
 import ProblemContent from "../components/Problem/Content";
 import {ProblemInfo} from "@types";
+import {useRecoilValue} from "recoil";
+import {userState} from "../recoils/userState";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -123,10 +125,20 @@ const Problem = () => {
     description: ""
   });
   const {id, version} = useParams();
+  const user = useRecoilValue(userState);
 
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if(user.isLoggedIn) {
+      return;
+    }
+    navigate('/signin', {
+      state: `/problem/${version}/${id}`
+    });
+  }, [user.isLoggedIn]);
 
   useEffect(() => {
     fetch(`${URL}/problem/${id}`)
@@ -160,10 +172,6 @@ const Problem = () => {
     onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => {
       if (moveColResize) resizeProblemWrapper(e.clientX);
       else if (moveRowResize) resizeEditorWrapper(e.clientY);
-      // else {
-      //   setMoveColResize(false);
-      //   setMoveRowResize(false);
-      // }
     },
     onMouseUp: (e: React.MouseEvent<HTMLDivElement>) => {
       setMoveColResize(false);
