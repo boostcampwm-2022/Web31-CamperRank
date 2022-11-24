@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 export const HeaderContainer = styled.div`
   box-sizing: border-box;
@@ -26,8 +26,8 @@ export const HeaderContainer = styled.div`
 
         .greater {
           margin-top: 2px;
-          height: 24px;
-          width: 12px;
+          height: 1.5rem;
+          width: 0.75rem;
         }
 
         a {
@@ -43,7 +43,7 @@ export const HeaderContainer = styled.div`
 
 export const AnchorLogo = styled(Link)`
   font-weight: 700;
-  font-size: 32px;
+  font-size: 2rem;
   cursor: pointer;
   text-decoration: none;
 `;
@@ -63,8 +63,10 @@ export const MenuContainer = styled.div`
     font-size: 0.7rem;
     border: none;
     background: none;
+  }
 
-    &:nth-child(1) {
+  a:nth-child(1) {
+    button{
       border-right: solid 1px silver;
     }
   }
