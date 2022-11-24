@@ -15,6 +15,7 @@ import { UpdateSolvedDto } from './dto/update-solved.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SimpleSolvedDto } from './dto/simple-solved.dto';
 import { HttpService } from '@nestjs/axios';
+import { SolvedResult } from './entities/SolvedResult.enum';
 
 @Controller('solved')
 @ApiTags('답안 제출 기록 관련 API')
@@ -71,19 +72,25 @@ export class SolvedController {
       createSolvedDto,
     );
 
-    const results = [];
+    const results = await Promise.all(
+      gradeSolvedDtos.map((value) => {
+        return this.httpService.axiosRef
+          .post('http://localhost:4000/v1/grading', { data: value })
+          .then((response) => response.data)
+          .catch((err) => {
+            console.error(err);
+          });
+      }),
+    );
 
-    for (const gradeSolvedDto of gradeSolvedDtos) {
-      console.log('gradeSolvedDto', gradeSolvedDto);
-      this.httpService.axiosRef
-        .post('http://localhost:4000/v1/grading', { data: gradeSolvedDto })
-        .then((response) => {
-          results.push(response.data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
+    const failList = results.filter((value) => {
+      return value.resultCode !== 1000;
+    });
+
+    return await this.solvedService.updateResult(
+      results[0].solvedId,
+      failList.length === 0 ? SolvedResult.Success : SolvedResult.Fail,
+    );
   }
 
   @Get()
