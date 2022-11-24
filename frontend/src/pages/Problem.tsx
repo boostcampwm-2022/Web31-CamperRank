@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { PageButtons, ProblemButtons } from "../components/Problem/Buttons";
+import {ProblemHeader} from "../components/ProblemHeader";
+
 const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
@@ -118,7 +120,9 @@ const Problem = () => {
   };
   return (
     <Wrapper>
-      <HeaderWrapper>Header</HeaderWrapper>
+      <HeaderWrapper>
+        <ProblemHeader URL={"123"} problemName={"456"} type={0}/>
+      </HeaderWrapper>
       <MainWrapper>
         <PageButtonsWrapper>
           <PageButtons></PageButtons>
