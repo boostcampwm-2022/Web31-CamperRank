@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, {useState, useRef, useEffect} from "react";
+import {useParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
-import { PageButtons, ProblemButtons } from "../components/Problem/Buttons";
-import { ProblemHeader } from "../components/ProblemHeader";
+import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
+import {ProblemHeader} from "../components/ProblemHeader";
 import ProblemContent from "../components/Problem/Content";
-import { ProblemInfo } from "@types";
+import {ProblemInfo} from "@types";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -113,8 +113,11 @@ const REM = getComputedStyle(document.documentElement).fontSize;
 const Problem = () => {
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
-  const [problem, setProblem] = useState<ProblemInfo>({});
-  const { id, version } = useParams();
+  const [problem, setProblem] = useState<ProblemInfo>({
+    title: "",
+    description: ""
+  });
+  const {id, version} = useParams();
 
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
@@ -125,8 +128,8 @@ const Problem = () => {
       .then((res) => res.json())
       .then((res) => {
         if (res.statusCode !== 200) throw new Error();
-        const { level, title, description } = res;
-        setProblem({ level, title, description });
+        const {level, title, description} = res;
+        setProblem({level, title, description});
       })
       .catch((err) => {
         alert("문제를 불러올 수 없습니다");
