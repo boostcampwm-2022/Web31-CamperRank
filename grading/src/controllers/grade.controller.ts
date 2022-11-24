@@ -75,11 +75,13 @@ export const gradingController = async (req: any, res: any) => {
 export const startGrade = async function (req: any, res: any) {
   //
   try {
-    let { userCode, language, input, output } = req.body;
+    let { problemId, userCode, language, input, output } = req.body;
     let filePath = "";
     let codeStyle = "";
     let fileList = [];
     const fileName = Math.floor(Math.random() * 100000000);
+
+    problemId = problemId || "undefined";
 
     if (language === "Python") {
       const pythonText = fs.readFileSync(__dirname + "/python.txt", "utf-8");
@@ -97,13 +99,13 @@ export const startGrade = async function (req: any, res: any) {
           fileList.push(input[i]);
         }
       }
-      userCode += "))";
+      userCode += ")\nprint('##########')\nprint(answer)";
       console.log(userCode);
     } else if (language === "JavaScript") {
       codeStyle = "node";
       filePath = __dirname + "../../../" + fileName + ".js";
       fileList.push(filePath);
-      userCode += "\n\n" + "console.log(solution(";
+      userCode += "\n\n" + "let answer = solution(";
       if (input !== undefined) {
         for (let i = 1; i < input.length + 1; i++) {
           if (i !== 1) {
@@ -113,17 +115,28 @@ export const startGrade = async function (req: any, res: any) {
           fileList.push(input[i - 1]);
         }
       }
-      userCode += "))";
+      userCode += ")\n\tconsole.log('##########')\n\tconsole.log(answer)";
       console.log(userCode);
     }
 
     fs.writeFileSync(filePath, `${userCode}`);
 
-    const codeResult = spawnSync(codeStyle, fileList);
+    const codeResult = spawnSync(codeStyle, fileList, {
+      maxBuffer: 1000,
+      /* timeout 3s */
+      timeout: 3000,
+    });
     const resultText = codeResult.stdout.toString();
     const errText = codeResult.stderr.toString();
-    console.log(resultText);
-    console.log(errText);
+    let solutionText = "";
+    let answerText = "";
+    if (resultText.split("##########\n").length < 2) {
+      solutionText = "";
+      answerText = resultText.split("##########\n")[0];
+    } else {
+      solutionText = resultText.split("##########\n")[0];
+      answerText = resultText.split("##########\n")[1] || "";
+    }
 
     fs.unlinkSync(filePath);
 
@@ -131,15 +144,28 @@ export const startGrade = async function (req: any, res: any) {
       return res.json({
         isSuccess: false,
         code: 2000,
-        message: "채점 실패",
+        message: "코드 실행 실패",
       });
     } else {
-      return res.json({
-        result: resultText,
-        isSuccess: true,
-        code: 1000,
-        message: "채점 성공",
-      });
+      if (answerText == output) {
+        return res.json({
+          problemId: problemId,
+          solutionText: solutionText,
+          answerText: answerText,
+          isSuccess: true,
+          code: 1000,
+          message: "정답 맞추기 성공",
+        });
+      } else {
+        return res.json({
+          problemId: problemId,
+          solutionText: solutionText,
+          answerText: answerText,
+          isSuccess: true,
+          code: 1000,
+          message: "정답 맞추기 실패",
+        });
+      }
     }
   } catch (err) {
     console.log(err);
