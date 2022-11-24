@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import Buttons from "../components/Problem/ProblemButtons/Buttons";
-
+import { PageButtons, ProblemButtons } from "../components/Problem/Buttons";
 const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
@@ -24,10 +23,9 @@ const MainWrapper = styled.div`
   display: flex;
 `;
 
-const ProblemButtonWrapper = styled.div`
+const PageButtonsWrapper = styled.div`
   height: 100%;
-  width: 3%;
-  border: 2px solid black;
+  width: 2.5%;
 `;
 
 const ProblemWrapper = styled.div`
@@ -108,11 +106,9 @@ const Problem = () => {
   };
   const handleRowSizeController = {
     onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => {
-      console.log(e);
       setMoveRowResize(true);
     },
     onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => {
-      console.log("MOVE");
       if (moveRowResize) resizeEditorWrapper(e.clientY);
       else setMoveRowResize(false);
     },
@@ -124,7 +120,9 @@ const Problem = () => {
     <Wrapper>
       <HeaderWrapper>Header</HeaderWrapper>
       <MainWrapper>
-        <ProblemButtonWrapper>Problem Button</ProblemButtonWrapper>
+        <PageButtonsWrapper>
+          <PageButtons></PageButtons>
+        </PageButtonsWrapper>
         <ProblemWrapper ref={problemRef}>Problem</ProblemWrapper>
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
@@ -132,7 +130,7 @@ const Problem = () => {
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>Result</ResultWrapper>
           <ButtonsWrapper>
-            <Buttons></Buttons>
+            <ProblemButtons></ProblemButtons>
           </ButtonsWrapper>
         </SolvingWrapper>
       </MainWrapper>

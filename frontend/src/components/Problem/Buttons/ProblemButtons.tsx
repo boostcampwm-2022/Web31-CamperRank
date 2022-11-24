@@ -27,13 +27,10 @@ const Button = ({ name }: ButtonProp) => {
   return <ButtonWrapper name={name}>{name}</ButtonWrapper>;
 };
 
-const Buttons = () => {
-  return (
-    <>
-      <Button name="초기화"></Button>
-      <Button name="코드테스트"></Button>
-      <Button name="제출"></Button>
-    </>
-  );
+const ProblemButtons = () => {
+  const buttonNames = ["초기화", "코드테스트", "제출"];
+  return buttonNames.map((name: string, idx: number) => (
+    <Button key={idx} name={name} />
+  ));
 };
-export default Buttons;
+export default ProblemButtons;
