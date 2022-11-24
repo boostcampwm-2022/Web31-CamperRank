@@ -10,6 +10,7 @@ const ContentWrapper = styled.div`
   margin-top: 2rem;
   padding: 1.5rem;
   background: #F5FDF8;
+  height: fit-content;
 `;
 
 const Level = styled.div`
@@ -40,6 +41,7 @@ const ProblemDummy = `
   <div>[[9, 9], [8, 8]]</div><br>
   <h4>예시 출력#2</h4>
   <div>[18, 16]</div>
+  
 </div>
 `;
 
