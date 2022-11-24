@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import styled, { css } from "styled-components";
+import React from "react";
+import styled from "styled-components";
 
 type ButtonProp = {
   name: string;
 };
 
 const ButtonWrapper = styled.button<ButtonProp>`
-  border: none;
   width: 6rem;
   height: 80%;
   margin: 0.5rem;
@@ -18,7 +17,7 @@ const ButtonWrapper = styled.button<ButtonProp>`
       ? "0px 8px 24px rgba(51, 195, 99, 0.5);"
       : "0px 4px 1px rgba(0, 0, 0, 0.25);"};
   border-radius: 4px;
-  &: hover {
+  &:hover {
     background: ${(props) => (props.name === "제출" ? "#DBF6E4" : "#eeeeee")};
   }
 `;
@@ -29,8 +28,12 @@ const Button = ({ name }: ButtonProp) => {
 
 const ProblemButtons = () => {
   const buttonNames = ["초기화", "코드테스트", "제출"];
-  return buttonNames.map((name: string, idx: number) => (
-    <Button key={idx} name={name} />
-  ));
+  return (
+    <>
+      {buttonNames.map((name, idx) => (
+        <Button key={idx} name={name} />
+      ))}
+    </>
+  );
 };
 export default ProblemButtons;
