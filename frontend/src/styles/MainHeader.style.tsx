@@ -5,7 +5,7 @@ export const MainHeaderContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
   padding: 0 6rem;
-  height: 10rem;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
