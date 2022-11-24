@@ -9,36 +9,19 @@ import {userState} from "./recoils/userState";
 const App = () => {
   const [user, setUser] = useRecoilState(userState);
   const isLoggedIn = useMemo(() => user.isLoggedIn, [user.isLoggedIn]);
-  const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/auth/jwtLogin", []);
 
   useEffect(() => {
     const token = localStorage.getItem('camperRankToken');
-    if (!token || user.isLoggedIn) {
+    const camperID = localStorage.getItem('camperID');
+    if (!token || !camperID || user.isLoggedIn) {
       return;
     }
-    fetch(requestURL, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({})
-    }).then(res => {
-      if (!res.ok) {
-        localStorage.removeItem('camperRankToken');
-        return;
-      }
-      return res.json().then(data => {
-        setUser({
-          token,
-          isLoggedIn: true,
-          ID: data.userId
-        })
-      });
-    }).catch((e) => {
-      console.log(e);
+    setUser({
+      token,
+      isLoggedIn: true,
+      ID: camperID
     });
-  }, []);
+  }, [])
 
   return (
     <BrowserRouter>
@@ -48,7 +31,7 @@ const App = () => {
         {!isLoggedIn && <Route path="/signin" element={<SignIn/>}/>}
         {/*{isLoggedIn && <Route path="/profile" element={<SignIn/>}/>}*/}
         <Route path="/problems" element={<ProblemList/>}/>
-        <Route path="/problem/:version/:id" element={<Problem />} />
+        <Route path="/problem/:version/:id" element={<Problem/>}/>
         <Route path="*" element={<Navigate to="/"/>}/>
       </Routes>
     </BrowserRouter>

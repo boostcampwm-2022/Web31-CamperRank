@@ -29,6 +29,7 @@ export const InputForm = () => {
         setLoading(false);
         if (data.msg === 'success') {
           localStorage.setItem('camperRankToken', data.accessToken);
+          localStorage.setItem('camperID', data.userId);
           setUser({
             token: data.accessToken,
             isLoggedIn: true,
