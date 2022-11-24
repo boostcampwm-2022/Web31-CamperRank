@@ -5,7 +5,7 @@ import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
 import ProblemContent from "../components/Problem/Content";
 import {ProblemInfo} from "@types";
-import {useRecoilValue} from "recoil";
+import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
 
 const Wrapper = styled.div`
@@ -125,20 +125,31 @@ const Problem = () => {
     description: ""
   });
   const {id, version} = useParams();
-  const user = useRecoilValue(userState);
+  const [user, setUser] = useRecoilState(userState);
 
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(user.isLoggedIn) {
+    if (user.isLoggedIn) {
       return;
     }
-    navigate('/signin', {
-      state: `/problem/${version}/${id}`
+    const token = localStorage.getItem('camperRankToken');
+    const camperID = localStorage.getItem('camperID');
+    if (!token || !camperID) {
+      navigate('/signin', {
+        state: `problem/${version}/${id}`
+      });
+      return;
+    }
+    setUser({
+      token,
+      isLoggedIn: true,
+      ID: camperID
     });
-  }, [user.isLoggedIn]);
+
+  }, []);
 
   useEffect(() => {
     fetch(`${URL}/problem/${id}`)

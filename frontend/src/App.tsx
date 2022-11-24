@@ -9,7 +9,6 @@ import {userState} from "./recoils/userState";
 const App = () => {
   const [user, setUser] = useRecoilState(userState);
   const isLoggedIn = useMemo(() => user.isLoggedIn, [user.isLoggedIn]);
-
   useEffect(() => {
     const token = localStorage.getItem('camperRankToken');
     const camperID = localStorage.getItem('camperID');
@@ -21,14 +20,14 @@ const App = () => {
       isLoggedIn: true,
       ID: camperID
     });
-  }, [])
+  }, []);
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home/>}/>
         {!isLoggedIn && <Route path="/signup" element={<SignUp/>}/>}
-        {!isLoggedIn && <Route path="/signin" element={<SignIn/>}/>}
+        {<Route path="/signin" element={<SignIn/>}/>}
         {/*{isLoggedIn && <Route path="/profile" element={<SignIn/>}/>}*/}
         <Route path="/problems" element={<ProblemList/>}/>
         <Route path="/problem/:version/:id" element={<Problem/>}/>

@@ -11,13 +11,10 @@ export const InputForm = () => {
   const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/auth/signin", []);
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
-  let {state} = useLocation();
+  const {state} = useLocation();
 
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(state);
-    state = state ?? -1;
-    console.log(state);
     setLoading(true);
     fetch(requestURL, {
       method: "POST",
@@ -39,7 +36,7 @@ export const InputForm = () => {
             isLoggedIn: true,
             ID: data.userId
           });
-          navigate(state);
+          state ? navigate(`../${state}`) : navigate(-1);
           return;
         }
         alert('로그인에 실패하였습니다.');
