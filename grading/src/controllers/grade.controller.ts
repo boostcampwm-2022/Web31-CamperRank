@@ -65,10 +65,7 @@ export const gradingController = async (req: any, res: any) => {
     const userCode = req.body.data.userCode;
     const fileName = uuid();
     const plClassifier = PLClassifier(req.body.data.language);
-    const filePath =
-      "C:\\Users\\SeHyun\\Code\\boostcamp_Membership\\CamperRank\\tempCodes\\" +
-      fileName +
-      plClassifier.ext;
+    const filePath = process.env.NEW_FILE_PATH + fileName + plClassifier.ext;
     const totalCode = buildCode(userCode, testCaseInput, plClassifier.cmd);
 
     fs.writeFileSync(filePath, `${totalCode}`);

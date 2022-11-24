@@ -2,9 +2,9 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
   push:
-    branches: ["main", "dev"]
+    branches: [ "main", "dev" ]
   pull_request:
-    branches: ["main", "dev"]
+    branches: [ "main", "dev" ]
 jobs:
   deployment:
     name: deployment
@@ -28,4 +28,4 @@ jobs:
             cd /home/code/Web31-CamperRank/backend
             npm install
             pm2 start -n server npm -- start
-            sudo nginx -s restart
+            sudo nginx -s reload

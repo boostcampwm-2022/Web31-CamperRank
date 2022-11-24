@@ -154,8 +154,10 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-backend/src/.env
-backend/src/**/.env
+backend/.env
+backend/**/.env
+grading/.env
+grading/**/.env
 .env.test
 
 # parcel-bundler cache (https://parceljs.org/)
