@@ -133,27 +133,27 @@ export class AppController {
     );
 
     const simpleTestCaseDto4 = await this.testCaseService.create(
-      new CreateTestCaseDto(2, 1, '123', '222'),
+      new CreateTestCaseDto(2, 1, `'123'`, '222'),
     );
 
     const simpleTestCaseDto5 = await this.testCaseService.create(
-      new CreateTestCaseDto(2, 2, '234', '222'),
+      new CreateTestCaseDto(2, 2, `'234'`, '222'),
     );
 
     const simpleTestCaseDto6 = await this.testCaseService.create(
-      new CreateTestCaseDto(2, 3, '345', '222'),
+      new CreateTestCaseDto(2, 3, `'345'`, '222'),
     );
 
     const simpleTestCaseDto7 = await this.testCaseService.create(
-      new CreateTestCaseDto(3, 1, '123', '333'),
+      new CreateTestCaseDto(3, 1, '1 2\n3 4\n5', '15'),
     );
 
     const simpleTestCaseDto8 = await this.testCaseService.create(
-      new CreateTestCaseDto(3, 2, '234', '333'),
+      new CreateTestCaseDto(3, 2, '6 7\n8 9\n10', '40'),
     );
 
     const simpleTestCaseDto9 = await this.testCaseService.create(
-      new CreateTestCaseDto(3, 3, '345', '333'),
+      new CreateTestCaseDto(3, 3, '10 11\n12 13 14\n15', '75'),
     );
 
     const simpleSolvedDto1 = await this.solvedService.create(

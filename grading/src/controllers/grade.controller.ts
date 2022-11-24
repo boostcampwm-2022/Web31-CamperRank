@@ -3,6 +3,8 @@ import { v4 as uuid } from "uuid";
 
 import fs from "fs";
 
+const IDENTIFY_CODE = process.env.IDENTIFY_CODE || "secret";
+
 function PLClassifier(pl: string) {
   switch (pl) {
     case "Python":
@@ -14,51 +16,92 @@ function PLClassifier(pl: string) {
   }
 }
 
-// function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
-//   if (cmd === "python") {
-//     const totalCode =
-//       "import sys" + "\n\n" + userCode + "\n\n" + "if __name__ == '__main__':";
-//     let argsStr = "    solution(";
-//     for (let i = 0; i < testCaseInput.length; i++) {
-//       if (i !== 0) {
-//         argsStr += ",";
-//       }
-//       argsStr += `sys.argv[${i + 1}]`;
-//     }
-//   } else if (cmd === "node") {
-//   }
-// }
+function parserPython(userCode: string, testCaseInput: any[]) {
+  const totalCode =
+    "import sys" +
+    "\n\n" +
+    userCode +
+    "\n\n" +
+    "if __name__ == '__main__':\n\t";
+  const argsArr = [];
+  const varArr = [];
+  for (let i = 0; i < testCaseInput.length; i++) {
+    varArr.push(
+      `argv${i + 1} = ${
+        testCaseInput[i].length > 1
+          ? "[" + testCaseInput[i] + "]"
+          : testCaseInput[i]
+      }`
+    );
+    argsArr.push(`argv${i + 1}`);
+  }
+  const argsStr = argsArr.join(",");
+  const varStr = varArr.join("\n\t");
+  return (
+    totalCode +
+    varStr +
+    "\n\tanswer = solution(" +
+    argsStr +
+    `)\n\tprint('${IDENTIFY_CODE}')\n\tprint(answer)`
+  );
+}
+
+function parserNode(userCode: string, testCaseInput: any[]) {}
+
+function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
+  switch (cmd) {
+    case "python":
+      return parserPython(userCode, testCaseInput);
+    case "node":
+      return parserNode(userCode, testCaseInput);
+    default:
+      throw Error();
+  }
+}
 
 export const gradingController = async (req: any, res: any) => {
   try {
-    // const codeText = req.body.code;
+    const testCaseInput = req.body.data.testCaseInput;
     const userCode = req.body.data.userCode;
-    console.log(userCode);
-    console.log(req.body.data);
     const fileName = uuid();
     const plClassifier = PLClassifier(req.body.data.language);
-    const filePath =
-      "C:\\Users\\SeHyun\\Code\\boostcamp_Membership\\CamperRank\\tempCodes\\" +
-      fileName +
-      plClassifier.ext;
+    const filePath = process.env.NEW_FILE_PATH + fileName + plClassifier.ext;
+    const totalCode = buildCode(userCode, testCaseInput, plClassifier.cmd);
 
-    fs.writeFileSync(filePath, `${userCode}`);
-    const pythonResult = spawnSync(plClassifier.cmd, [`${filePath}`], {});
-    console.log(pythonResult);
+    fs.writeFileSync(filePath, `${totalCode}`);
+    const pythonResult = spawnSync(
+      plClassifier.cmd,
+      [`${filePath}`, testCaseInput],
+      {
+        maxBuffer: 1024 * 1024,
+        timeout: 10000,
+      }
+    );
     const resultText = pythonResult.stdout.toString();
     const errText = pythonResult.stderr.toString();
     fs.unlinkSync(filePath);
 
-    if (errText.length === 0 && req.body.data.testCaseOutput === resultText) {
+    const strings = resultText.split(IDENTIFY_CODE);
+    const userPrint = strings[0].replace(/\\r\\n/gi, "\n");
+    const userAnswer = strings[1].trim();
+    console.log(errText);
+
+    if (errText.length === 0 && req.body.data.testCaseOutput === userAnswer) {
       res.status(200).json({
         solvedId: req.body.data.solvedId,
         result: "success",
+        userPrint: userPrint,
+        userAnswer: userAnswer,
+        resultCode: 1000,
         msg: "정답",
       });
     } else {
       res.status(200).json({
         solvedId: req.body.data.solvedId,
         result: "fail",
+        userPrint: userPrint,
+        userAnswer: userAnswer,
+        resultCode: 1001,
         msg: "오답",
       });
     }
@@ -67,19 +110,21 @@ export const gradingController = async (req: any, res: any) => {
     res.status(400).json({
       solvedId: req.body.data.solvedId,
       result: "fail",
+      resultCode: 2000,
       msg: "채점 실패",
     });
   }
 };
 
 export const startGrade = async function (req: any, res: any) {
-  //
   try {
-    let { userCode, language, input, output } = req.body;
+    let { problemId, userCode, language, input, output } = req.body.data;
     let filePath = "";
     let codeStyle = "";
     let fileList = [];
     const fileName = Math.floor(Math.random() * 100000000);
+
+    problemId = problemId || "undefined";
 
     if (language === "Python") {
       const pythonText = fs.readFileSync(__dirname + "/python.txt", "utf-8");
@@ -97,13 +142,13 @@ export const startGrade = async function (req: any, res: any) {
           fileList.push(input[i]);
         }
       }
-      userCode += "))";
+      userCode += ")\nprint('##########')\nprint(answer)";
       console.log(userCode);
     } else if (language === "JavaScript") {
       codeStyle = "node";
       filePath = __dirname + "../../../" + fileName + ".js";
       fileList.push(filePath);
-      userCode += "\n\n" + "console.log(solution(";
+      userCode += "\n\n" + "let answer = solution(";
       if (input !== undefined) {
         for (let i = 1; i < input.length + 1; i++) {
           if (i !== 1) {
@@ -113,17 +158,28 @@ export const startGrade = async function (req: any, res: any) {
           fileList.push(input[i - 1]);
         }
       }
-      userCode += "))";
+      userCode += ")\n\tconsole.log('##########')\n\tconsole.log(answer)";
       console.log(userCode);
     }
 
     fs.writeFileSync(filePath, `${userCode}`);
 
-    const codeResult = spawnSync(codeStyle, fileList);
+    const codeResult = spawnSync(codeStyle, fileList, {
+      maxBuffer: 1000,
+      /* timeout 3s */
+      timeout: 3000,
+    });
     const resultText = codeResult.stdout.toString();
     const errText = codeResult.stderr.toString();
-    console.log(resultText);
-    console.log(errText);
+    let solutionText = "";
+    let answerText = "";
+    if (resultText.split("##########\n").length < 2) {
+      solutionText = "";
+      answerText = resultText.split("##########\n")[0];
+    } else {
+      solutionText = resultText.split("##########\n")[0];
+      answerText = resultText.split("##########\n")[1] || "";
+    }
 
     fs.unlinkSync(filePath);
 
@@ -131,15 +187,28 @@ export const startGrade = async function (req: any, res: any) {
       return res.json({
         isSuccess: false,
         code: 2000,
-        message: "채점 실패",
+        message: "코드 실행 실패",
       });
     } else {
-      return res.json({
-        result: resultText,
-        isSuccess: true,
-        code: 1000,
-        message: "채점 성공",
-      });
+      if (answerText == output) {
+        return res.json({
+          problemId: problemId,
+          solutionText: solutionText,
+          answerText: answerText,
+          isSuccess: true,
+          code: 1000,
+          message: "정답 맞추기 성공",
+        });
+      } else {
+        return res.json({
+          problemId: problemId,
+          solutionText: solutionText,
+          answerText: answerText,
+          isSuccess: true,
+          code: 1000,
+          message: "정답 맞추기 실패",
+        });
+      }
     }
   } catch (err) {
     console.log(err);

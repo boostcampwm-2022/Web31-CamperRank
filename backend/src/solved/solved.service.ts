@@ -84,6 +84,46 @@ export class SolvedService {
     }
   }
 
+  /**
+   * solved가 저장되지 않는다.
+   * @param createSolvedDto
+   */
+  async createToTest(createSolvedDto: CreateSolvedDto) {
+    const foundProblem = await this.problemRepository.findOneBy({
+      id: createSolvedDto.problemId,
+    });
+
+    const foundUser = await this.userRepository.findOneBy({
+      id: createSolvedDto.userId,
+    });
+
+    if (foundProblem !== null && foundUser !== null) {
+      const solved = Solved.createSolved({
+        problem: foundProblem,
+        user: foundUser,
+        userCode: createSolvedDto.userCode,
+        language: createSolvedDto.language,
+        result: createSolvedDto.result
+          ? createSolvedDto.result
+          : SolvedResult.Ready,
+      });
+
+      const foundTestCases = await this.testCaseRepository.find({
+        where: {
+          problem: {
+            id: createSolvedDto.problemId,
+          },
+        },
+        take: 3,
+      });
+      return foundTestCases.map((value) => {
+        return new GradeSolvedDto(solved, value);
+      });
+    } else {
+      return null;
+    }
+  }
+
   async findAll() {
     const solvedList = await this.solvedRepository.find();
     return solvedList.map((value: Solved) => {
@@ -94,6 +134,15 @@ export class SolvedService {
   async findSolvedById(solvedId) {
     const solved = await this.solvedRepository.findOneBy({ id: solvedId });
     return new SimpleSolvedDto(solved);
+  }
+
+  async updateResult(solvedId, solvedResult) {
+    const solved = await this.solvedRepository.findOneBy({ id: solvedId });
+    console.log(solved);
+    solved.result = solvedResult;
+    const updatedSolved = await this.solvedRepository.save(solved);
+    // console.log(updatedSolved);
+    return new SimpleSolvedDto(updatedSolved);
   }
 
   async findSolvedByOpt({ problemId, userId }) {
