@@ -11,9 +11,11 @@ const ButtonWrapper = styled.button`
   height: auto;
   padding: 1rem 0;
   background: #ffffff;
-  border: 2px solid #888888;
+  border: 1px solid #888888;
   &:hover {
-    background: #eeeeee;
+    background: #EEF5F0;
+    font-weight: 600;
+    border: none;
   }
   span {
     writing-mode: vertical-lr;
