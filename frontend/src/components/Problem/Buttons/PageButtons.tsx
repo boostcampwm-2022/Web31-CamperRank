@@ -12,7 +12,7 @@ const ButtonWrapper = styled.button`
   padding: 1rem 0;
   background: #ffffff;
   border: 1px solid #888888;
-  &: nth-child(1) {
+  &:nth-child(1) {
     background: #EEF5F0;
     font-weight: 500;
     border: none;

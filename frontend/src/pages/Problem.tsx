@@ -48,7 +48,6 @@ const ProblemWrapper = styled.div`
   overflow-x: hidden;
   overflow-y: scroll;
 
-  ///* custom scrollbar */
   ::-webkit-scrollbar {
     width: 20px;
   }
@@ -153,29 +152,31 @@ const Problem = () => {
       }px`;
     }
   };
+
+  const mainEventHandler = {
+    onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => {
+      if (moveColResize) resizeProblemWrapper(e.clientX);
+      else if (moveRowResize) resizeEditorWrapper(e.clientY);
+      // else {
+      //   setMoveColResize(false);
+      //   setMoveRowResize(false);
+      // }
+    },
+    onMouseUp: (e: React.MouseEvent<HTMLDivElement>) => {
+      setMoveColResize(false);
+      setMoveRowResize(false);
+    }
+  };
+
   const handleColSizeController = {
     onMouseDown: () => {
       setMoveColResize(true);
-    },
-    onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => {
-      if (moveColResize) resizeProblemWrapper(e.clientX);
-      else setMoveColResize(false);
-    },
-    onMouseUp: () => {
-      setMoveColResize(false);
-    },
+    }
   };
   const handleRowSizeController = {
     onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => {
       setMoveRowResize(true);
-    },
-    onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => {
-      if (moveRowResize) resizeEditorWrapper(e.clientY);
-      else setMoveRowResize(false);
-    },
-    onMouseUp: (e: React.MouseEvent<HTMLDivElement>) => {
-      setMoveRowResize(false);
-    },
+    }
   };
   return (
     <Wrapper>
@@ -186,7 +187,7 @@ const Problem = () => {
           type={0}
         />
       </HeaderWrapper>
-      <MainWrapper>
+      <MainWrapper {...mainEventHandler}>
         <PageButtonsWrapper>
           <PageButtons></PageButtons>
         </PageButtonsWrapper>
