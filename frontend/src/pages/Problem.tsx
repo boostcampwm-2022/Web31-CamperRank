@@ -38,6 +38,7 @@ const PageButtonsWrapper = styled.div`
 
 const ProblemWrapper = styled.div`
   width: 47%;
+  min-width: 15%;
   height: auto;
   display: flex;
   justify-content: center;
@@ -79,11 +80,13 @@ const SolvingWrapper = styled.div`
 const EditorWrapper = styled.div`
   width: 100%;
   height: 65%;
+  min-height: 10%;
   border: 2px solid black;
 `;
 
 const ResultWrapper = styled.div`
   width: 100%;
+  min-height: 10%;
   flex-grow: 1;
   border: 2px solid black;
 `;
@@ -179,7 +182,7 @@ const Problem = () => {
     }
   };
   return (
-    <Wrapper>
+    <Wrapper {...mainEventHandler}>
       <HeaderWrapper>
         <ProblemHeader
           URL={`/problem/${version}/${id}`}
@@ -187,7 +190,7 @@ const Problem = () => {
           type={0}
         />
       </HeaderWrapper>
-      <MainWrapper {...mainEventHandler}>
+      <MainWrapper>
         <PageButtonsWrapper>
           <PageButtons></PageButtons>
         </PageButtonsWrapper>
