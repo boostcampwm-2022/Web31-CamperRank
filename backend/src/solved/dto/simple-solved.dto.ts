@@ -26,8 +26,8 @@ export class SimpleSolvedDto {
   updatedAt: Date;
 
   constructor(solved: Solved) {
-    this.problemId = solved.problem.id;
-    this.userId = solved.user.id;
+    this.problemId = solved.problem?.id;
+    this.userId = solved.user?.id;
     this.userCode = solved.userCode;
     this.language = solved.language;
     this.result = solved.result;
