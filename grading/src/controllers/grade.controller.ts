@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 
 import fs from "fs";
 
-const IDENTIFY_CODE = "secret";
+const IDENTIFY_CODE = process.env.IDENTIFY_CODE || "secret";
 
 function PLClassifier(pl: string) {
   switch (pl) {
