@@ -46,35 +46,7 @@ function parserPython(userCode: string, testCaseInput: any[]) {
   );
 }
 
-function parserNode(userCode: string, testCaseInput: any[]) {
-  const totalCode =
-    "import sys" +
-    "\n\n" +
-    userCode +
-    "\n\n" +
-    "if __name__ == '__main__':\n\t";
-  const argsArr = [];
-  const varArr = [];
-  for (let i = 0; i < testCaseInput.length; i++) {
-    varArr.push(
-      `argv${i + 1} = ${
-        testCaseInput[i].length > 1
-          ? "[" + testCaseInput[i] + "]"
-          : testCaseInput[i]
-      }`
-    );
-    argsArr.push(`argv${i + 1}`);
-  }
-  const argsStr = argsArr.join(",");
-  const varStr = varArr.join("\n\t");
-  return (
-    totalCode +
-    varStr +
-    "\n\tanswer = solution(" +
-    argsStr +
-    `)\n\tprint('${IDENTIFY_CODE}')\n\tprint(answer)`
-  );
-}
+function parserNode(userCode: string, testCaseInput: any[]) {}
 
 function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
   switch (cmd) {
@@ -103,7 +75,10 @@ export const gradingController = async (req: any, res: any) => {
     const pythonResult = spawnSync(
       plClassifier.cmd,
       [`${filePath}`, testCaseInput],
-      {}
+      {
+        maxBuffer: 1024 * 1024,
+        timeout: 10000,
+      }
     );
     const resultText = pythonResult.stdout.toString();
     const errText = pythonResult.stderr.toString();
@@ -145,9 +120,8 @@ export const gradingController = async (req: any, res: any) => {
 };
 
 export const startGrade = async function (req: any, res: any) {
-  //
   try {
-    let { problemId, userCode, language, input, output } = req.body;
+    let { problemId, userCode, language, input, output } = req.body.data;
     let filePath = "";
     let codeStyle = "";
     let fileList = [];
