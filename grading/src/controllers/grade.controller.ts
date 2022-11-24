@@ -3,6 +3,8 @@ import { v4 as uuid } from "uuid";
 
 import fs from "fs";
 
+const IDENTIFY_CODE = "secret";
+
 function PLClassifier(pl: string) {
   switch (pl) {
     case "Python":
@@ -14,61 +16,126 @@ function PLClassifier(pl: string) {
   }
 }
 
+function parserPython(userCode: string, testCaseInput: any[]) {
+  const totalCode =
+    "import sys" +
+    "\n\n" +
+    userCode +
+    "\n\n" +
+    "if __name__ == '__main__':\n\t";
+  const argsArr = [];
+  const varArr = [];
+  for (let i = 0; i < testCaseInput.length; i++) {
+    varArr.push(
+      `argv${i + 1} = ${
+        testCaseInput[i].length > 1
+          ? "[" + testCaseInput[i] + "]"
+          : testCaseInput[i]
+      }`
+    );
+    argsArr.push(`argv${i + 1}`);
+  }
+  const argsStr = argsArr.join(",");
+  const varStr = varArr.join("\n\t");
+  return (
+    totalCode +
+    varStr +
+    "\n\tanswer = solution(" +
+    argsStr +
+    `)\n\tprint('${IDENTIFY_CODE}')\n\tprint(answer)`
+  );
+}
+
+function parserNode(userCode: string, testCaseInput: any[]) {
+  const totalCode =
+    "import sys" +
+    "\n\n" +
+    userCode +
+    "\n\n" +
+    "if __name__ == '__main__':\n\t";
+  const argsArr = [];
+  const varArr = [];
+  for (let i = 0; i < testCaseInput.length; i++) {
+    varArr.push(
+      `argv${i + 1} = ${
+        testCaseInput[i].length > 1
+          ? "[" + testCaseInput[i] + "]"
+          : testCaseInput[i]
+      }`
+    );
+    argsArr.push(`argv${i + 1}`);
+  }
+  const argsStr = argsArr.join(",");
+  const varStr = varArr.join("\n\t");
+  return (
+    totalCode +
+    varStr +
+    "\n\tanswer = solution(" +
+    argsStr +
+    `)\n\tprint('${IDENTIFY_CODE}')\n\tprint(answer)`
+  );
+}
+
 function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
-  if (cmd === "python") {
-    const totalCode =
-      "import sys" +
-      "\n\n" +
-      userCode +
-      "\n\n" +
-      "if __name__ == '__main__':\n\tsolution(";
-    const argsArr = [];
-    for (let i = 0; i < testCaseInput.length; i++) {
-      argsArr.push(`sys.argv[${i + 1}]`);
-    }
-    const argsStr = argsArr.join(",");
-    return totalCode + argsStr + ")";
-  } else if (cmd === "node") {
+  switch (cmd) {
+    case "python":
+      return parserPython(userCode, testCaseInput);
+    case "node":
+      return parserNode(userCode, testCaseInput);
+    default:
+      throw Error();
   }
 }
 
 export const gradingController = async (req: any, res: any) => {
   try {
-    // const codeText = req.body.code;
-    const userCode = req.body.data.userCode;
-    console.log("==========1==========");
     console.log(req.body.data);
-    console.log("==========2==========");
-
+    const testCaseInput = req.body.data.testCaseInput;
+    const userCode = req.body.data.userCode;
+    console.log("==========0==========");
     const fileName = uuid();
     const plClassifier = PLClassifier(req.body.data.language);
     const filePath =
       "C:\\Users\\SeHyun\\Code\\boostcamp_Membership\\CamperRank\\tempCodes\\" +
       fileName +
       plClassifier.ext;
-    const totalCode = buildCode(
-      userCode,
-      req.body.data.testCaseInput,
-      plClassifier.cmd
-    );
+    const totalCode = buildCode(userCode, testCaseInput, plClassifier.cmd);
+    console.log("==========1==========");
+    console.log(totalCode);
 
     fs.writeFileSync(filePath, `${totalCode}`);
-    const pythonResult = spawnSync(plClassifier.cmd, [`${filePath}`], {});
-    console.log(pythonResult);
+    console.log(testCaseInput);
+    const pythonResult = spawnSync(
+      plClassifier.cmd,
+      [`${filePath}`, testCaseInput],
+      {}
+    );
     const resultText = pythonResult.stdout.toString();
     const errText = pythonResult.stderr.toString();
     // fs.unlinkSync(filePath);
+    console.log("==========2==========");
+    // console.log(resultText);
+    const strings = resultText.split(IDENTIFY_CODE);
+    const userPrint = strings[0].trim();
+    const userAnswer = strings[1].trim();
+    console.log("==========3==========");
+    console.log(errText);
+    console.log("==========4==========");
 
-    if (errText.length === 0 && req.body.data.testCaseOutput === resultText) {
+    if (errText.length === 0 && req.body.data.testCaseOutput === userAnswer) {
       res.status(200).json({
         solvedId: req.body.data.solvedId,
         result: "success",
+        userPrint: userPrint,
+        userAnswer: userAnswer,
         msg: "정답",
       });
     } else {
       res.status(200).json({
         solvedId: req.body.data.solvedId,
         result: "fail",
+        userPrint: userPrint,
+        userAnswer: userAnswer,
         msg: "오답",
       });
     }
@@ -77,6 +144,7 @@ export const gradingController = async (req: any, res: any) => {
     res.status(400).json({
       solvedId: req.body.data.solvedId,
       result: "fail",
+
       msg: "채점 실패",
     });
   }
