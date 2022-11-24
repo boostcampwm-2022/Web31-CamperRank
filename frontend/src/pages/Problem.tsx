@@ -149,7 +149,7 @@ const Problem = () => {
     if (editorRef.current != null) {
       let PX = +REM.replace("px", "");
       editorRef.current.style.height = `${
-        y - PX * 6 - window.innerWidth * 0.01
+        y - PX * 4 - window.innerWidth * 0.008
       }px`;
     }
   };

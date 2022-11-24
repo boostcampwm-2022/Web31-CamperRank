@@ -24,7 +24,7 @@ const Level = styled.div`
 const ProblemDummy = `
 <div>
   <h4>문제 내용</h4>
-  <div>A와 B의 합을 출력하시요</div><br>
+  <div>A와 B의 합을 출력하시오</div><br>
   <h4>입력 형태</h4>
   <div>A와 B가 담긴 배열을 요소로 가지는 배열</div><br>
   <h4>출력 형태</h4>
