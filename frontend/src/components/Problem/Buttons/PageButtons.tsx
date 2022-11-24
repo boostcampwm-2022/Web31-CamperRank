@@ -18,6 +18,7 @@ const ButtonWrapper = styled.button`
   span {
     writing-mode: vertical-lr;
     font-size: 1rem;
+    letter-spacing: 3px;
   }
 `;
 

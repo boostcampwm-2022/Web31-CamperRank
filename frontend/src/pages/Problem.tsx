@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { PageButtons, ProblemButtons } from "../components/Problem/Buttons";
-import {ProblemHeader} from "../components/ProblemHeader";
+import { ProblemHeader } from "../components/ProblemHeader";
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 105vh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -13,14 +14,13 @@ const Wrapper = styled.div`
 
 const HeaderWrapper = styled.div`
   width: 100%;
-  height: 48px;
-  border: 2px solid black;
+  height: 6rem;
   box-sizing: border-box;
 `;
 
 const MainWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  flex-grow: 1;
   border: 2px solid black;
   display: flex;
 `;
@@ -74,23 +74,26 @@ const RowSizeController = styled.div`
   height: 1vw;
   cursor: row-resize;
 `;
-window.addEventListener("click", (e) => console.log(e));
+
+const REM = getComputedStyle(document.documentElement).fontSize;
+window.addEventListener("click", (e) => console.log(e.clientX, e.clientY));
 const Problem = () => {
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
-
+  const { id } = useParams();
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
 
   const resizeProblemWrapper = (x: number) => {
     if (problemRef.current != null) {
-      problemRef.current.style.width = `${x - window.innerWidth * 0.0357}px`;
+      problemRef.current.style.width = `${x - window.innerWidth * 0.032}px`;
     }
   };
   const resizeEditorWrapper = (y: number) => {
     if (editorRef.current != null) {
+      let PX = +REM.replace("px", "");
       editorRef.current.style.height = `${
-        y - 48 - window.innerWidth * 0.005
+        y - PX * 6 - window.innerWidth * 0.01
       }px`;
     }
   };
@@ -121,7 +124,7 @@ const Problem = () => {
   return (
     <Wrapper>
       <HeaderWrapper>
-        <ProblemHeader URL={"123"} problemName={"456"} type={0}/>
+        <ProblemHeader URL={"123"} problemName={String(id)} type={0} />
       </HeaderWrapper>
       <MainWrapper>
         <PageButtonsWrapper>

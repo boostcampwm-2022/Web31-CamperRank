@@ -1,28 +1,28 @@
 import styled from "styled-components";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const HeaderContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
-  padding: 0 96px;
-  height: 160px;
+  padding: 0 6rem;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   div {
-    margin-right: 172px;
-    height: 36px;
+    margin-right: 11rem;
+    height: 2.5rem;
 
     ul {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 32px;
+      height: 2rem;
 
       li {
-        height: 24px;
-        margin-left: 64px;
+        height: 1.5rem;
+        margin-left: 4rem;
 
         .greater {
           margin-top: 2px;
@@ -33,9 +33,9 @@ export const HeaderContainer = styled.div`
         a {
           text-decoration: none;
           font-weight: 700;
-          font-size: 24px;
+          font-size: 1.5rem;
           color: #000000;
-        } 
+        }
       }
     }
   }
@@ -54,13 +54,13 @@ export const GreenMark = styled.mark`
 `;
 
 export const MenuContainer = styled.div`
-  margin-bottom: 112px;
+  margin-bottom: 2rem;
 
   button {
     cursor: pointer;
     font-family: Noto Sans KR, serif;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 0.7rem;
     border: none;
     background: none;
 
