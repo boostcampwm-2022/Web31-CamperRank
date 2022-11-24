@@ -23,19 +23,20 @@ const HeaderWrapper = styled.div`
 const MainWrapper = styled.div`
   width: 100%;
   flex-grow: 1;
-  border: 2px solid black;
+  border: 2px groove #DADADA;
   display: flex;
+  background: #EEF5F0;
 `;
 
 const PageButtonsWrapper = styled.div`
   height: 100%;
   width: 2.5%;
+  padding-top: 3rem;
 `;
 
 const ProblemWrapper = styled.div`
   width: 47%;
-  height: 100%;
-  border: 1px solid #888888;
+  height: auto;
   display: flex;
   justify-content: center;
   padding: 1rem;
@@ -73,12 +74,14 @@ const ColSizeController = styled.div`
   height: 100%;
   width: 1%;
   cursor: col-resize;
+  background: #DCE2DE;
 `;
 
 const RowSizeController = styled.div`
   width: 100%;
   height: 1vw;
   cursor: row-resize;
+  background: #DCE2DE;
 `;
 
 const URL = import.meta.env.VITE_SERVER_URL;
