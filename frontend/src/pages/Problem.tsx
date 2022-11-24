@@ -1,14 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, {useState, useRef, useEffect} from "react";
+import {useParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
-import { PageButtons, ProblemButtons } from "../components/Problem/Buttons";
-import { ProblemHeader } from "../components/ProblemHeader";
+import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
+import {ProblemHeader} from "../components/ProblemHeader";
 import ProblemContent from "../components/Problem/Content";
-import { ProblemInfo } from "@types";
+import {ProblemInfo} from "@types";
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 105vh;
+  height: 100vh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -16,11 +16,13 @@ const Wrapper = styled.div`
 
 const HeaderWrapper = styled.div`
   width: 100%;
-  height: 6rem;
+  height: 4rem;
   box-sizing: border-box;
 `;
 
 const MainWrapper = styled.div`
+  height: calc(100vh - 6.5rem);
+  max-height: calc(100vh - 6.5rem);
   width: 100%;
   flex-grow: 1;
   border: 2px groove #DADADA;
@@ -41,6 +43,30 @@ const ProblemWrapper = styled.div`
   justify-content: center;
   padding: 1rem;
   position: relative;
+
+  word-break: break-all;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  ///* custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 20px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #a8bbbf;
+  }
 `;
 
 const SolvingWrapper = styled.div`
@@ -90,8 +116,11 @@ const REM = getComputedStyle(document.documentElement).fontSize;
 const Problem = () => {
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
-  const [problem, setProblem] = useState<ProblemInfo>({});
-  const { id, version } = useParams();
+  const [problem, setProblem] = useState<ProblemInfo>({
+    title: "",
+    description: ""
+  });
+  const {id, version} = useParams();
 
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
@@ -102,8 +131,8 @@ const Problem = () => {
       .then((res) => res.json())
       .then((res) => {
         if (res.statusCode !== 200) throw new Error();
-        const { level, title, description } = res;
-        setProblem({ level, title, description });
+        const {level, title, description} = res;
+        setProblem({level, title, description});
       })
       .catch((err) => {
         alert("문제를 불러올 수 없습니다");
