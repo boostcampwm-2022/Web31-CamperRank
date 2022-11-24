@@ -32,7 +32,7 @@ export class GradeSolvedDto {
   testCaseOutput: any;
 
   constructor(solved: Solved, testCase: TestCase) {
-    this.solvedId = solved.id;
+    this.solvedId = solved?.id;
     this.problemId = solved.problem.id;
     this.userId = solved.user.id;
     this.userCode = solved.userCode;

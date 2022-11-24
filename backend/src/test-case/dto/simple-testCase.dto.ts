@@ -2,6 +2,9 @@ import { TestCase } from '../entities/test-case.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class SimpleTestCaseDto {
+  @ApiProperty({ description: '테스트 케이스 아이디' })
+  testCaseId: number;
+
   @ApiProperty({ description: '문제 식별 아이디' })
   problemId: number;
 
@@ -21,6 +24,7 @@ export class SimpleTestCaseDto {
   updatedAt: Date;
 
   constructor(testCase: TestCase) {
+    this.testCaseId = testCase.id;
     this.problemId = testCase.problem.id;
     this.caseNumber = testCase.caseNumber;
     this.testInput = testCase.testInput;
