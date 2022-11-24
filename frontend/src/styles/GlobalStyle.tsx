@@ -9,6 +9,9 @@ export const GlobalStyle = createGlobalStyle`
     color: #000000;
     box-sizing: border-box;
   }
+  #root{
+    height: 100vh;
+  }
   button {
     cursor: pointer;
   }
