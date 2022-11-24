@@ -14,14 +14,14 @@ interface pageProps {
 
 const ControllerWrapper = styled.div`
   position: absolute;
-  bottom: 48px;
+  bottom: 3rem;
   display: flex;
-  gap: 20px;
+  gap: 1.5rem;
 `;
 
 const SliderImage = styled.img`
-  height: 16x;
-  width: 16px;
+  height: 2rem;
+  width: 1rem;
   border-radius: 15px;
   object-fit: cover;
   cursor: pointer;
@@ -29,13 +29,14 @@ const SliderImage = styled.img`
 
 const PageWrapper = styled.div`
   display: flex;
-  gap: 12px;
+  gap: 0.7rem;
 `;
 
 const Page = styled.div`
-  font-size: 32px;
-  line-height: 32px;
+  font-size: 2rem;
+  line-height: 2rem;
   font-weight: 400;
+  color: gray;
   cursor: pointer;
 `;
 

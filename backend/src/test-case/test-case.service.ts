@@ -40,47 +40,46 @@ export class TestCaseService {
   }
 
   async findTestCaseOpt({ testCaseId, problemId }) {
-    try {
-      const testCase = await this.testCaseRepository.find({
-        where: {
-          id: testCaseId,
-          problem: {
-            id: problemId,
-          },
+    const testCase = await this.testCaseRepository.find({
+      where: {
+        id: testCaseId,
+        problem: {
+          id: problemId,
         },
-      });
-      return { result: true, testCase: testCase };
-    } catch (e) {
-      console.error(e);
-    }
+      },
+    });
+
+    return testCase.map((value: TestCase) => {
+      return new SimpleTestCaseDto(value);
+    });
   }
 
   async update(testCaseId: number, updateTestCaseDto: UpdateTestCaseDto) {
-    try {
-      const foundTestCase = await this.testCaseRepository.findOneBy({
-        id: testCaseId,
-      });
-      if (foundTestCase) {
-        foundTestCase.caseNumber = updateTestCaseDto.caseNumber;
-        foundTestCase.testInput = updateTestCaseDto.testInput;
-        foundTestCase.testOutput = updateTestCaseDto.testOutput;
-        const updatedTestCase = await this.testCaseRepository.save(
-          foundTestCase,
-        );
-        return { result: true, problem: updatedTestCase };
-      } else {
-        return { result: false, problem: null };
-      }
-    } catch (e) {
-      console.error(e);
-      return { result: false, problem: null };
+    const foundTestCase = await this.testCaseRepository.findOneBy({
+      id: testCaseId,
+    });
+    if (foundTestCase !== null) {
+      foundTestCase.caseNumber = updateTestCaseDto.caseNumber;
+      foundTestCase.testInput = updateTestCaseDto.testInput;
+      foundTestCase.testOutput = updateTestCaseDto.testOutput;
+      const updatedTestCase = await this.testCaseRepository.save(foundTestCase);
+      return new SimpleTestCaseDto(updatedTestCase);
+    } else {
+      return null;
     }
   }
 
-  remove(testCaseId: number) {
-    try {
-    } catch (e) {
-      console.error(e);
+  async remove(testCaseId: number) {
+    const foundTestCase = await this.testCaseRepository.findOneBy({
+      id: testCaseId,
+    });
+    if (foundTestCase !== null) {
+      const deletedTestCase = await this.testCaseRepository.remove(
+        foundTestCase,
+      );
+      return new SimpleTestCaseDto(deletedTestCase);
+    } else {
+      return null;
     }
   }
 }

@@ -9,24 +9,24 @@ type BannerControllerType = {
 
 const ControllerWrapper = styled.div`
   position: absolute;
-  top: 320px;
-  left: 96px;
+  top: 16rem;
+  left: 4rem;
   display: flex;
 `;
 
 const SliderController = styled.img`
-  height: 29px;
-  width: 13px;
+  height: 1.7rem;
+  width: 0.8rem;
   cursor: pointer;
 `;
 
 const SliderPage = styled.div`
-  height: 29px;
-  width: 112px;
+  height: 1.8rem;
+  width: 7rem;
   text-align: center;
   color: #0b6113;
   font-weight: 500;
-  font-size: 20px;
+  font-size: 1.25rem;
 `;
 
 const BannerController = ({ pageNum, onClickButton }: BannerControllerType) => {

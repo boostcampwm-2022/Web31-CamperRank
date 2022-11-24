@@ -4,7 +4,6 @@ export const FooterContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  
   text-align: center;
   display: flex;
   flex-direction: column;

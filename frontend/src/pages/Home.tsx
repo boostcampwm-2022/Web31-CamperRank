@@ -5,8 +5,8 @@ import { MainHeader } from "../components/MainHeader";
 import { Footer } from "../components/Footer";
 
 const MainWrapper = styled.div`
-  width: 1920px;
-  height: 2160px;
+  width: 100%;
+  height: 120rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -14,12 +14,12 @@ const MainWrapper = styled.div`
 
 const HeaderWrapper = styled.div`
   width: 100%;
-  height: 160px;
+  height: 8rem;
 `;
 
 const BannerWrapper = styled.div`
-  width: 1920px;
-  height: 400px;
+  width: 100%;
+  height: 20rem;
   border: 3px solid #e0dcdc;
   overflow: hidden;
   position: relative;
@@ -33,7 +33,7 @@ const ListWrapper = styled.div`
 
 const FooterWrapper = styled.div`
   width: 100%;
-  height: 400px;
+  height: 20rem;
 `;
 
 const Main = () => {

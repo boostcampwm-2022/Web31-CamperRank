@@ -6,21 +6,30 @@ import BannerInfo from "../../../utils/BannerInfo";
 
 type BannerType = {
   page: number;
+  width: number;
 };
 
 const BannerContainer = styled.div<BannerType>`
-  width: ${1920 * 3}px;
   height: 100%;
   display: flex;
   ${(props) =>
     css`
-      transform: translate(${props.page * -1920}px, 0);
+      width: ${props.width * 3}px;
+      transform: translate(${props.page * -props.width}px, 0);
       transition: all 0.4s ease-in-out;
     `}
 `;
 
 const Banner = () => {
   const [page, setPage] = useState(0);
+  const [width, setWidth] = useState(window.innerWidth);
+  const handleResize = () => setWidth(window.innerWidth);
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   const handleButtonClick = (num: number) => setPage(num);
 
   useEffect(() => {
@@ -30,7 +39,7 @@ const Banner = () => {
 
   return (
     <>
-      <BannerContainer page={page}>
+      <BannerContainer page={page} width={width}>
         {BannerInfo.map((content, idx) => (
           <BannerContent key={idx} content={content} />
         ))}

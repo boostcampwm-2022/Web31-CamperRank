@@ -12,7 +12,7 @@ type ModalElements = {
 const ModalWrapper = styled.div`
   width: 100%;
   position: absolute;
-  top: 48px;
+  top: 3rem;
   border: 2px solid #c6dfbb;
   background: rgba(256, 256, 256, 0.8);
   border-radius: 10px;

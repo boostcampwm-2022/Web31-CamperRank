@@ -6,12 +6,12 @@ type BannerImageType = {
 };
 
 const SliderImage = styled.img`
-  height: 350px;
-  width: 508px;
-  right: 282px;
-  top: 24px;
+  height: 17rem;
+  width: 18%;
+  right: 17rem;
+  top: 1.5rem;
   position: absolute;
-  border-radius: 15px;
+  border-radius: 1rem;
   object-fit: cover;
 `;
 

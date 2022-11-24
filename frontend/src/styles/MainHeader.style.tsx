@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const MainHeaderContainer = styled.div`
   box-sizing: border-box;
@@ -30,10 +31,11 @@ export const MainHeaderContainer = styled.div`
   }
 `;
 
-export const AnchorLogo = styled.a`
+export const AnchorLogo = styled(Link)`
   font-weight: 700;
-  font-size: 32px;
+  font-size: 32px;  
   cursor: pointer;
+  text-decoration: none;
 `;
 
 export const GreenMark = styled.mark`

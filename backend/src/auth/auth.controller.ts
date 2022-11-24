@@ -24,10 +24,10 @@ export class AuthController {
 
   // jwt 인증을 위한 useGuards + AuthGuard .. passport 활용
   // 토큰이 없거나 일치하지 않으면 401
-  @Post('/authTest')
+  @Post('/jwtLogin')
   @UseGuards(AuthGuard())
   authTest(@Req() req) {
-    console.log(req.user);
-    return req.user;
+    const userId = req.user.loginId;
+    return { userId: userId };
   }
 }
