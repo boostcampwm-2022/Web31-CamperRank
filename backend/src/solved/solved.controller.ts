@@ -36,24 +36,26 @@ export class SolvedController {
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
-  async create2(@Body() createSolvedDto: CreateSolvedDto) {
+  async nonCreateJustTest(@Body() createSolvedDto: CreateSolvedDto) {
     const gradeSolvedDtos = await this.solvedService.createToTest(
       createSolvedDto,
     );
 
-    const results = [];
+    const results = await Promise.all(
+      gradeSolvedDtos.map((value) => {
+        return this.httpService.axiosRef
+          .post('http://localhost:4000/v1/grading', { data: value })
+          .then((response) => response.data)
+          .catch((err) => {
+            console.error(err);
+          });
+      }),
+    );
 
-    for (const gradeSolvedDto of gradeSolvedDtos) {
-      console.log('gradeSolvedDto', gradeSolvedDto);
-      this.httpService.axiosRef
-        .post('http://localhost:4000/v1/grading', { data: gradeSolvedDto })
-        .then((response) => {
-          results.push(response.data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
+    return {
+      statusCode: HttpStatus.OK,
+      ...results,
+    };
   }
 
   @Post()

@@ -107,12 +107,11 @@ export const gradingController = async (req: any, res: any) => {
     );
     const resultText = pythonResult.stdout.toString();
     const errText = pythonResult.stderr.toString();
-    // fs.unlinkSync(filePath);
+    fs.unlinkSync(filePath);
+
     const strings = resultText.split(IDENTIFY_CODE);
     const userPrint = strings[0].replace(/\\r\\n/gi, "\n");
-    console.log("userPrint", userPrint);
     const userAnswer = strings[1].trim();
-    console.log("userAnswer", userAnswer);
     console.log(errText);
 
     if (errText.length === 0 && req.body.data.testCaseOutput === userAnswer) {
