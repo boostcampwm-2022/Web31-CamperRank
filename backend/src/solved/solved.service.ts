@@ -136,6 +136,15 @@ export class SolvedService {
     return new SimpleSolvedDto(solved);
   }
 
+  async updateResult(solvedId, solvedResult) {
+    const solved = await this.solvedRepository.findOneBy({ id: solvedId });
+    console.log(solved);
+    solved.result = solvedResult;
+    const updatedSolved = await this.solvedRepository.save(solved);
+    // console.log(updatedSolved);
+    return new SimpleSolvedDto(updatedSolved);
+  }
+
   async findSolvedByOpt({ problemId, userId }) {
     const solvedList = await this.solvedRepository.find({
       where: {

@@ -89,10 +89,8 @@ function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
 
 export const gradingController = async (req: any, res: any) => {
   try {
-    console.log(req.body.data);
     const testCaseInput = req.body.data.testCaseInput;
     const userCode = req.body.data.userCode;
-    console.log("==========0==========");
     const fileName = uuid();
     const plClassifier = PLClassifier(req.body.data.language);
     const filePath =
@@ -100,11 +98,8 @@ export const gradingController = async (req: any, res: any) => {
       fileName +
       plClassifier.ext;
     const totalCode = buildCode(userCode, testCaseInput, plClassifier.cmd);
-    console.log("==========1==========");
-    console.log(totalCode);
 
     fs.writeFileSync(filePath, `${totalCode}`);
-    console.log(testCaseInput);
     const pythonResult = spawnSync(
       plClassifier.cmd,
       [`${filePath}`, testCaseInput],
@@ -113,14 +108,12 @@ export const gradingController = async (req: any, res: any) => {
     const resultText = pythonResult.stdout.toString();
     const errText = pythonResult.stderr.toString();
     // fs.unlinkSync(filePath);
-    console.log("==========2==========");
-    // console.log(resultText);
     const strings = resultText.split(IDENTIFY_CODE);
-    const userPrint = strings[0].trim();
+    const userPrint = strings[0].replace(/\\r\\n/gi, "\n");
+    console.log("userPrint", userPrint);
     const userAnswer = strings[1].trim();
-    console.log("==========3==========");
+    console.log("userAnswer", userAnswer);
     console.log(errText);
-    console.log("==========4==========");
 
     if (errText.length === 0 && req.body.data.testCaseOutput === userAnswer) {
       res.status(200).json({
@@ -128,6 +121,7 @@ export const gradingController = async (req: any, res: any) => {
         result: "success",
         userPrint: userPrint,
         userAnswer: userAnswer,
+        resultCode: 1000,
         msg: "정답",
       });
     } else {
@@ -136,6 +130,7 @@ export const gradingController = async (req: any, res: any) => {
         result: "fail",
         userPrint: userPrint,
         userAnswer: userAnswer,
+        resultCode: 1001,
         msg: "오답",
       });
     }
@@ -144,7 +139,7 @@ export const gradingController = async (req: any, res: any) => {
     res.status(400).json({
       solvedId: req.body.data.solvedId,
       result: "fail",
-
+      resultCode: 2000,
       msg: "채점 실패",
     });
   }
