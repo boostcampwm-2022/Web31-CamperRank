@@ -159,7 +159,7 @@ const Problem = () => {
         const {level, title, description} = res;
         setProblem({level, title, description});
       })
-      .catch((err) => {
+      .catch(() => {
         alert("문제를 불러올 수 없습니다");
         navigate("/problems");
       });
@@ -184,11 +184,7 @@ const Problem = () => {
       if (moveColResize) resizeProblemWrapper(e.clientX);
       else if (moveRowResize) resizeEditorWrapper(e.clientY);
     },
-    onMouseUp: (e: React.MouseEvent<HTMLDivElement>) => {
-      setMoveColResize(false);
-      setMoveRowResize(false);
-    },
-    onMouseOut: (e: React.MouseEvent<HTMLDivElement>) => {
+    onMouseUp: () => {
       setMoveColResize(false);
       setMoveRowResize(false);
     }
@@ -201,11 +197,11 @@ const Problem = () => {
   };
 
   const handleRowSizeController = {
-    onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => {
+    onMouseDown: () => {
       setMoveRowResize(true);
     }
   };
-  
+
   return (
     <Wrapper {...mainEventHandler}>
       <HeaderWrapper>
