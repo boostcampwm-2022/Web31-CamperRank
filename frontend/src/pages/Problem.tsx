@@ -3,7 +3,7 @@ import {useParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
-import { ProblemContent, Editor } from "../components/Problem";
+import ProblemContent from "../components/Problem/Content";
 import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
@@ -187,6 +187,10 @@ const Problem = () => {
     onMouseUp: (e: React.MouseEvent<HTMLDivElement>) => {
       setMoveColResize(false);
       setMoveRowResize(false);
+    },
+    onMouseOut: (e: React.MouseEvent<HTMLDivElement>) => {
+      setMoveColResize(false);
+      setMoveRowResize(false);
     }
   };
 
@@ -195,11 +199,13 @@ const Problem = () => {
       setMoveColResize(true);
     }
   };
+
   const handleRowSizeController = {
     onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => {
       setMoveRowResize(true);
     }
   };
+  
   return (
     <Wrapper {...mainEventHandler}>
       <HeaderWrapper>
