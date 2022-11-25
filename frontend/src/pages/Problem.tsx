@@ -14,6 +14,10 @@ const Wrapper = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 `;
 
 const HeaderWrapper = styled.div`
@@ -84,6 +88,10 @@ const EditorWrapper = styled.div`
   min-height: 10%;
   padding: 0.5rem;
   position: relative;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 `;
 
 const ResultWrapper = styled.div`
@@ -187,6 +195,10 @@ const Problem = () => {
     onMouseUp: () => {
       setMoveColResize(false);
       setMoveRowResize(false);
+    },
+    onMouseLeave: () => {
+      setMoveColResize(false);
+      setMoveRowResize(false);
     }
   };
 
@@ -203,7 +215,7 @@ const Problem = () => {
   };
 
   return (
-    <Wrapper {...mainEventHandler}>
+    <Wrapper {...mainEventHandler} >
       <HeaderWrapper>
         <ProblemHeader
           URL={`/problem/${version}/${id}`}
