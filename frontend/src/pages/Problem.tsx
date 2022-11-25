@@ -3,7 +3,7 @@ import {useParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
-import ProblemContent from "../components/Problem/Content";
+import { ProblemContent, Editor } from "../components/Problem";
 import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
@@ -74,7 +74,6 @@ const ProblemWrapper = styled.div`
 const SolvingWrapper = styled.div`
   flex-grow: 1;
   height: 100%;
-  border: 2px solid black;
   display: flex;
   flex-direction: column;
 `;
@@ -83,7 +82,8 @@ const EditorWrapper = styled.div`
   width: 100%;
   height: 65%;
   min-height: 10%;
-  border: 2px solid black;
+  padding: 0.5rem;
+  position: relative;
 `;
 
 const ResultWrapper = styled.div`
@@ -163,7 +163,7 @@ const Problem = () => {
         alert("문제를 불러올 수 없습니다");
         navigate("/problems");
       });
-  }, [id]);
+  }, []);
 
   const resizeProblemWrapper = (x: number) => {
     if (problemRef.current != null) {
@@ -218,7 +218,8 @@ const Problem = () => {
         </ProblemWrapper>
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
-          <EditorWrapper ref={editorRef}>Editor</EditorWrapper>
+          <EditorWrapper ref={editorRef}>
+          </EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>Result</ResultWrapper>
           <ButtonsWrapper>
