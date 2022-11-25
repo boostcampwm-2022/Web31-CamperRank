@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 
-export const MainHeaderContainer = styled.div`
+export const HeaderContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
   padding: 0 6rem;
@@ -10,20 +10,29 @@ export const MainHeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  nav {
+  div {
     margin-right: 11rem;
+    height: 2.5rem;
 
     ul {
+      display: flex;
       justify-content: space-between;
       align-items: center;
+      height: 2rem;
 
       li {
-        display: inline;
-        margin-left: 6rem;
+        height: 1.5rem;
+        margin-left: 4rem;
+
+        .greater {
+          margin-top: 2px;
+          height: 1.5rem;
+          width: 0.75rem;
+        }
 
         a {
           text-decoration: none;
-          font-weight: 600;
+          font-weight: 700;
           font-size: 1.5rem;
           color: #000000;
         }
@@ -62,4 +71,3 @@ export const MenuContainer = styled.div`
     }
   }
 `;
-

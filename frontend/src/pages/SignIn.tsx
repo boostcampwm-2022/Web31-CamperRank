@@ -1,8 +1,11 @@
 import {MainHeader} from "../components/MainHeader";
 import {Footer} from "../components/Footer";
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import {InputForm} from "../components/SignIn/InputForm";
+import {useRecoilState} from "recoil";
+import {userState} from "../recoils/userState";
+import {useNavigate} from "react-router-dom";
 
 const MainWrapper = styled.div`
   width: 100%;
@@ -34,6 +37,26 @@ const FooterWrapper = styled.div`
 `;
 
 export const SignIn = () => {
+  const [user, setUser] = useRecoilState(userState);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user.isLoggedIn) {
+      navigate(-1);
+      return;
+    }
+    const token = localStorage.getItem('camperRankToken');
+    const camperID = localStorage.getItem('camperID');
+    if (!token || !camperID) {
+      return;
+    }
+    setUser({
+      token,
+      isLoggedIn: true,
+      ID: camperID
+    });
+    navigate(-1);
+  }, []);
+
   return (
     <MainWrapper>
       <HeaderWrapper>
