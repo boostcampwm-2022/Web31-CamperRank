@@ -45,7 +45,7 @@ export const GreenMark = styled.mark`
 `;
 
 export const MenuContainer = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: 7rem;
 
   button {
     cursor: pointer;

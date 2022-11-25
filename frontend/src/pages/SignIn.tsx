@@ -17,7 +17,7 @@ const MainWrapper = styled.div`
 
 const HeaderWrapper = styled.div`
   width: 100%;
-  height: 160px;
+  height: 8rem;
   box-sizing: border-box;
 `;
 
