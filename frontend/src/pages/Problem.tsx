@@ -3,7 +3,7 @@ import {useParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
-import ProblemContent from "../components/Problem/Content";
+import { ProblemContent, Editor } from "../components/Problem";
 import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
@@ -233,6 +233,7 @@ const Problem = () => {
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
           <EditorWrapper ref={editorRef}>
+              <Editor></Editor>
           </EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>Result</ResultWrapper>
