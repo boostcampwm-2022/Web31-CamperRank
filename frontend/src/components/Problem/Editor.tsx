@@ -7,30 +7,35 @@ const EditorWrapper = styled.div`
   height: calc(100% - 2rem);
   overflow-x: hidden;
   overflow-y: auto;
+  position: relative;
 `
 
-const CodeEditor = styled.div`
-  border: 2px double #888888;
-  border-radius: 3px;
-  background: #F5FDF8;
+const Code = styled.div`
   width: 95%;
   padding: 0.3rem;
   font-size: 0.9rem;
   outline: none;
   min-height: 100%;
   height: fit-content;
+  border: 2px double #888888;
+  border-radius: 3px;
+`;
+
+const CodeEditor = styled(Code)`
   &:focus {
     border: 2px double #888888;
   }
+  z-index: 1;
+  opacity: 0.5;
 `
 
-const CodePrinter = styled.div`
+const CodePrinter = styled(Code)`
+  font-weight: 500;
   position: absolute;
-  width: 92%;
-  margin-left: 2.5rem;
-  font-size: 0.9rem;
-  border: 1px solid black;
-  z-index: 2;
+  right: 0;
+  span {
+    color: red;
+  }
 `
 
 const Title = styled.div`
@@ -68,12 +73,16 @@ const Editor = () => {
   }
   
   useEffect(() => {
-    if (code === '') return;
+    if (code === '') {
+      if (printerRef && printerRef.current) {
+        printerRef.current.innerHTML = '';
+      }
+    }
     const removedCode = code.replaceAll('\n\n', '\n');
     setLine(countEscape(removedCode));
     let editorHTML = editorRef.current?.innerHTML;
     ReservedWords.map(elem => {
-      editorHTML = editorHTML?.replaceAll(elem, `<h1>${elem}</h1>`);
+      editorHTML = editorHTML?.replace(new RegExp(`\\b${elem}\\b`, 'g'), `<span>${elem}</span>`);
     });
     if (editorHTML && printerRef && printerRef.current) {
       printerRef.current.innerHTML = editorHTML;
@@ -98,6 +107,7 @@ const Editor = () => {
             setCode(target.innerText);}}
         >
         </CodeEditor>
+        <CodePrinter ref={printerRef}></CodePrinter>
       </EditorWrapper>
       
     </>
