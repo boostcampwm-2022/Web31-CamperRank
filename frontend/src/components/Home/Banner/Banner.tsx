@@ -23,6 +23,10 @@ const BannerContainer = styled.div<BannerType>`
 const Banner = () => {
   const [page, setPage] = useState(0);
   const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const rem = (parseFloat(getComputedStyle(document.documentElement).fontSize));
+    if (width < 80 * rem) setWidth(80 * rem);
+  }, [width])
   const handleResize = () => setWidth(window.innerWidth);
   useEffect(() => {
     window.addEventListener("resize", handleResize);
