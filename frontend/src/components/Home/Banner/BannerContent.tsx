@@ -12,7 +12,7 @@ const BannerWrapper = styled.div<BannerWrapperProp>`
   height: 100%;
   display: flex;
   position: relative;
-  min-width: 1000px;
+  min-width: 80rem;
   ${(props) =>
     css`
       background-color: ${props.color};

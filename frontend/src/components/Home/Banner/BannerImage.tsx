@@ -8,7 +8,7 @@ type BannerImageType = {
 const SliderImage = styled.img`
   height: 17rem;
   width: 18%;
-  right: 17rem;
+  right: 20%;
   top: 1.5rem;
   position: absolute;
   border-radius: 1rem;
