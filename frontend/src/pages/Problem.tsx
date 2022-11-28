@@ -17,6 +17,8 @@ import {WebrtcProvider} from 'y-webrtc'
 import {EditorView, basicSetup} from "codemirror";
 import {EditorState} from "@codemirror/state";
 import {javascript} from '@codemirror/lang-javascript'
+import { keymap } from '@codemirror/view'
+import {indentWithTab} from "@codemirror/commands"
 import {} from '@codemirror/autocomplete'
 
 import * as random from 'lib0/random'
@@ -184,12 +186,12 @@ const Problem = () => {
       extensions: [
         basicSetup,
         javascript(),
+        keymap.of([indentWithTab]),
         yCollab(ytext, provider.awareness, {undoManager})
       ]
     });
-
-    // @ts-ignore
-    const view = new EditorView({state, parent: /** @type {HTMLElement} */ (document.querySelector('.edit'))});
+  
+    if (editorRef.current) new EditorView({state, parent: editorRef.current});
   }, []);
 
   useEffect(() => {
@@ -286,8 +288,7 @@ const Problem = () => {
         </ProblemWrapper>
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
-          <EditorWrapper ref={editorRef} className={"edit"}>
-            {/*<Editor></Editor>*/}
+          <EditorWrapper ref={editorRef}>
           </EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>Result</ResultWrapper>
