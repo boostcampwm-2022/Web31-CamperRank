@@ -28,6 +28,7 @@ const HeaderWrapper = styled.div`
 
 const MainWrapper = styled.div`
   height: calc(100vh - 5rem);
+  min-width: 80rem;
   max-height: calc(100vh - 5rem);
   width: 100%;
   flex-grow: 1;
