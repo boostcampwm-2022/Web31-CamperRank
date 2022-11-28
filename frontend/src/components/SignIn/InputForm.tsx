@@ -42,6 +42,7 @@ export const InputForm = () => {
         alert('로그인에 실패하였습니다.');
       }).catch((e) => {
       setLoading(false);
+      alert('로그인에 실패하였습니다.');
       console.log(e);
     });
   }, [id, password, requestURL]);

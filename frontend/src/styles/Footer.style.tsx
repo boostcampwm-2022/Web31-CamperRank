@@ -32,6 +32,7 @@ export const ButtonContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+
   a {
     cursor: pointer;
     width: 112px;
@@ -41,7 +42,7 @@ export const ButtonContainer = styled.div`
     border: 1px solid #888888;
     border-radius: 20px;
     text-decoration: none;
-    font-family: Noto Sans KR,serif;
+    font-family: Noto Sans KR, sans-serif;
     font-weight: 400;
     font-size: 16px;
     color: #000000;

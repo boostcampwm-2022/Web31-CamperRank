@@ -204,3 +204,7 @@ dist
 .pnp.*
 
 .idea
+.env*
+.flaskenv*
+!.env.project
+!.env.vault

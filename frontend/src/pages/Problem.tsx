@@ -3,7 +3,7 @@ import {useParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
-import ProblemContent from "../components/Problem/Content";
+import { ProblemContent, Editor } from "../components/Problem";
 import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
@@ -14,6 +14,10 @@ const Wrapper = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 `;
 
 const HeaderWrapper = styled.div`
@@ -23,8 +27,9 @@ const HeaderWrapper = styled.div`
 `;
 
 const MainWrapper = styled.div`
-  height: calc(100vh - 6.5rem);
-  max-height: calc(100vh - 6.5rem);
+  height: calc(100vh - 5rem);
+  min-width: 80rem;
+  max-height: calc(100vh - 5rem);
   width: 100%;
   flex-grow: 1;
   border: 2px groove #DADADA;
@@ -74,7 +79,6 @@ const ProblemWrapper = styled.div`
 const SolvingWrapper = styled.div`
   flex-grow: 1;
   height: 100%;
-  border: 2px solid black;
   display: flex;
   flex-direction: column;
 `;
@@ -83,7 +87,12 @@ const EditorWrapper = styled.div`
   width: 100%;
   height: 65%;
   min-height: 10%;
-  border: 2px solid black;
+  padding: 0.5rem;
+  position: relative;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 `;
 
 const ResultWrapper = styled.div`
@@ -159,11 +168,11 @@ const Problem = () => {
         const {level, title, description} = res;
         setProblem({level, title, description});
       })
-      .catch((err) => {
+      .catch(() => {
         alert("문제를 불러올 수 없습니다");
         navigate("/problems");
       });
-  }, [id]);
+  }, []);
 
   const resizeProblemWrapper = (x: number) => {
     if (problemRef.current != null) {
@@ -184,7 +193,11 @@ const Problem = () => {
       if (moveColResize) resizeProblemWrapper(e.clientX);
       else if (moveRowResize) resizeEditorWrapper(e.clientY);
     },
-    onMouseUp: (e: React.MouseEvent<HTMLDivElement>) => {
+    onMouseUp: () => {
+      setMoveColResize(false);
+      setMoveRowResize(false);
+    },
+    onMouseLeave: () => {
       setMoveColResize(false);
       setMoveRowResize(false);
     }
@@ -195,13 +208,15 @@ const Problem = () => {
       setMoveColResize(true);
     }
   };
+
   const handleRowSizeController = {
-    onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => {
+    onMouseDown: () => {
       setMoveRowResize(true);
     }
   };
+
   return (
-    <Wrapper {...mainEventHandler}>
+    <Wrapper {...mainEventHandler} >
       <HeaderWrapper>
         <ProblemHeader
           URL={`/problem/${version}/${id}`}
@@ -218,11 +233,13 @@ const Problem = () => {
         </ProblemWrapper>
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
-          <EditorWrapper ref={editorRef}>Editor</EditorWrapper>
+          <EditorWrapper ref={editorRef}>
+              <Editor></Editor>
+          </EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>Result</ResultWrapper>
           <ButtonsWrapper>
-            <ProblemButtons></ProblemButtons>
+            <ProblemButtons/>
           </ButtonsWrapper>
         </SolvingWrapper>
       </MainWrapper>

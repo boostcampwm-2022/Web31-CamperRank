@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 export const HeaderContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
+  min-width: 80rem;
   padding: 0 6rem;
   height: 100%;
   display: flex;
@@ -58,7 +59,7 @@ export const MenuContainer = styled.div`
 
   button {
     cursor: pointer;
-    font-family: Noto Sans KR, serif;
+    font-family: Noto Sans KR, sans-serif;
     font-weight: 500;
     font-size: 0.7rem;
     border: none;
