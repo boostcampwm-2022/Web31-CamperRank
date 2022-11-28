@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, {useState, useRef, useEffect, useMemo} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
@@ -8,6 +8,29 @@ import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
 import {Video} from "../components/Problem/Video";
+
+import * as Y from 'yjs'
+// @ts-ignore
+import {yCollab} from 'y-codemirror.next'
+import {WebrtcProvider} from 'y-webrtc'
+
+import {EditorView, basicSetup} from "codemirror";
+import {EditorState} from "@codemirror/state";
+import {javascript} from '@codemirror/lang-javascript'
+import {} from '@codemirror/autocomplete'
+
+import * as random from 'lib0/random'
+
+export const usercolors = [
+  {color: '#30bced', light: '#30bced33'},
+  {color: '#6eeb83', light: '#6eeb8333'},
+  {color: '#ffbc42', light: '#ffbc4233'},
+  {color: '#ecd444', light: '#ecd44433'},
+  {color: '#ee6352', light: '#ee635233'},
+  {color: '#9ac2c9', light: '#9ac2c933'},
+  {color: '#8acb88', light: '#8acb8833'},
+  {color: '#1be7ff', light: '#1be7ff33'}
+]
 
 const Wrapper = styled.div`
   width: 100%;
@@ -134,10 +157,40 @@ const Problem = () => {
   });
   const {id, version} = useParams();
   const [user, setUser] = useRecoilState(userState);
-
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  const ydoc = useMemo(() => new Y.Doc(), []);
+  const [provider, ytext] = useMemo(() => {
+    return [
+      // @ts-ignore
+      new WebrtcProvider('codemirror6-demo-room', ydoc, {signaling: ['ws://localhost:4444']})
+      , ydoc.getText('codemirror')
+    ]
+  }, []);
+  const undoManager = useMemo(() => new Y.UndoManager(ytext), []);
+  const userColor = useMemo(() => usercolors[random.uint32() % usercolors.length], []);
+
+  useEffect(() => {
+    provider.awareness.setLocalStateField('user', {
+      name: 'Anonymous ' + Math.floor(Math.random() * 100),
+      color: userColor.color,
+      colorLight: userColor.light
+    });
+
+    const state = EditorState.create({
+      doc: ytext.toString(),
+      extensions: [
+        basicSetup,
+        javascript(),
+        yCollab(ytext, provider.awareness, {undoManager})
+      ]
+    });
+
+    // @ts-ignore
+    const view = new EditorView({state, parent: /** @type {HTMLElement} */ (document.querySelector('.edit'))});
+  }, []);
 
   useEffect(() => {
     if (user.isLoggedIn) {
@@ -233,8 +286,8 @@ const Problem = () => {
         </ProblemWrapper>
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
-          <EditorWrapper ref={editorRef}>
-            <Editor></Editor>
+          <EditorWrapper ref={editorRef} className={"edit"}>
+            {/*<Editor></Editor>*/}
           </EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>Result</ResultWrapper>
