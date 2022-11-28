@@ -58,7 +58,7 @@ export const MenuContainer = styled.div`
 
   button {
     cursor: pointer;
-    font-family: Noto Sans KR, serif;
+    font-family: Noto Sans KR, sans-serif;
     font-weight: 500;
     font-size: 0.7rem;
     border: none;

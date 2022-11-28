@@ -26,7 +26,7 @@ const ButtonWrapper = styled.button<ButtonProp>`
 `;
 
 const Button = ({name, callback}: ButtonProp) => {
-  return <ButtonWrapper name={name} callback={callback}>{name}</ButtonWrapper>;
+  return <ButtonWrapper name={name} onClick={callback} callback={callback}>{name}</ButtonWrapper>;
 };
 
 const ProblemButtons = () => {
@@ -38,13 +38,13 @@ const ProblemButtons = () => {
       text: "",
       language: content.language
     });
-  }, []);
+  }, [content.text]);
 
   const executeTest = useCallback(() => {
-  }, [content]);
+  }, [content.text]);
 
   const submit = useCallback(() => {
-  }, [content]);
+  }, [content.text]);
 
   const callbackList = [reset, executeTest, submit];
 
