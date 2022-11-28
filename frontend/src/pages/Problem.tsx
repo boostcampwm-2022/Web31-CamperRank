@@ -3,10 +3,11 @@ import {useParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
-import { ProblemContent, Editor } from "../components/Problem";
+import {ProblemContent, Editor} from "../components/Problem";
 import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
+import {Video} from "../components/Problem/Video";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -47,8 +48,6 @@ const ProblemWrapper = styled.div`
   width: 47%;
   min-width: 15%;
   height: auto;
-  display: flex;
-  justify-content: center;
   padding: 1rem;
   position: relative;
 
@@ -229,12 +228,13 @@ const Problem = () => {
           <PageButtons></PageButtons>
         </PageButtonsWrapper>
         <ProblemWrapper ref={problemRef}>
+          {version === "multi" && <Video/>}
           <ProblemContent problem={problem}></ProblemContent>
         </ProblemWrapper>
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
           <EditorWrapper ref={editorRef}>
-              <Editor></Editor>
+            <Editor></Editor>
           </EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>Result</ResultWrapper>
