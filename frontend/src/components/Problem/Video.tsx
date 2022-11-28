@@ -26,7 +26,7 @@ export const Video = () => {
   return (
     <VideoContainer>
       {
-        userList.map(() => (<UserVideo/>))
+        userList.map((user, idx) => (<UserVideo key={idx}/>))
       }
     </VideoContainer>
   );
