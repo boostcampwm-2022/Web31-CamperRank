@@ -186,6 +186,66 @@ export class AppController {
       ),
     );
 
+    const simpleSolvedDto4 = await this.solvedService.create(
+      new CreateSolvedDto(
+        1,
+        1,
+        'function solution() { return 111; }',
+        ProgrammingLanguage.JavaScript,
+        SolvedResult.Ready,
+      ),
+    );
+
+    const simpleSolvedDto5 = await this.solvedService.create(
+      new CreateSolvedDto(
+        2,
+        2,
+        'function solution() { return 222; }',
+        ProgrammingLanguage.JavaScript,
+        SolvedResult.Ready,
+      ),
+    );
+
+    const simpleSolvedDto6 = await this.solvedService.create(
+      new CreateSolvedDto(
+        3,
+        2,
+        'function solution() { return 333; }',
+        ProgrammingLanguage.JavaScript,
+        SolvedResult.Ready,
+      ),
+    );
+
+    const simpleSolvedDto7 = await this.solvedService.create(
+      new CreateSolvedDto(
+        1,
+        3,
+        'function solution() { return 111; }',
+        ProgrammingLanguage.JavaScript,
+        SolvedResult.Ready,
+      ),
+    );
+
+    const simpleSolvedDto8 = await this.solvedService.create(
+      new CreateSolvedDto(
+        2,
+        2,
+        'function solution() { return 222; }',
+        ProgrammingLanguage.JavaScript,
+        SolvedResult.Ready,
+      ),
+    );
+
+    const simpleSolvedDto9 = await this.solvedService.create(
+      new CreateSolvedDto(
+        3,
+        3,
+        'function solution() { return 333; }',
+        ProgrammingLanguage.JavaScript,
+        SolvedResult.Ready,
+      ),
+    );
+
     return {
       resultCode: HttpStatus.OK,
     };
