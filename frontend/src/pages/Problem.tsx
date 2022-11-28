@@ -238,7 +238,7 @@ const Problem = () => {
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>Result</ResultWrapper>
           <ButtonsWrapper>
-            <ProblemButtons></ProblemButtons>
+            <ProblemButtons/>
           </ButtonsWrapper>
         </SolvingWrapper>
       </MainWrapper>

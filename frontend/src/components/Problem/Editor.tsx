@@ -1,6 +1,8 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, {useState, useRef, useEffect, useCallback} from "react";
 import styled from "styled-components";
 import ReservedWords from "../../utils/ReservedWords";
+import {editorState} from "../../recoils/editorState";
+import {useRecoilState} from "recoil";
 
 const EditorWrapper = styled.div`
   display: flex;
@@ -25,6 +27,7 @@ const CodeEditor = styled(Code)`
   &:focus {
     border: 2px double #888888;
   }
+
   z-index: 1;
   opacity: 0.5;
 `
@@ -33,6 +36,7 @@ const CodePrinter = styled(Code)`
   font-weight: 500;
   position: absolute;
   right: 0;
+
   span {
     color: red;
   }
@@ -49,6 +53,7 @@ const LineWrapper = styled.div`
   flex-grow: 1;
   padding-top: 0.4rem;
   text-align: right;
+
   p {
     font-size: 0.9rem;
     color: #888888;
@@ -56,29 +61,30 @@ const LineWrapper = styled.div`
   }
 `
 
+const countEscape = (str: string) => {
+  let count = 0;
+  let hasChar = false;
+  for (let char of str) {
+    if (char === '\n') count++;
+    else hasChar = true;
+  }
+  if (hasChar) count++;
+  return count;
+}
+
 const Editor = () => {
-  const [code, setCode] = useState('');
+  const [editor, setEditor] = useRecoilState(editorState);
   const [line, setLine] = useState(0);
   const editorRef = useRef<HTMLDivElement>(null);
   const printerRef = useRef<HTMLDivElement>(null);
-  const countEscape = (str: string) => {
-    let count = 0;
-    let hasChar = false;
-    for (let char of str) {
-      if (char === '\n') count++;
-      else hasChar = true;
-    }
-    if (hasChar) count++;
-    return count;
-  }
-  
+
   useEffect(() => {
-    if (code === '') {
+    if (editor.text === '') {
       if (printerRef && printerRef.current) {
         printerRef.current.innerHTML = '';
       }
     }
-    const removedCode = code.replaceAll('\n\n', '\n');
+    const removedCode = editor.text.replaceAll('\n\n', '\n');
     setLine(countEscape(removedCode));
     let editorHTML = editorRef.current?.innerHTML;
     ReservedWords.map(elem => {
@@ -87,7 +93,15 @@ const Editor = () => {
     if (editorHTML && printerRef && printerRef.current) {
       printerRef.current.innerHTML = editorHTML;
     }
-  }, [code]);
+  }, [editor.text]);
+
+  const inputHandle = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement;
+    setEditor({
+      text: target.innerText,
+      language: editor.language
+    });
+  }, [editor.text]);
 
   return (
     <>
@@ -102,14 +116,12 @@ const Editor = () => {
           contentEditable={true}
           suppressContentEditableWarning={true}
           ref={editorRef}
-          onInput={(e: React.KeyboardEvent<HTMLDivElement>) => {
-            const target = e.target as HTMLDivElement;
-            setCode(target.innerText);}}
+          onInput={inputHandle}
         >
         </CodeEditor>
         <CodePrinter ref={printerRef}></CodePrinter>
       </EditorWrapper>
-      
+
     </>
   );
 }
