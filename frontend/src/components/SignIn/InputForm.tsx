@@ -1,7 +1,7 @@
 import {IDInputContainer, InputFormContainer, PasswordInputContainer} from "../../styles/SignIn.style";
-import React, {useCallback, useMemo, useState, useRef} from "react";
+import React, {useCallback, useMemo, useState, useRef, useEffect} from "react";
 import {useNavigate, useLocation} from "react-router-dom";
-import {useSetRecoilState} from "recoil";
+import {useRecoilState} from "recoil";
 import {userState} from "../../recoils/userState";
 
 export const InputForm = () => {
@@ -9,8 +9,9 @@ export const InputForm = () => {
   const id = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/auth/signin", []);
+  const baseURL = useMemo(() => import.meta.env.VITE_SERVER_URL, []);
   const navigate = useNavigate();
-  const setUser = useSetRecoilState(userState);
+  const [user, setUser] = useRecoilState(userState);
   const {state} = useLocation();
 
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
@@ -26,24 +27,28 @@ export const InputForm = () => {
         password: password.current!.value
       })
     }).then(res => res.json())
-      .then(data => {
+      .then(async data => {
         setLoading(false);
         if (data.msg === 'success') {
           localStorage.setItem('camperRankToken', data.accessToken);
           localStorage.setItem('camperID', data.userId);
+          const res = await fetch(`${baseURL}/users?loginId=${data.userId}`);
+          const {userId: numID} = await res.json();
+          localStorage.setItem('numID', numID);
           setUser({
             token: data.accessToken,
+            ID: data.userId,
             isLoggedIn: true,
-            ID: data.userId
+            numID
           });
           state ? navigate(`../${state}`) : navigate(-1);
-          return;
+          return data.userId;
         }
         alert('로그인에 실패하였습니다.');
-      }).catch((e) => {
+      })
+       .catch((e) => {
       setLoading(false);
       alert('로그인에 실패하였습니다.');
-      console.log(e);
     });
   }, [id, password, requestURL]);
 

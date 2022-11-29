@@ -7,7 +7,7 @@ import {
 import {Link} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 
 export const MainHeader = () => {
   const [user, setUser] = useRecoilState(userState);
@@ -19,11 +19,11 @@ export const MainHeader = () => {
     setUser({
       token: "",
       isLoggedIn: false,
-      ID: ""
+      ID: "",
+      numID: 0,
     })
     localStorage.removeItem('camperRankToken');
   }, [user, setUser]);
-
   return (
     <MainHeaderContainer>
       <AnchorLogo to={"/"}>
