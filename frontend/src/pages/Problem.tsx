@@ -169,9 +169,6 @@ const Problem = () => {
   const {id, version} = useParams();
   const [isMultiVersion] = useState(version === "multi");
   const {roomNumber} = isMultiVersion ? useParams() : {roomNumber: null};
-  if(!roomNumber && isMultiVersion){
-    useNavigate()("/");
-  }
 
   const [user, setUser] = useRecoilState(userState);
   const problemRef = useRef<HTMLDivElement>(null);
@@ -190,29 +187,11 @@ const Problem = () => {
   const userColor = useMemo(() => usercolors[random.uint32() % usercolors.length], []);
 
   useEffect(() => {
-    provider && provider.awareness.setLocalStateField('user', {
-      name: 'Anonymous ' + Math.floor(Math.random() * 100),
-      color: userColor.color,
-      colorLight: userColor.light
-    });
-
-    const extensions = [
-      basicSetup,
-      javascript(),
-      keymap.of([indentWithTab])
-    ];
-    provider && extensions.push(yCollab(ytext, provider.awareness, {undoManager}));
-
-    const state = EditorState.create({
-      doc: ytext.toString(),
-      extensions
-    });
-
-    if (editorRef.current) new EditorView({state, parent: editorRef.current});
-
-    return () => {
-      provider && provider.destroy();
-    };
+    if (!isMultiVersion || !!roomNumber) {
+      return;
+    }
+    alert("올바르지 않은 URL 입니다.");
+    navigate("/");
   }, []);
 
   useEffect(() => {
@@ -246,6 +225,32 @@ const Problem = () => {
         alert("문제를 불러올 수 없습니다");
         navigate("/problems");
       });
+  }, []);
+
+  useEffect(() => {
+    provider && provider.awareness.setLocalStateField('user', {
+      name: 'Anonymous ' + Math.floor(Math.random() * 100),
+      color: userColor.color,
+      colorLight: userColor.light
+    });
+
+    const extensions = [
+      basicSetup,
+      javascript(),
+      keymap.of([indentWithTab])
+    ];
+    provider && extensions.push(yCollab(ytext, provider.awareness, {undoManager}));
+
+    const state = EditorState.create({
+      doc: ytext.toString(),
+      extensions
+    });
+
+    if (editorRef.current) new EditorView({state, parent: editorRef.current});
+
+    return () => {
+      provider && provider.destroy();
+    };
   }, []);
 
   useEffect(() => {

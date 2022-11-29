@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback} from "react";
 import {useParams} from "react-router-dom";
 import styled from "styled-components";
 import {InviteModal} from "../InviteModal";
