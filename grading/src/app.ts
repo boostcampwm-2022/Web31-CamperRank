@@ -7,7 +7,7 @@ import methodOverride from "method-override";
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost",
+  origin: "*",
   credentials: true,
 };
 
