@@ -117,6 +117,7 @@ const EditorWrapper = styled.div`
   -moz-user-select: text;
   -ms-user-select: text;
   user-select: text;
+  overflow: auto;
 `;
 
 const ResultWrapper = styled.div`
@@ -211,7 +212,6 @@ const Problem = () => {
       isLoggedIn: true,
       ID: camperID
     });
-
   }, []);
 
   useEffect(() => {
@@ -228,9 +228,15 @@ const Problem = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (editorRef.current) editorRef.current.style.maxWidth = `${window.innerWidth * 0.485}px`;
+  }, []);
+
   const resizeProblemWrapper = (x: number) => {
-    if (problemRef.current != null) {
+    if (problemRef.current != null && editorRef.current != null) {
       problemRef.current.style.width = `${x - window.innerWidth * 0.032}px`;
+      const problemRefWidth = +problemRef.current.style.width.replace('px', '');
+      editorRef.current.style.maxWidth = `${window.innerWidth * 0.95 - problemRefWidth}px`;
     }
   };
   const resizeEditorWrapper = (y: number) => {
