@@ -19,11 +19,10 @@ import {EditorState} from "@codemirror/state";
 import {javascript} from '@codemirror/lang-javascript'
 import { keymap } from '@codemirror/view'
 import {indentWithTab} from "@codemirror/commands"
-import {} from '@codemirror/autocomplete'
 
 import * as random from 'lib0/random'
 
-export const usercolors = [
+const usercolors = [
   {color: '#30bced', light: '#30bced33'},
   {color: '#6eeb83', light: '#6eeb8333'},
   {color: '#ffbc42', light: '#ffbc4233'},
