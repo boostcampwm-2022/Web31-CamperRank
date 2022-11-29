@@ -1,6 +1,6 @@
 import React, {useCallback} from "react";
 import styled from "styled-components";
-import {editorState} from "../../../recoils/editorState";
+import { editorState } from "../../../recoils";
 import {useRecoilState} from "recoil";
 
 type ButtonProp = {
@@ -29,18 +29,15 @@ const Button = ({name, callback}: ButtonProp) => {
   return <ButtonWrapper name={name} onClick={callback} callback={callback}>{name}</ButtonWrapper>;
 };
 
-const ProblemButtons = () => {
+const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
   const buttonNames = ["초기화", "코드테스트", "제출"];
-  const [content, setContent] = useRecoilState(editorState);
-
+  const [content] = useRecoilState(editorState);
   const reset = useCallback(() => {
-    setContent({
-      text: "",
-      language: content.language
-    });
+    if (confirm("코드를 초기화하시겠습니까?")) onClickClearBtn();
   }, [content.text]);
 
   const executeTest = useCallback(() => {
+
   }, [content.text]);
 
   const submit = useCallback(() => {

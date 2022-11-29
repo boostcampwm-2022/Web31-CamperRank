@@ -6,7 +6,7 @@ import {ProblemHeader} from "../components/ProblemHeader";
 import {ProblemContent} from "../components/Problem";
 import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
-import {userState} from "../recoils/userState";
+import { userState, editorState } from "../recoils";
 import {Video} from "../components/Problem/Video";
 
 import * as Y from 'yjs'
@@ -159,7 +159,9 @@ const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 const Problem = () => {
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
-  const [code, setCode] = useState(''); //editor code
+  const [code, setCode] = useRecoilState(editorState);
+  const [eState, setEState] = useState<EditorState>();
+  const [eView, setEView] = useState<EditorView>();
   const [problem, setProblem] = useState<ProblemInfo>({
     title: "",
     description: ""
@@ -196,13 +198,26 @@ const Problem = () => {
         keymap.of([indentWithTab]),
         yCollab(ytext, provider.awareness, {undoManager}),
         EditorView.updateListener.of(function(e) {
-          setCode(e.state.doc.toString());
+          setCode({...code, text: e.state.doc.toString()});
         })
       ]
     });
-    
-    if (editorRef.current) new EditorView({state, parent: editorRef.current});
+    setEState(state);
+
+    if (editorRef.current) {
+      const view = new EditorView({state, parent: editorRef.current});
+      setEView(view);
+      let transaction = view.state.update({changes: {from: 0, to: view.state.doc.length, insert: "// 함수 내부에 코드를 작성하세요\n\n"}})
+      view.dispatch(transaction)
+    }
   }, []);
+
+  const clearEditor = () => {
+    if (eView) {
+      let transaction = eView.state.update({changes: {from: 0, to: eView.state.doc.length, insert: "// 함수 내부에 코드를 작성하세요\n\n"}})
+      eView.dispatch(transaction)
+    }
+  }
 
   useEffect(() => {
     if (user.isLoggedIn) {
@@ -240,6 +255,10 @@ const Problem = () => {
   useEffect(() => {
     if (editorRef.current) editorRef.current.style.maxWidth = `${window.innerWidth * 0.485}px`;
   }, []);
+
+  useEffect(() => {
+    console.log(code);
+  }, [code]);
 
   const resizeProblemWrapper = (x: number) => {
     if (problemRef.current != null && editorRef.current != null) {
@@ -308,7 +327,7 @@ const Problem = () => {
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>Result</ResultWrapper>
           <ButtonsWrapper>
-            <ProblemButtons/>
+            <ProblemButtons onClickClearBtn={clearEditor}/>
           </ButtonsWrapper>
         </SolvingWrapper>
       </MainWrapper>
