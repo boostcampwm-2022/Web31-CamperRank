@@ -20,8 +20,8 @@ export class RankService {
       // .addSelect('COUNT(*) AS solvedCount')
       .groupBy('solved.user.id')
       // .distinctOn(['solved.problem.id'])
-      .skip(skip)
-      .take(take)
+      .skip(skip && take ? skip : undefined)
+      .take(skip && take ? skip : undefined)
       .getRawMany();
     return solvedList.map((value) => {
       return new SimpleRankDto(value.userId, +value.solvedCount);
