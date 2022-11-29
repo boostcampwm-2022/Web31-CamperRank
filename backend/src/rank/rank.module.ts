@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 import { RankController } from './rank.controller';
 import { RankService } from './rank.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Solved } from '../solved/entities/solved.entity';
-import { User } from '../users/entities/user.entity';
+import { TypeOrmExModule } from '../typeorm/typeorm-ex.module';
+import { UserRepository } from '../users/user.repository';
+import { SolvedRepository } from '../solved/solved.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Solved])],
+  imports: [
+    // TypeOrmModule.forFeature([User, Solved]),
+    TypeOrmExModule.forCustomRepository([UserRepository, SolvedRepository]),
+  ],
   controllers: [RankController],
   providers: [RankService],
 })
