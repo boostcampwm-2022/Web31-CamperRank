@@ -192,7 +192,7 @@ const Problem = () => {
     }
     alert("올바르지 않은 URL 입니다.");
     navigate("/");
-  }, []);
+  }, [isMultiVersion, roomNumber]);
 
   useEffect(() => {
     if (user.isLoggedIn) {
@@ -304,7 +304,7 @@ const Problem = () => {
     <Wrapper {...mainEventHandler} >
       <HeaderWrapper>
         <ProblemHeader
-          URL={`/problem/${version}/${id}`}
+          URL={!!roomNumber ? `/problem/${version}/${id}/${roomNumber}` : `/problem/${version}/${id}`}
           problemName={problem.title ? problem.title : ""}
           type={0}
         />

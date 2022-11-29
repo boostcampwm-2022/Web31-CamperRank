@@ -14,6 +14,7 @@ interface propsType {
   URL: string;
   problemName: string;
   type: Number;
+  roomNumber?: string;
   //0: 문제풀이 페이지
   //1: 질문 페이지
 }
