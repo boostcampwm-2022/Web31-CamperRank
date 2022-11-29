@@ -4,7 +4,7 @@ import {useCallback, useRef} from "react";
 
 interface props {
   isShowing: boolean
-};
+}
 
 const Wrapper = styled.div`
   position: absolute;
@@ -73,15 +73,10 @@ const CopyButton = styled.button`
   }
 `;
 
-const URL = import.meta.env.VITE_SERVER_URL;
-
 export const InviteModal = ({isShowing}: props) => {
-  const url = useRef(null);
+  const url = useRef<HTMLDivElement>(null);
 
   const handleCopy = useCallback(()=>{
-    // @ts-ignore
-    console.log(url.current!.innerText);
-    // @ts-ignore
     navigator.clipboard.writeText(url.current!.innerText);
   }, [url.current]);
 
@@ -97,5 +92,5 @@ export const InviteModal = ({isShowing}: props) => {
         </CopyButton>
       </URLWrapper>
     </Wrapper>
-  ) : (<></>);
+  ) : null;
 }
