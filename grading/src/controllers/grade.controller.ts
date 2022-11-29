@@ -84,10 +84,10 @@ function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
 
 export const gradingController = async (req: any, res: any) => {
   try {
-    const testCaseInput = req.body.data.testCaseInput;
-    const userCode = req.body.data.userCode;
+    const { solvedId, language, userCode, testCaseInput, testCaseOutput } =
+      req.body.data;
     const fileName = uuid();
-    const plClassifier = PLClassifier(req.body.data.language);
+    const plClassifier = PLClassifier(language);
     const filePath = process.env.NEW_FILE_PATH + fileName + plClassifier.ext;
     const totalCode = buildCode(userCode, testCaseInput, plClassifier.cmd);
 
@@ -108,9 +108,9 @@ export const gradingController = async (req: any, res: any) => {
     const userPrint = strings[0].replace(/\\r\\n/gi, "\n");
     const userAnswer = strings[1].trim();
 
-    if (errText.length === 0 && req.body.data.testCaseOutput === userAnswer) {
+    if (errText.length === 0 && testCaseOutput === userAnswer) {
       res.status(200).json({
-        solvedId: req.body.data.solvedId,
+        solvedId: solvedId,
         result: "success",
         userPrint: userPrint,
         userAnswer: userAnswer,
@@ -119,7 +119,7 @@ export const gradingController = async (req: any, res: any) => {
       });
     } else {
       res.status(200).json({
-        solvedId: req.body.data.solvedId,
+        solvedId: solvedId,
         result: "fail",
         userPrint: userPrint,
         userAnswer: userAnswer,
@@ -144,7 +144,6 @@ export const startGrade = async function (req: any, res: any) {
     let {
       solvedId,
       problemId,
-      userId,
       userCode,
       language,
       testCaseInput,

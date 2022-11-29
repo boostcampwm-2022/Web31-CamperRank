@@ -5,6 +5,7 @@ import {
   Get,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -69,7 +70,17 @@ export class SolvedController {
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
-  async create(@Body() createSolvedDto: CreateSolvedDto) {
+  async createSolvedRecord(@Body() createSolvedDto: CreateSolvedDto) {
+    if (
+      !createSolvedDto.loginId ||
+      !createSolvedDto.problemId ||
+      !createSolvedDto.userCode ||
+      !createSolvedDto.language
+    ) {
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
+      };
+    }
     const gradeSolvedDtos = await this.solvedService.createToGrade(
       createSolvedDto,
     );
@@ -91,10 +102,14 @@ export class SolvedController {
       return value.resultCode !== 1000;
     });
 
-    return await this.solvedService.updateResult(
+    const simpleSolvedDto = await this.solvedService.updateResult(
       results[0].solvedId,
       failList.length === 0 ? SolvedResult.Success : SolvedResult.Fail,
     );
+    return {
+      statusCode: HttpStatus.OK,
+      ...simpleSolvedDto,
+    };
   }
 
   @Get()
@@ -109,8 +124,16 @@ export class SolvedController {
     type: SimpleSolvedDto,
   })
   async findProblemByProblemIdOrUserId(
-    @Query('problemId') problemId: string,
-    @Query('userId') userId: string,
+    @Query(
+      'problemId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    problemId: number,
+    @Query(
+      'userId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    userId: number,
   ) {
     const simpleSolvedDtos = await this.solvedService.findSolvedByOpt({
       problemId,
@@ -133,7 +156,11 @@ export class SolvedController {
     type: SimpleSolvedDto,
   })
   async update(
-    @Param('solvedId') solvedId: string,
+    @Param(
+      'solvedId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    solvedId: number,
     @Body() updateSolvedDto: UpdateSolvedDto,
   ) {
     const simpleSolvedDto = await this.solvedService.update(
@@ -157,7 +184,13 @@ export class SolvedController {
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
-  async remove(@Param('solvedId') solvedId: string) {
+  async remove(
+    @Param(
+      'solvedId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    solvedId: number,
+  ) {
     const simpleSolvedDto = await this.solvedService.remove(+solvedId);
     return {
       statusCode:

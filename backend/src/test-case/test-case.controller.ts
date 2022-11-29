@@ -5,6 +5,7 @@ import {
   Get,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -54,8 +55,16 @@ export class TestCaseController {
     type: SimpleTestCaseDto,
   })
   async findTestCase(
-    @Query('testCaseId') testCaseId: string,
-    @Query('problemId') problemId: string,
+    @Query(
+      'testCaseId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    testCaseId: number,
+    @Query(
+      'problemId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    problemId: number,
   ) {
     const simpleTestCaseDtos = await this.testCaseService.findTestCaseOpt({
       testCaseId: testCaseId,
@@ -79,7 +88,11 @@ export class TestCaseController {
     type: SimpleTestCaseDto,
   })
   async update(
-    @Param('testCaseId') testCaseId: string,
+    @Param(
+      'testCaseId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    testCaseId: number,
     @Body() updateTestCaseDto: UpdateTestCaseDto,
   ) {
     const simpleTestCaseDto = await this.testCaseService.update(
@@ -103,7 +116,13 @@ export class TestCaseController {
     status: HttpStatus.OK,
     type: SimpleTestCaseDto,
   })
-  async remove(@Param('id') id: string) {
+  async remove(
+    @Param(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    id: number,
+  ) {
     const simpleTestCaseDto = await this.testCaseService.remove(+id);
     return {
       statusCode:

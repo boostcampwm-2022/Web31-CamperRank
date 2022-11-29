@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -31,11 +39,15 @@ export class UsersController {
     type: SimpleUserDto,
   })
   async findUser(
-    @Query('userId') userId: string,
+    @Query(
+      'userId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    userId: number,
     @Query('loginId') loginId: string,
   ) {
     const simpleUserDto = await this.usersService.findUser({
-      userId: +userId,
+      userId: userId,
       loginId: loginId,
     });
     return {
