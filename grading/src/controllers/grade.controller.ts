@@ -1,4 +1,4 @@
-import { spawnSync } from "child_process";
+import { spawnSync, execSync } from "child_process";
 import { v4 as uuid } from "uuid";
 
 import fs from "fs";
@@ -249,6 +249,57 @@ export const startGrade = async function (req: any, res: any) {
       result: "fail",
       resultCode: 2000,
       msg: "채점 실패",
+    });
+  }
+};
+
+
+export const startDocker = async function (req: any, res: any) {
+  try {
+    let { problemId, userCode, language, input, output } = req.body;
+
+    problemId = problemId || "undefined";
+
+    const fileName = Math.floor(Math.random() * 100000000);
+    let filePath = __dirname + "/../../" + fileName + ".py";
+    console.log(__dirname)
+    userCode = `print('${fileName}')`
+
+    // const CMD1 = `cd src/controllers/demo &&
+    //               docker build -t demo .`;
+    // const CMD2 = `docker run --rm demo`
+    // const CMD3 = `docker image prune -a -f`
+
+    // execSync(CMD1);
+    // let result = execSync(CMD2);
+    // execSync(CMD3);
+
+    fs.writeFileSync(filePath, `${userCode}`);
+
+    const CMD4 = `docker run --rm -v $(pwd)/${fileName}.py:/home/test.py demo`;
+    let result:any = execSync(CMD4);
+
+    fs.unlinkSync(filePath);
+
+    let resultText = result.toString();
+
+    console.log(resultText);
+    
+    return res.json({
+      result: resultText,
+      isSuccess: true,
+      code: 2000,
+      message: "채점 성공",
+    });
+    
+  } catch (err) {
+    console.log(err);
+    console.log(`Api - grade problem error\n: ${JSON.stringify(err)}`);
+
+    return res.json({
+      isSuccess: false,
+      code: 2000,
+      message: "채점 실패",
     });
   }
 };
