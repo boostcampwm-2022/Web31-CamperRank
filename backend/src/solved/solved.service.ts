@@ -26,7 +26,7 @@ export class SolvedService {
     });
 
     const foundUser = await this.userRepository.findOneBy({
-      id: createSolvedDto.userId,
+      loginId: createSolvedDto.loginId,
     });
 
     if (foundProblem !== null && foundUser !== null) {
@@ -50,8 +50,12 @@ export class SolvedService {
     });
 
     const foundUser = await this.userRepository.findOneBy({
-      id: createSolvedDto.userId,
+      loginId: createSolvedDto.loginId,
     });
+
+    console.log('createSolvedDto.loginId', createSolvedDto.loginId);
+    console.log('foundUser', foundUser);
+    console.log('foundProblem', foundProblem);
 
     if (foundProblem !== null && foundUser !== null) {
       const solved = Solved.createSolved({
@@ -88,7 +92,7 @@ export class SolvedService {
     });
 
     const foundUser = await this.userRepository.findOneBy({
-      id: createSolvedDto.userId,
+      loginId: createSolvedDto.loginId,
     });
 
     if (foundProblem !== null && foundUser !== null) {
@@ -130,7 +134,6 @@ export class SolvedService {
 
   async updateResult(solvedId, solvedResult) {
     const solved = await this.solvedRepository.findOneBy({ id: solvedId });
-    console.log(solved);
     solved.result = solvedResult;
     const updatedSolved = await this.solvedRepository.save(solved);
     // console.log(updatedSolved);
@@ -159,9 +162,9 @@ export class SolvedService {
     });
 
     if (foundSolved !== null) {
-      if (!isFalsy(updateSolvedDto.userId)) {
+      if (!isFalsy(updateSolvedDto.loginId)) {
         foundSolved.user = await this.userRepository.findOneBy({
-          id: updateSolvedDto.userId,
+          loginId: updateSolvedDto.loginId,
         });
       }
 

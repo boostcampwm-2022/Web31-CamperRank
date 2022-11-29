@@ -5,6 +5,7 @@ import {
   Get,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -67,7 +68,13 @@ export class ProblemController {
     status: HttpStatus.OK,
     type: SimpleProblemDto,
   })
-  async findOne(@Param('problemId') problemId: string) {
+  async findOne(
+    @Param(
+      'problemId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    problemId: number,
+  ) {
     const simpleProblemDto = await this.problemService.findProblem(+problemId);
     return {
       statusCode:
@@ -88,7 +95,11 @@ export class ProblemController {
     type: SimpleProblemDto,
   })
   async update(
-    @Param('problemId') problemId: string,
+    @Param(
+      'problemId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    problemId: number,
     @Body() updateProblemDto: UpdateProblemDto,
   ) {
     const simpleProblemDto = await this.problemService.update(
@@ -113,7 +124,13 @@ export class ProblemController {
     status: HttpStatus.OK,
     type: SimpleProblemDto,
   })
-  async remove(@Param('id') id: string) {
+  async remove(
+    @Param(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    id: number,
+  ) {
     const simpleProblemDto = await this.problemService.remove(+id);
     return {
       statusCode:
