@@ -3,7 +3,6 @@ import {
   DefaultValuePipe,
   Get,
   HttpStatus,
-  ParseIntPipe,
   Query,
 } from '@nestjs/common';
 import { RankService } from './rank.service';
@@ -26,17 +25,9 @@ export class RankController {
     type: SimpleRankDto,
   })
   async getUserRank(
-    @Query(
-      'skip',
-      new DefaultValuePipe(0),
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
-    )
+    @Query('skip', new DefaultValuePipe(0))
     skip: number,
-    @Query(
-      'take',
-      new DefaultValuePipe(1000),
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
-    )
+    @Query('take', new DefaultValuePipe(1000))
     take: number,
   ) {
     if (skip && !take) {

@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpStatus,
-  ParseIntPipe,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -39,13 +31,11 @@ export class UsersController {
     type: SimpleUserDto,
   })
   async findUser(
-    @Query(
-      'userId',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
-    )
-    userId: number,
+    @Query('userId') userId: number,
     @Query('loginId') loginId: string,
   ) {
+    // TODO: pipe 대신에 직접 number가 들어오는지 확인
+
     const simpleUserDto = await this.usersService.findUser({
       userId: userId,
       loginId: loginId,
