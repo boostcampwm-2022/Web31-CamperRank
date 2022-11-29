@@ -8,6 +8,8 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ProblemService } from './problem.service';
 import { CreateProblemDto } from './dto/create-problem.dto';
@@ -30,6 +32,7 @@ export class ProblemController {
     status: HttpStatus.OK,
     type: SimpleProblemDto,
   })
+  @UsePipes(ValidationPipe)
   async create(@Body() createProblemDto: CreateProblemDto) {
     const simpleProblemDto = await this.problemService.create(createProblemDto);
     return {
@@ -75,7 +78,7 @@ export class ProblemController {
     )
     problemId: number,
   ) {
-    const simpleProblemDto = await this.problemService.findProblem(+problemId);
+    const simpleProblemDto = await this.problemService.findProblem(problemId);
     return {
       statusCode:
         simpleProblemDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
@@ -94,6 +97,7 @@ export class ProblemController {
     status: HttpStatus.OK,
     type: SimpleProblemDto,
   })
+  @UsePipes(ValidationPipe)
   async update(
     @Param(
       'problemId',

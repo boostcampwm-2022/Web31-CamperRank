@@ -9,6 +9,8 @@ import {
   Patch,
   Post,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { TestCaseService } from './test-case.service';
 import { CreateTestCaseDto } from './dto/create-test-case.dto';
@@ -32,6 +34,7 @@ export class TestCaseController {
     status: HttpStatus.OK,
     type: SimpleTestCaseDto,
   })
+  @UsePipes(ValidationPipe)
   async create(@Body() createTestCaseDto: CreateTestCaseDto) {
     const simpleTestCaseDto = await this.testCaseService.create(
       createTestCaseDto,
@@ -79,6 +82,7 @@ export class TestCaseController {
     status: HttpStatus.OK,
     type: SimpleTestCaseDto,
   })
+  @UsePipes(ValidationPipe)
   async update(
     @Param(
       'testCaseId',
@@ -88,7 +92,7 @@ export class TestCaseController {
     @Body() updateTestCaseDto: UpdateTestCaseDto,
   ) {
     const simpleTestCaseDto = await this.testCaseService.update(
-      +testCaseId,
+      testCaseId,
       updateTestCaseDto,
     );
     return {
@@ -115,7 +119,7 @@ export class TestCaseController {
     )
     id: number,
   ) {
-    const simpleTestCaseDto = await this.testCaseService.remove(+id);
+    const simpleTestCaseDto = await this.testCaseService.remove(id);
     return {
       statusCode:
         simpleTestCaseDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
