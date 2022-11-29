@@ -167,8 +167,11 @@ const Problem = () => {
     description: "",
   });
   const {id, version} = useParams();
-  const {roomNumber} = version === "multi" ? useParams() : {roomNumber: null};
-  const [isMultiVersion] = useState(version === "multi" && !!roomNumber);
+  const [isMultiVersion] = useState(version === "multi");
+  const {roomNumber} = isMultiVersion ? useParams() : {roomNumber: null};
+  if(!roomNumber && isMultiVersion){
+    useNavigate()("/");
+  }
 
   const [user, setUser] = useRecoilState(userState);
   const problemRef = useRef<HTMLDivElement>(null);
