@@ -46,7 +46,30 @@ function parserPython(userCode: string, testCaseInput: any[]) {
   );
 }
 
-function parserNode(userCode: string, testCaseInput: any[]) {}
+function parserNode(userCode: string, testCaseInput: any[]) {
+  // const totalCode = userCode + "\n\n" + "console.log(answer)";
+  const argsArr = [];
+  const varArr = [];
+  for (let i = 0; i < testCaseInput.length; i++) {
+    varArr.push(
+      `\nlet argv${i + 1} = ${
+        testCaseInput[i].length > 1
+          ? "[" + testCaseInput[i] + "]"
+          : testCaseInput[i]
+      }`
+    );
+    argsArr.push(`argv${i + 1}`);
+  }
+  const argsStr = argsArr.join(",");
+  const varStr = varArr.join("\n\t");
+  return (
+    userCode +
+    varStr +
+    "\nconst answer = solution(" +
+    argsStr +
+    `)\nconsole.log('${IDENTIFY_CODE}')\nconsole.log(answer)`
+  );
+}
 
 function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
   switch (cmd) {
@@ -84,7 +107,6 @@ export const gradingController = async (req: any, res: any) => {
     const strings = resultText.split(IDENTIFY_CODE);
     const userPrint = strings[0].replace(/\\r\\n/gi, "\n");
     const userAnswer = strings[1].trim();
-    console.log(errText);
 
     if (errText.length === 0 && req.body.data.testCaseOutput === userAnswer) {
       res.status(200).json({
@@ -118,7 +140,16 @@ export const gradingController = async (req: any, res: any) => {
 
 export const startGrade = async function (req: any, res: any) {
   try {
-    let { problemId, userCode, language, input, output } = req.body.data;
+    console.log("data", req.body.data);
+    let {
+      solvedId,
+      problemId,
+      userId,
+      userCode,
+      language,
+      testCaseInput,
+      testCaseOutput,
+    } = req.body.data;
     let filePath = "";
     let codeStyle = "";
     let fileList = [];
@@ -133,34 +164,33 @@ export const startGrade = async function (req: any, res: any) {
       userCode = "import sys \n\n" + userCode + "\n\n" + pythonText;
       fileList.push(filePath);
 
-      if (input !== undefined) {
-        for (let i = 0; i < input.length; i++) {
+      if (testCaseInput !== undefined) {
+        for (let i = 0; i < testCaseInput.length; i++) {
           if (i !== 0) {
             userCode += ",";
           }
           userCode += `sys.argv[${i + 1}]`;
-          fileList.push(input[i]);
+          fileList.push(testCaseInput[i]);
         }
       }
       userCode += ")\nprint('##########')\nprint(answer)";
-      console.log(userCode);
     } else if (language === "JavaScript") {
       codeStyle = "node";
       filePath = __dirname + "../../../" + fileName + ".js";
       fileList.push(filePath);
       userCode += "\n\n" + "let answer = solution(";
-      if (input !== undefined) {
-        for (let i = 1; i < input.length + 1; i++) {
+      if (testCaseInput !== undefined) {
+        for (let i = 1; i < testCaseInput.length + 1; i++) {
           if (i !== 1) {
             userCode += ",";
           }
           userCode += `process.argv[${i + 1}]`;
-          fileList.push(input[i - 1]);
+          fileList.push(testCaseInput[i - 1]);
         }
       }
       userCode += ")\n\tconsole.log('##########')\n\tconsole.log(answer)";
-      console.log(userCode);
     }
+    console.log(userCode);
 
     fs.writeFileSync(filePath, `${userCode}`);
 
@@ -185,28 +215,29 @@ export const startGrade = async function (req: any, res: any) {
 
     if (errText.length > 0 || errText === null) {
       return res.json({
-        isSuccess: false,
-        code: 2000,
-        message: "코드 실행 실패",
+        solvedId: solvedId,
+        result: "fail",
+        resultCode: 2000,
+        msg: "채점 실패",
       });
     } else {
-      if (answerText == output) {
+      if (answerText == testCaseOutput) {
         return res.json({
-          problemId: problemId,
-          solutionText: solutionText,
-          answerText: answerText,
-          isSuccess: true,
-          code: 1000,
-          message: "정답 맞추기 성공",
+          solvedId: solvedId,
+          result: "success",
+          userPrint: solutionText,
+          userAnswer: answerText,
+          resultCode: 1000,
+          msg: "정답",
         });
       } else {
         return res.json({
-          problemId: problemId,
-          solutionText: solutionText,
-          answerText: answerText,
-          isSuccess: true,
-          code: 1000,
-          message: "정답 맞추기 실패",
+          solvedId: req.body.data.solvedId,
+          result: "fail",
+          userPrint: solutionText,
+          userAnswer: answerText,
+          resultCode: 1001,
+          msg: "오답",
         });
       }
     }
@@ -215,9 +246,10 @@ export const startGrade = async function (req: any, res: any) {
     console.log(`Api - grade problem error\n: ${JSON.stringify(err)}`);
 
     return res.json({
-      isSuccess: false,
-      code: 2000,
-      message: "채점 실패",
+      solvedId: req.body.data.solvedId,
+      result: "fail",
+      resultCode: 2000,
+      msg: "채점 실패",
     });
   }
 };
