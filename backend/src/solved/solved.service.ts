@@ -1,25 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSolvedDto } from './dto/create-solved.dto';
 import { UpdateSolvedDto } from './dto/update-solved.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Solved } from './entities/solved.entity';
-import { Problem } from '../problem/entities/problem.entity';
-import { User } from '../users/entities/user.entity';
 import { SimpleSolvedDto } from './dto/simple-solved.dto';
 import { isFalsy } from '../utils/boolUtils';
 import { SolvedResult } from './entities/SolvedResult.enum';
-import { TestCase } from '../test-case/entities/test-case.entity';
 import { GradeSolvedDto } from './dto/grade-solved.dto';
+import { SolvedRepository } from './solved.repository';
+import { UserRepository } from '../users/user.repository';
+import { TestCaseRepository } from '../test-case/test-case.repository';
+import { ProblemRepository } from '../problem/problem.repository';
 
 @Injectable()
 export class SolvedService {
   constructor(
-    @InjectRepository(Solved) private solvedRepository: Repository<Solved>,
-    @InjectRepository(Problem) private problemRepository: Repository<Problem>,
-    @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(TestCase)
-    private testCaseRepository: Repository<TestCase>,
+    private readonly solvedRepository: SolvedRepository,
+    private readonly problemRepository: ProblemRepository,
+    private readonly userRepository: UserRepository,
+    private readonly testCaseRepository: TestCaseRepository,
   ) {}
 
   async create(createSolvedDto: CreateSolvedDto) {
@@ -37,9 +35,7 @@ export class SolvedService {
         user: foundUser,
         userCode: createSolvedDto.userCode,
         language: createSolvedDto.language,
-        result: createSolvedDto.result
-          ? createSolvedDto.result
-          : SolvedResult.Ready,
+        result: SolvedResult.Ready,
       });
       const savedSolved = await this.solvedRepository.save(solved);
       return new SimpleSolvedDto(savedSolved);
@@ -63,9 +59,7 @@ export class SolvedService {
         user: foundUser,
         userCode: createSolvedDto.userCode,
         language: createSolvedDto.language,
-        result: createSolvedDto.result
-          ? createSolvedDto.result
-          : SolvedResult.Ready,
+        result: SolvedResult.Ready,
       });
 
       const savedSolved = await this.solvedRepository.save(solved);
@@ -103,9 +97,7 @@ export class SolvedService {
         user: foundUser,
         userCode: createSolvedDto.userCode,
         language: createSolvedDto.language,
-        result: createSolvedDto.result
-          ? createSolvedDto.result
-          : SolvedResult.Ready,
+        result: SolvedResult.Ready,
       });
 
       const foundTestCases = await this.testCaseRepository.find({

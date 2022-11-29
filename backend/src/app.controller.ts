@@ -29,15 +29,15 @@ export class AppController {
   @Get('dummy')
   async createDummy() {
     const simpleUserDto1 = await this.usersService.create(
-      new CreateUserDto('test1', '1234'),
+      new CreateUserDto('loginId1', '12341234'),
     );
 
     const simpleUserDto2 = await this.usersService.create(
-      new CreateUserDto('test2', '1234'),
+      new CreateUserDto('loginId2', '12341234'),
     );
 
     const simpleUserDto3 = await this.usersService.create(
-      new CreateUserDto('test3', '1234'),
+      new CreateUserDto('loginId3', '12341234'),
     );
 
     const simpleProblemDto1 = await this.problemService.create(
