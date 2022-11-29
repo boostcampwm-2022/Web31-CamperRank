@@ -118,6 +118,10 @@ const EditorWrapper = styled.div`
   -ms-user-select: text;
   user-select: text;
   overflow: auto;
+  .cm-editor.cm-focused { outline: none; }
+  .cm-activeLine, .cm-activeLineGutter {
+    background: none;
+  }
 `;
 
 const ResultWrapper = styled.div`
@@ -191,7 +195,7 @@ const Problem = () => {
         yCollab(ytext, provider.awareness, {undoManager})
       ]
     });
-  
+    
     if (editorRef.current) new EditorView({state, parent: editorRef.current});
   }, []);
 
