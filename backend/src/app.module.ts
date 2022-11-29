@@ -13,6 +13,7 @@ import { User } from './users/entities/user.entity';
 import { TestCase } from './test-case/entities/test-case.entity';
 import { Solved } from './solved/entities/solved.entity';
 import { Problem } from './problem/entities/problem.entity';
+import { RankModule } from './rank/rank.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { Problem } from './problem/entities/problem.entity';
         database: configService.get('database.database'),
         entities: [User, TestCase, Solved, Problem],
         synchronize: false,
+        logging: false,
       }),
     }),
     UsersModule,
@@ -40,6 +42,7 @@ import { Problem } from './problem/entities/problem.entity';
     TestCaseModule,
     SolvedModule,
     AuthModule,
+    RankModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -44,7 +44,7 @@ export class SolvedController {
     const results = await Promise.all(
       gradeSolvedDtos.map((value) => {
         return this.httpService.axiosRef
-          .post('http://localhost:4000/v1/grading', { data: value })
+          .post(process.env.GRADING_SERVER_URL, { data: value })
           .then((response) => response.data)
           .catch((err) => {
             console.error(err);
