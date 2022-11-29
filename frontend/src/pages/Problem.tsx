@@ -205,35 +205,6 @@ function solution(param) {
 
 }`;
 
-  useEffect(() => {
-    provider.awareness.setLocalStateField('user', {
-      name: 'Anonymous ' + Math.floor(Math.random() * 100),
-      color: userColor.color,
-      colorLight: userColor.light
-    });
-
-    const state = EditorState.create({
-      doc: ytext.toString(),
-      extensions: [
-        basicSetup,
-        javascript(),
-        keymap.of([indentWithTab]),
-        yCollab(ytext, provider.awareness, {undoManager}),
-        EditorView.updateListener.of(function(e) {
-          setCode({...code, text: e.state.doc.toString()});
-        })
-      ]
-    });
-    setEState(state);
-
-    if (editorRef.current) {
-      const view = new EditorView({state, parent: editorRef.current});
-      setEView(view);
-      let transaction = view.state.update({changes: {from: 0, to: view.state.doc.length, insert: defaultCode}})
-      view.dispatch(transaction)
-    }
-  }, []);
-
 useEffect(() => {
   if (!isMultiVersion || !!roomNumber) {
     return;
@@ -292,7 +263,10 @@ useEffect(() => {
     const extensions = [
       basicSetup,
       javascript(),
-      keymap.of([indentWithTab])
+      keymap.of([indentWithTab]),
+      EditorView.updateListener.of(function(e) {
+        setCode({...code, text: e.state.doc.toString()});
+      })
     ];
     provider && extensions.push(yCollab(ytext, provider.awareness, {undoManager}));
 
@@ -300,9 +274,14 @@ useEffect(() => {
       doc: ytext.toString(),
       extensions
     });
+    setEState(state);
 
-    if (editorRef.current) new EditorView({state, parent: editorRef.current});
-
+    if (editorRef.current) {
+      const view = new EditorView({state, parent: editorRef.current});
+      setEView(view);
+      let transaction = view.state.update({changes: {from: 0, to: view.state.doc.length, insert: defaultCode}})
+      view.dispatch(transaction)
+    }
     return () => {
       provider && provider.destroy();
     };

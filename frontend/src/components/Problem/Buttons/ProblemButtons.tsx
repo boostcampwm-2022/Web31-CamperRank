@@ -1,7 +1,7 @@
 import React, {useCallback, useState, useEffect} from "react";
 import styled from "styled-components";
 import {useParams} from "react-router-dom";
-import { editorState, userState } from "../../../recoils";
+import { editorState, userState, gradingState } from "../../../recoils";
 import {useRecoilState} from "recoil";
 
 type ButtonProp = {
@@ -36,8 +36,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
   const buttonNames = ["초기화", "코드테스트", "제출"];
   const [content] = useRecoilState(editorState);
   const [user] = useRecoilState(userState);
-  const [isWorking, setIsWorking] = useState(false);
-
+  const [grading, setGrading] = useRecoilState(gradingState);
 
   const reset = useCallback(() => {
     if (confirm("코드를 초기화하시겠습니까?")) onClickClearBtn();
@@ -51,26 +50,16 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     return {
       userCode,
       language,
-      problemID: +id,
-      userId: 1,
+      problemId: +id,
+      loginId: user.ID,
     }
   }
-
-  const checkGrading = () =>{
-    if (!isWorking) return true;
-    return false;
-  }
-
-  useEffect(() => {
-    console.log('채점', isWorking)
-  }, [isWorking]);
 
   const executeTest = useCallback(() => {
-    if (!checkGrading()) {
-      alert('현재 채점 진행 중입니다. 잠시 기다려주세요..');
-      return;
-    }
-    setIsWorking(true);
+    setGrading({
+      ...grading, 
+      status: 'run',
+    })
     const param = makeGradingObj();
     fetch(`${URL}/solved/test-case`, {
       method: "POST",
@@ -87,17 +76,14 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
         console.log('err', err);
       })
       .finally(() => {
-        setIsWorking(false);
       })
   }, [content.text]);
 
   const submit = useCallback(() => {
-    if (isWorking) alert("현재 작업 중");
-    if (!checkGrading()) {
-      alert('현재 채점 진행 중입니다. 잠시 기다려주세요.');
-      return;
-    }
-    setIsWorking(true);
+    setGrading({
+      ...grading, 
+      status: 'run',
+    })
     const param = makeGradingObj();
     fetch(`${URL}/solved`, {
       method: "POST",
@@ -108,11 +94,16 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     })
       .then((res) => res.json())
       .then((response) => {
-        console.log('response', response);
+        setGrading({
+          status: 'complete',
+          result: response,
+          kind: '제출',
+        })
       })
       .catch((err) => {
-        setIsWorking(false);
-      });
+        console.log('err', err);
+      })
+      .finally(() => {});
   }, [content.text]);
 
   const callbackList = [reset, executeTest, submit];
