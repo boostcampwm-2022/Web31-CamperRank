@@ -108,7 +108,7 @@ export class SolvedController {
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
-  async findOne(
+  async findProblemByProblemIdOrUserId(
     @Query('problemId') problemId: string,
     @Query('userId') userId: string,
   ) {
