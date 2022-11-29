@@ -53,7 +53,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     if (!id) return;
     return {
       userCode,
-      language,
+      language: 'JavaScript',
       problemId: +id,
       loginId: user.ID,
     }
@@ -65,7 +65,6 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
       status: 'run',
     })
     const param = makeGradingObj();
-    console.log(param);
     fetch(`${URL}/solved/test-case`, {
       method: "POST",
       headers: {
@@ -75,7 +74,11 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     })
       .then((res) => res.json())
       .then((response) => {
-        console.log('response', response);
+        setGrading({
+          status: 'complete',
+          result:response,
+          kind:'테스트'
+        })
       })
       .catch((err) => {
         console.log('err', err);
@@ -90,7 +93,6 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
       status: 'run',
     })
     const param = makeGradingObj();
-    console.log(param);
     fetch(`${URL}/solved`, {
       method: "POST",
       headers: {
