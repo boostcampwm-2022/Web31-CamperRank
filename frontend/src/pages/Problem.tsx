@@ -159,6 +159,7 @@ const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 const Problem = () => {
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
+  const [code, setCode] = useState(''); //editor code
   const [problem, setProblem] = useState<ProblemInfo>({
     title: "",
     description: ""
@@ -193,7 +194,10 @@ const Problem = () => {
         basicSetup,
         javascript(),
         keymap.of([indentWithTab]),
-        yCollab(ytext, provider.awareness, {undoManager})
+        yCollab(ytext, provider.awareness, {undoManager}),
+        EditorView.updateListener.of(function(e) {
+          setCode(e.state.doc.toString());
+        })
       ]
     });
     
