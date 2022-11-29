@@ -1,19 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTestCaseDto } from './dto/create-test-case.dto';
 import { UpdateTestCaseDto } from './dto/update-test-case.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { TestCase } from './entities/test-case.entity';
-import { Problem } from '../problem/entities/problem.entity';
 import { SimpleTestCaseDto } from './dto/simple-testCase.dto';
+import { TestCaseRepository } from './test-case.repository';
+import { ProblemRepository } from '../problem/problem.repository';
 
 @Injectable()
 export class TestCaseService {
   constructor(
-    @InjectRepository(TestCase)
-    private testCaseRepository: Repository<TestCase>,
-    @InjectRepository(Problem)
-    private problemRepository: Repository<Problem>,
+    private readonly testCaseRepository: TestCaseRepository,
+    private readonly problemRepository: ProblemRepository,
   ) {}
 
   async create(createTestCaseDto: CreateTestCaseDto) {

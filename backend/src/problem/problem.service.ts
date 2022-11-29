@@ -2,15 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { CreateProblemDto } from './dto/create-problem.dto';
 import { UpdateProblemDto } from './dto/update-problem.dto';
 import { Problem } from './entities/problem.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { SimpleProblemDto } from './dto/simple-problem.dto';
+import { ProblemRepository } from './problem.repository';
 
 @Injectable()
 export class ProblemService {
-  constructor(
-    @InjectRepository(Problem) private problemRepository: Repository<Problem>,
-  ) {}
+  constructor(private readonly problemRepository: ProblemRepository) {}
 
   async create(createProblemDto: CreateProblemDto) {
     const problem = Problem.createProblem({
