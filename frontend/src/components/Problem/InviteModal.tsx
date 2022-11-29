@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   left: 4rem;
   transform: translateY(-100%);
   background-color: rgb(255, 255, 255);
-  width: 40rem;
+  width: 55rem;
   height: 6rem;
   z-index: 99;
   border: 1px solid;
@@ -27,7 +27,7 @@ const Wrapper = styled.div`
 `;
 
 const URLWrapper = styled.div`
-  width: 40rem;
+  width: 55rem;
   margin-left: 1rem;
   height: calc(100% - 37px);
   display: flex;
@@ -35,7 +35,7 @@ const URLWrapper = styled.div`
 `;
 
 const URLContainer = styled.div`
-  width: 85%;
+  width: 90%;
   height: 75%;
   border: 0;
   border-radius: 16px;
@@ -52,8 +52,8 @@ const URLContainer = styled.div`
 `;
 
 const CopyButton = styled.button`
-  margin-right: 2rem;
-  width: 8%;
+  margin-right: 2.5rem;
+  width: 5%;
   height: 80%;
   cursor: pointer;
   background: #ffffff;
