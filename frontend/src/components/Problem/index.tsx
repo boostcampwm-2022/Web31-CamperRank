@@ -1,3 +1,3 @@
 import ProblemContent from "./Content";
-
-export {ProblemContent};
+import Result from "./Result";
+export {ProblemContent, Result};
