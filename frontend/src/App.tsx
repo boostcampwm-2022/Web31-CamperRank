@@ -31,7 +31,7 @@ const App = () => {
         {/*{isLoggedIn && <Route path="/profile" element={<SignIn/>}/>}*/}
         <Route path="/problems" element={<ProblemList/>}/>
         <Route path="/problem/:version/:id" element={<Problem/>}/>
-        <Route path="/problem/:version/:id/:inviteLink" element={<Problem/>}/>
+        <Route path="/problem/:version/:id/:roomNumber" element={<Problem/>}/>
         <Route path="*" element={<Navigate to="/"/>}/>
       </Routes>
     </BrowserRouter>
