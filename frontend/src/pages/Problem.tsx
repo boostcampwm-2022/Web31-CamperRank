@@ -3,7 +3,7 @@ import {useParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
-import {ProblemContent, Editor} from "../components/Problem";
+import {ProblemContent} from "../components/Problem";
 import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
@@ -17,11 +17,12 @@ import {WebrtcProvider} from 'y-webrtc'
 import {EditorView, basicSetup} from "codemirror";
 import {EditorState} from "@codemirror/state";
 import {javascript} from '@codemirror/lang-javascript'
-import {} from '@codemirror/autocomplete'
+import {keymap} from '@codemirror/view'
+import {indentWithTab} from "@codemirror/commands"
 
 import * as random from 'lib0/random'
 
-export const usercolors = [
+const usercolors = [
   {color: '#30bced', light: '#30bced33'},
   {color: '#6eeb83', light: '#6eeb8333'},
   {color: '#ffbc42', light: '#ffbc4233'},
@@ -115,6 +116,15 @@ const EditorWrapper = styled.div`
   -moz-user-select: text;
   -ms-user-select: text;
   user-select: text;
+  overflow: auto;
+
+  .cm-editor.cm-focused {
+    outline: none;
+  }
+
+  .cm-activeLine, .cm-activeLineGutter {
+    background: none;
+  }
 `;
 
 const ResultWrapper = styled.div`
@@ -147,15 +157,19 @@ const RowSizeController = styled.div`
 
 const URL = import.meta.env.VITE_SERVER_URL;
 const REM = getComputedStyle(document.documentElement).fontSize;
+const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 
 const Problem = () => {
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
   const [problem, setProblem] = useState<ProblemInfo>({
     title: "",
-    description: ""
+    description: "",
   });
   const {id, version} = useParams();
+  const [isMultiVersion] = useState(version === "multi");
+  const {roomNumber} = isMultiVersion ? useParams() : {roomNumber: null};
+
   const [user, setUser] = useRecoilState(userState);
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
@@ -165,7 +179,7 @@ const Problem = () => {
   const [provider, ytext] = useMemo(() => {
     return [
       // @ts-ignore
-      new WebrtcProvider('codemirror6-demo-room', ydoc, {signaling: ['ws://localhost:4444']})
+      isMultiVersion ? new WebrtcProvider(roomNumber, ydoc, {signaling: [webRTCURL]}) : null
       , ydoc.getText('codemirror')
     ]
   }, []);
@@ -173,24 +187,12 @@ const Problem = () => {
   const userColor = useMemo(() => usercolors[random.uint32() % usercolors.length], []);
 
   useEffect(() => {
-    provider.awareness.setLocalStateField('user', {
-      name: 'Anonymous ' + Math.floor(Math.random() * 100),
-      color: userColor.color,
-      colorLight: userColor.light
-    });
-
-    const state = EditorState.create({
-      doc: ytext.toString(),
-      extensions: [
-        basicSetup,
-        javascript(),
-        yCollab(ytext, provider.awareness, {undoManager})
-      ]
-    });
-
-    // @ts-ignore
-    const view = new EditorView({state, parent: /** @type {HTMLElement} */ (document.querySelector('.edit'))});
-  }, []);
+    if (!isMultiVersion || !!roomNumber) {
+      return;
+    }
+    alert("올바르지 않은 URL 입니다.");
+    navigate("/");
+  }, [isMultiVersion, roomNumber]);
 
   useEffect(() => {
     if (user.isLoggedIn) {
@@ -209,7 +211,6 @@ const Problem = () => {
       isLoggedIn: true,
       ID: camperID
     });
-
   }, []);
 
   useEffect(() => {
@@ -226,9 +227,41 @@ const Problem = () => {
       });
   }, []);
 
+  useEffect(() => {
+    provider && provider.awareness.setLocalStateField('user', {
+      name: 'Anonymous ' + Math.floor(Math.random() * 100),
+      color: userColor.color,
+      colorLight: userColor.light
+    });
+
+    const extensions = [
+      basicSetup,
+      javascript(),
+      keymap.of([indentWithTab])
+    ];
+    provider && extensions.push(yCollab(ytext, provider.awareness, {undoManager}));
+
+    const state = EditorState.create({
+      doc: ytext.toString(),
+      extensions
+    });
+
+    if (editorRef.current) new EditorView({state, parent: editorRef.current});
+
+    return () => {
+      provider && provider.destroy();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (editorRef.current) editorRef.current.style.maxWidth = `${window.innerWidth * 0.485}px`;
+  }, []);
+
   const resizeProblemWrapper = (x: number) => {
-    if (problemRef.current != null) {
+    if (problemRef.current != null && editorRef.current != null) {
       problemRef.current.style.width = `${x - window.innerWidth * 0.032}px`;
+      const problemRefWidth = +problemRef.current.style.width.replace('px', '');
+      editorRef.current.style.maxWidth = `${window.innerWidth * 0.95 - problemRefWidth}px`;
     }
   };
   const resizeEditorWrapper = (y: number) => {
@@ -271,7 +304,7 @@ const Problem = () => {
     <Wrapper {...mainEventHandler} >
       <HeaderWrapper>
         <ProblemHeader
-          URL={`/problem/${version}/${id}`}
+          URL={!!roomNumber ? `/problem/${version}/${id}/${roomNumber}` : `/problem/${version}/${id}`}
           problemName={problem.title ? problem.title : ""}
           type={0}
         />
@@ -286,8 +319,7 @@ const Problem = () => {
         </ProblemWrapper>
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
-          <EditorWrapper ref={editorRef} className={"edit"}>
-            {/*<Editor></Editor>*/}
+          <EditorWrapper ref={editorRef}>
           </EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>Result</ResultWrapper>

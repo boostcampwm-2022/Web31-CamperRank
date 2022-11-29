@@ -3,6 +3,7 @@ declare module "@types" {
     level?: number;
     title: string;
     description: string;
+    id?: number;
   }
 
   type ProblemType = {
