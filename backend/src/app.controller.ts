@@ -9,7 +9,6 @@ import { CreateProblemDto } from './problem/dto/create-problem.dto';
 import { CreateTestCaseDto } from './test-case/dto/create-test-case.dto';
 import { CreateSolvedDto } from './solved/dto/create-solved.dto';
 import { ProgrammingLanguage } from './solved/entities/ProgrammingLanguage.enum';
-import { SolvedResult } from './solved/entities/SolvedResult.enum';
 
 @Controller()
 export class AppController {
@@ -159,90 +158,81 @@ export class AppController {
     const simpleSolvedDto1 = await this.solvedService.create(
       new CreateSolvedDto(
         1,
-        1,
+        'loginId1',
         'function solution() { return 111; }',
         ProgrammingLanguage.JavaScript,
-        SolvedResult.Ready,
       ),
     );
 
     const simpleSolvedDto2 = await this.solvedService.create(
       new CreateSolvedDto(
         2,
-        1,
+        'loginId1',
         'function solution() { return 222; }',
         ProgrammingLanguage.JavaScript,
-        SolvedResult.Ready,
       ),
     );
 
     const simpleSolvedDto3 = await this.solvedService.create(
       new CreateSolvedDto(
         3,
-        1,
+        'loginId1',
         'function solution() { return 333; }',
         ProgrammingLanguage.JavaScript,
-        SolvedResult.Ready,
       ),
     );
 
     const simpleSolvedDto4 = await this.solvedService.create(
       new CreateSolvedDto(
         1,
-        1,
+        'loginId1',
         'function solution() { return 111; }',
         ProgrammingLanguage.JavaScript,
-        SolvedResult.Ready,
       ),
     );
 
     const simpleSolvedDto5 = await this.solvedService.create(
       new CreateSolvedDto(
         2,
-        2,
+        'loginId2',
         'function solution() { return 222; }',
         ProgrammingLanguage.JavaScript,
-        SolvedResult.Ready,
       ),
     );
 
     const simpleSolvedDto6 = await this.solvedService.create(
       new CreateSolvedDto(
         3,
-        2,
+        'loginId2',
         'function solution() { return 333; }',
         ProgrammingLanguage.JavaScript,
-        SolvedResult.Ready,
       ),
     );
 
     const simpleSolvedDto7 = await this.solvedService.create(
       new CreateSolvedDto(
         1,
-        3,
+        'loginId3',
         'function solution() { return 111; }',
         ProgrammingLanguage.JavaScript,
-        SolvedResult.Ready,
       ),
     );
 
     const simpleSolvedDto8 = await this.solvedService.create(
       new CreateSolvedDto(
         2,
-        2,
+        'loginId2',
         'function solution() { return 222; }',
         ProgrammingLanguage.JavaScript,
-        SolvedResult.Ready,
       ),
     );
 
     const simpleSolvedDto9 = await this.solvedService.create(
       new CreateSolvedDto(
         3,
-        3,
+        'loginId3',
         'function solution() { return 333; }',
         ProgrammingLanguage.JavaScript,
-        SolvedResult.Ready,
       ),
     );
 

@@ -5,8 +5,8 @@ export class CreateSolvedDto {
   @ApiProperty({ description: '문제 식별 아이디' })
   problemId: number;
 
-  @ApiProperty({ description: '사용자 식별 아이디' })
-  userId: number;
+  @ApiProperty({ description: '사용자 로그인 아이디' })
+  loginId: string;
 
   @ApiProperty({ description: '사용자 제출 코드' })
   userCode: string;
@@ -14,9 +14,9 @@ export class CreateSolvedDto {
   @ApiProperty({ description: '제출 코드 언어' })
   language: ProgrammingLanguage;
 
-  constructor(problemId, userId, userCode, language, result) {
+  constructor(problemId, loginId, userCode, language) {
     this.problemId = problemId;
-    this.userId = userId;
+    this.loginId = loginId;
     this.userCode = userCode;
     this.language = language;
   }
