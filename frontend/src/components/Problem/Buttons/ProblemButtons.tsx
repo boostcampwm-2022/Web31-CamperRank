@@ -1,12 +1,15 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useState, useEffect} from "react";
 import styled from "styled-components";
-import { editorState } from "../../../recoils";
+import {useParams} from "react-router-dom";
+import { editorState, userState } from "../../../recoils";
 import {useRecoilState} from "recoil";
 
 type ButtonProp = {
   name: string;
   callback: any
 };
+
+const URL = import.meta.env.VITE_SERVER_URL;
 
 const ButtonWrapper = styled.button<ButtonProp>`
   width: 6rem;
@@ -32,16 +35,84 @@ const Button = ({name, callback}: ButtonProp) => {
 const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
   const buttonNames = ["초기화", "코드테스트", "제출"];
   const [content] = useRecoilState(editorState);
+  const [user] = useRecoilState(userState);
+  const [isWorking, setIsWorking] = useState(false);
+
+
   const reset = useCallback(() => {
     if (confirm("코드를 초기화하시겠습니까?")) onClickClearBtn();
   }, [content.text]);
 
+  const {id} = useParams();
+
+  const makeGradingObj = () => {
+    const {text: userCode, language} = content;
+    if (!id) return;
+    return {
+      userCode,
+      language,
+      problemID: +id,
+      userId: 1,
+    }
+  }
+
+  const checkGrading = () =>{
+    if (!isWorking) return true;
+    return false;
+  }
+
+  useEffect(() => {
+    console.log('채점', isWorking)
+  }, [isWorking]);
+
   const executeTest = useCallback(() => {
-    const {text, language} = content;
+    if (!checkGrading()) {
+      alert('현재 채점 진행 중입니다. 잠시 기다려주세요..');
+      return;
+    }
+    setIsWorking(true);
+    const param = makeGradingObj();
+    fetch(`${URL}/solved/test-case`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(param),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log('response', response);
+      })
+      .catch((err) => {
+        console.log('err', err);
+      })
+      .finally(() => {
+        setIsWorking(false);
+      })
   }, [content.text]);
 
   const submit = useCallback(() => {
-
+    if (isWorking) alert("현재 작업 중");
+    if (!checkGrading()) {
+      alert('현재 채점 진행 중입니다. 잠시 기다려주세요.');
+      return;
+    }
+    setIsWorking(true);
+    const param = makeGradingObj();
+    fetch(`${URL}/solved`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(param),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log('response', response);
+      })
+      .catch((err) => {
+        setIsWorking(false);
+      });
   }, [content.text]);
 
   const callbackList = [reset, executeTest, submit];

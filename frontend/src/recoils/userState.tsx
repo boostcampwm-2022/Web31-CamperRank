@@ -4,7 +4,6 @@ interface userInfo {
   token: string,
   isLoggedIn: boolean,
   ID: string
-  numID?: number
 }
 
 export const userState = atom<userInfo>({
@@ -12,7 +11,6 @@ export const userState = atom<userInfo>({
   default: {
     token: "",
     isLoggedIn: false,
-    ID: "",
-    numID: 0,
+    ID: ""
   },
 });

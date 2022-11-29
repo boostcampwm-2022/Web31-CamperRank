@@ -272,10 +272,6 @@ function solution(param) {
     if (editorRef.current) editorRef.current.style.maxWidth = `${window.innerWidth * 0.485}px`;
   }, []);
 
-  useEffect(() => {
-    console.log(code);
-  }, [code]);
-
   const resizeProblemWrapper = (x: number) => {
     if (problemRef.current != null && editorRef.current != null) {
       problemRef.current.style.width = `${x - window.innerWidth * 0.032}px`;
