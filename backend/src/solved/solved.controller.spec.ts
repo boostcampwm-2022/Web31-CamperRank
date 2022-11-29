@@ -1,20 +1,35 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SolvedController } from './solved.controller';
 import { SolvedService } from './solved.service';
+import { SolvedRepository } from './solved.repository';
+import { UserRepository } from '../users/user.repository';
+import { ProblemRepository } from '../problem/problem.repository';
+import { TestCaseRepository } from '../test-case/test-case.repository';
+import { HttpService } from '@nestjs/axios';
 
 describe('SolvedController', () => {
-  let controller: SolvedController;
+  let solvedController: SolvedController;
+  let solvedService: SolvedService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SolvedController],
-      providers: [SolvedService],
+      providers: [
+        SolvedService,
+        HttpService,
+        SolvedRepository,
+        UserRepository,
+        ProblemRepository,
+        TestCaseRepository,
+      ],
     }).compile();
 
-    controller = module.get<SolvedController>(SolvedController);
+    solvedService = module.get<SolvedService>(SolvedService);
+    solvedController = module.get<SolvedController>(SolvedController);
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(solvedService).toBeDefined();
+    expect(solvedController).toBeDefined();
   });
 });
