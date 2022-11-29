@@ -38,15 +38,18 @@ const Result = () => {
     results.length > 0 ? setResult('정답입니다!') : setResult('틀렸습니다!');
   }, [grading.result]);
 
+
   useEffect(() => {
-    setResult('');
     setPoint('');
-    grading.kind && checkGrading();
-    if (grading.status !== 'run') return;
-    const interval = setInterval(() => setPoint(point + '.'), 500);
-    return () => clearInterval(interval);
+    setResult('');
+    grading.kind && Object.keys(grading.result).length > 0 && checkGrading();
   }, [grading]);
 
+  useEffect(() => {
+    if (grading.status !== 'run') return;
+    const interval = setInterval(() => setPoint(point + '.'), 800);
+    return () => clearInterval(interval);
+  });
 
   const textObj : ObjType = {
     ready: '코드를 테스트하거나 제출해주세요!!',
@@ -57,7 +60,7 @@ const Result = () => {
   return (
     <ResultWrapper>
       <Text>{textObj[grading.status]}{grading.status === 'run' && point}</Text>
-      <Grade>{result}</Grade>
+      <Grade>{grading.status === 'complete' && result}</Grade>
     </ResultWrapper>
   )
 };

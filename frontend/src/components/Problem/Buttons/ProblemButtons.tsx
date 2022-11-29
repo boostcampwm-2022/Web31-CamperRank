@@ -40,6 +40,10 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
 
   const reset = useCallback(() => {
     if (confirm("코드를 초기화하시겠습니까?")) onClickClearBtn();
+    setGrading({
+      status: 'ready',
+      result: []
+    })
   }, [content.text]);
 
   const {id} = useParams();
@@ -61,6 +65,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
       status: 'run',
     })
     const param = makeGradingObj();
+    console.log(param);
     fetch(`${URL}/solved/test-case`, {
       method: "POST",
       headers: {
@@ -85,6 +90,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
       status: 'run',
     })
     const param = makeGradingObj();
+    console.log(param);
     fetch(`${URL}/solved`, {
       method: "POST",
       headers: {
