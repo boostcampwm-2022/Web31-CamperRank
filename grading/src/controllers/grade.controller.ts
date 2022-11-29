@@ -229,22 +229,33 @@ export const startDocker = async function (req: any, res: any) {
 
     problemId = problemId || "undefined";
 
-    const CMD1 = `cd src/controllers/demo &&
-                  docker build -t demo .`;
-    const CMD2 = `docker run --rm demo`
-    const CMD3 = `docker image prune -a -f`
+    const fileName = Math.floor(Math.random() * 100000000);
+    let filePath = __dirname + "/../../" + fileName + ".py";
+    console.log(__dirname)
+    userCode = `print('${fileName}')`
 
-    execSync(CMD1);
-    let result = execSync(CMD2);
-    execSync(CMD3);
+    // const CMD1 = `cd src/controllers/demo &&
+    //               docker build -t demo .`;
+    // const CMD2 = `docker run --rm demo`
+    // const CMD3 = `docker image prune -a -f`
 
+    // execSync(CMD1);
+    // let result = execSync(CMD2);
+    // execSync(CMD3);
 
-    console.log(result);
+    fs.writeFileSync(filePath, `${userCode}`);
+
+    const CMD4 = `docker run --rm -v $(pwd)/${fileName}.py:/home/test.py demo`;
+    let result:any = execSync(CMD4);
+
+    fs.unlinkSync(filePath);
+
     let resultText = result.toString();
 
     console.log(resultText);
     
     return res.json({
+      result: resultText,
       isSuccess: true,
       code: 2000,
       message: "채점 성공",

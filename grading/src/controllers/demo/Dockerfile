@@ -1,5 +1,4 @@
 FROM python
-WORKDIR .
-COPY . .
+WORKDIR /home
 CMD ["test.py"]
 ENTRYPOINT ["python3"]
