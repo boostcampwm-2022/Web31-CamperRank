@@ -87,8 +87,6 @@ export class SolvedController {
       }),
     );
 
-    console.log(results);
-
     const failList = results.filter((value) => {
       return value.resultCode !== 1000;
     });
@@ -110,7 +108,7 @@ export class SolvedController {
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
-  async findOne(
+  async findProblemByProblemIdOrUserId(
     @Query('problemId') problemId: string,
     @Query('userId') userId: string,
   ) {
