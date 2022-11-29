@@ -167,9 +167,9 @@ const Problem = () => {
     description: "",
   });
   const {id, version} = useParams();
-  const [isMultiVersion] = useState(version === "multi");
+  const {roomNumber} = version === "multi" ? useParams() : {roomNumber: null};
+  const [isMultiVersion] = useState(version === "multi" && !!roomNumber);
 
-  const {roomNumber} = isMultiVersion ? useParams() : {roomNumber: null};
   const [user, setUser] = useRecoilState(userState);
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
