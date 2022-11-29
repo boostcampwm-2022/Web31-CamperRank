@@ -17,13 +17,12 @@ import {WebrtcProvider} from 'y-webrtc'
 import {EditorView, basicSetup} from "codemirror";
 import {EditorState} from "@codemirror/state";
 import {javascript} from '@codemirror/lang-javascript'
-import { keymap } from '@codemirror/view'
+import {keymap} from '@codemirror/view'
 import {indentWithTab} from "@codemirror/commands"
-import {} from '@codemirror/autocomplete'
 
 import * as random from 'lib0/random'
 
-export const usercolors = [
+const usercolors = [
   {color: '#30bced', light: '#30bced33'},
   {color: '#6eeb83', light: '#6eeb8333'},
   {color: '#ffbc42', light: '#ffbc4233'},
@@ -118,7 +117,11 @@ const EditorWrapper = styled.div`
   -ms-user-select: text;
   user-select: text;
   overflow: auto;
-  .cm-editor.cm-focused { outline: none; }
+
+  .cm-editor.cm-focused {
+    outline: none;
+  }
+
   .cm-activeLine, .cm-activeLineGutter {
     background: none;
   }
@@ -169,9 +172,12 @@ const Problem = () => {
   const [eView, setEView] = useState<EditorView>();
   const [problem, setProblem] = useState<ProblemInfo>({
     title: "",
-    description: ""
+    description: "",
   });
   const {id, version} = useParams();
+  const [isMultiVersion] = useState(version === "multi");
+  const {roomNumber} = isMultiVersion ? useParams() : {roomNumber: null};
+
   const [user, setUser] = useRecoilState(userState);
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
@@ -181,7 +187,7 @@ const Problem = () => {
   const [provider, ytext] = useMemo(() => {
     return [
       // @ts-ignore
-      new WebrtcProvider('codemirror6-demo-room', ydoc, {signaling: [webRTCURL]})
+      isMultiVersion ? new WebrtcProvider(roomNumber, ydoc, {signaling: [webRTCURL]}) : null
       , ydoc.getText('codemirror')
     ]
   }, []);
@@ -228,6 +234,14 @@ function solution(param) {
     }
   }, []);
 
+useEffect(() => {
+  if (!isMultiVersion || !!roomNumber) {
+    return;
+  }
+  alert("올바르지 않은 URL 입니다.");
+  navigate("/");
+}, [isMultiVersion, roomNumber]);
+
   const clearEditor = () => {
     if (eView) {
       let transaction = eView.state.update({changes: {from: 0, to: eView.state.doc.length, insert: defaultCode}})
@@ -266,6 +280,32 @@ function solution(param) {
         alert("문제를 불러올 수 없습니다");
         navigate("/problems");
       });
+  }, []);
+
+  useEffect(() => {
+    provider && provider.awareness.setLocalStateField('user', {
+      name: 'Anonymous ' + Math.floor(Math.random() * 100),
+      color: userColor.color,
+      colorLight: userColor.light
+    });
+
+    const extensions = [
+      basicSetup,
+      javascript(),
+      keymap.of([indentWithTab])
+    ];
+    provider && extensions.push(yCollab(ytext, provider.awareness, {undoManager}));
+
+    const state = EditorState.create({
+      doc: ytext.toString(),
+      extensions
+    });
+
+    if (editorRef.current) new EditorView({state, parent: editorRef.current});
+
+    return () => {
+      provider && provider.destroy();
+    };
   }, []);
 
   useEffect(() => {
@@ -319,7 +359,7 @@ function solution(param) {
     <Wrapper {...mainEventHandler} >
       <HeaderWrapper>
         <ProblemHeader
-          URL={`/problem/${version}/${id}`}
+          URL={!!roomNumber ? `/problem/${version}/${id}/${roomNumber}` : `/problem/${version}/${id}`}
           problemName={problem.title ? problem.title : ""}
           type={0}
         />

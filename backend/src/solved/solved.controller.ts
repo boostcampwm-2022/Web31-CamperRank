@@ -9,6 +9,8 @@ import {
   Patch,
   Post,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { SolvedService } from './solved.service';
 import { CreateSolvedDto } from './dto/create-solved.dto';
@@ -38,6 +40,7 @@ export class SolvedController {
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
+  @UsePipes(ValidationPipe)
   async nonCreateJustTest(@Body() createSolvedDto: CreateSolvedDto) {
     const gradeSolvedDtos = await this.solvedService.createToTest(
       createSolvedDto,
@@ -71,17 +74,8 @@ export class SolvedController {
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
+  @UsePipes(ValidationPipe)
   async createSolvedRecord(@Body() createSolvedDto: CreateSolvedDto) {
-    if (
-      !createSolvedDto.loginId ||
-      !createSolvedDto.problemId ||
-      !createSolvedDto.userCode ||
-      !createSolvedDto.language
-    ) {
-      return {
-        statusCode: HttpStatus.BAD_REQUEST,
-      };
-    }
     const gradeSolvedDtos = await this.solvedService.createToGrade(
       createSolvedDto,
     );
@@ -156,6 +150,7 @@ export class SolvedController {
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
+  @UsePipes(ValidationPipe)
   async update(
     @Param(
       'solvedId',
@@ -165,7 +160,7 @@ export class SolvedController {
     @Body() updateSolvedDto: UpdateSolvedDto,
   ) {
     const simpleSolvedDto = await this.solvedService.update(
-      +solvedId,
+      solvedId,
       updateSolvedDto,
     );
     return {
@@ -192,7 +187,7 @@ export class SolvedController {
     )
     solvedId: number,
   ) {
-    const simpleSolvedDto = await this.solvedService.remove(+solvedId);
+    const simpleSolvedDto = await this.solvedService.remove(solvedId);
     return {
       statusCode:
         simpleSolvedDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
