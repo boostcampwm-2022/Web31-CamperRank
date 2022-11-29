@@ -3,7 +3,7 @@ import {useParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
-import {ProblemContent, Editor} from "../components/Problem";
+import {ProblemContent} from "../components/Problem";
 import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
@@ -154,6 +154,7 @@ const RowSizeController = styled.div`
 
 const URL = import.meta.env.VITE_SERVER_URL;
 const REM = getComputedStyle(document.documentElement).fontSize;
+const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 
 const Problem = () => {
   const [moveColResize, setMoveColResize] = useState(false);
@@ -172,7 +173,7 @@ const Problem = () => {
   const [provider, ytext] = useMemo(() => {
     return [
       // @ts-ignore
-      new WebrtcProvider('codemirror6-demo-room', ydoc, {signaling: ['ws://localhost:4444']})
+      new WebrtcProvider('codemirror6-demo-room', ydoc, {signaling: [webRTCURL]})
       , ydoc.getText('codemirror')
     ]
   }, []);
