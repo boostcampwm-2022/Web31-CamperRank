@@ -87,6 +87,8 @@ export class SolvedController {
       }),
     );
 
+    console.log(results);
+
     const failList = results.filter((value) => {
       return value.resultCode !== 1000;
     });
