@@ -53,10 +53,6 @@ export class SolvedService {
       loginId: createSolvedDto.loginId,
     });
 
-    console.log('createSolvedDto.loginId', createSolvedDto.loginId);
-    console.log('foundUser', foundUser);
-    console.log('foundProblem', foundProblem);
-
     if (foundProblem !== null && foundUser !== null) {
       const solved = Solved.createSolved({
         problem: foundProblem,

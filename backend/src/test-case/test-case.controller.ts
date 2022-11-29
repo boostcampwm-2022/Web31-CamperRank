@@ -55,16 +55,8 @@ export class TestCaseController {
     type: SimpleTestCaseDto,
   })
   async findTestCase(
-    @Query(
-      'testCaseId',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
-    )
-    testCaseId: number,
-    @Query(
-      'problemId',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
-    )
-    problemId: number,
+    @Query('testCaseId') testCaseId: number,
+    @Query('problemId') problemId: number,
   ) {
     const simpleTestCaseDtos = await this.testCaseService.findTestCaseOpt({
       testCaseId: testCaseId,

@@ -1,4 +1,4 @@
-import { spawnSync, execSync } from "child_process";
+import { execSync, spawnSync } from "child_process";
 import { v4 as uuid } from "uuid";
 
 import fs from "fs";
@@ -84,8 +84,14 @@ function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
 
 export const gradingController = async (req: any, res: any) => {
   try {
-    const { solvedId, language, userCode, testCaseInput, testCaseOutput } =
-      req.body.data;
+    const {
+      solvedId,
+      language,
+      userCode,
+      testCaseNumber,
+      testCaseInput,
+      testCaseOutput,
+    } = req.body.data;
     const fileName = uuid();
     const plClassifier = PLClassifier(language);
     const filePath = process.env.NEW_FILE_PATH + fileName + plClassifier.ext;
@@ -111,29 +117,26 @@ export const gradingController = async (req: any, res: any) => {
     if (errText.length === 0 && testCaseOutput === userAnswer) {
       res.status(200).json({
         solvedId: solvedId,
-        result: "success",
+        testCaseNumber: testCaseNumber,
         userPrint: userPrint,
         userAnswer: userAnswer,
         resultCode: 1000,
-        msg: "정답",
       });
     } else {
       res.status(200).json({
         solvedId: solvedId,
-        result: "fail",
+        testCaseNumber: testCaseNumber,
         userPrint: userPrint,
         userAnswer: userAnswer,
         resultCode: 1001,
-        msg: "오답",
       });
     }
   } catch (err) {
     console.error(err);
     res.status(400).json({
       solvedId: req.body.data.solvedId,
-      result: "fail",
+      testCaseNumber: req.body.data.testCaseNumber,
       resultCode: 2000,
-      msg: "채점 실패",
     });
   }
 };
@@ -253,17 +256,23 @@ export const startGrade = async function (req: any, res: any) {
   }
 };
 
-
 export const startDocker = async function (req: any, res: any) {
   try {
-    let { problemId, userCode, language, input, output } = req.body;
+    let {
+      solvedId,
+      problemId,
+      userCode,
+      language,
+      testCaseInput,
+      testCaseOutput,
+    } = req.body.data;
 
     problemId = problemId || "undefined";
 
     const fileName = Math.floor(Math.random() * 100000000);
     let filePath = __dirname + "/../../" + fileName + ".py";
-    console.log(__dirname)
-    userCode = `print('${fileName}')`
+    console.log(__dirname);
+    userCode = `print('${fileName}')`;
 
     // const CMD1 = `cd src/controllers/demo &&
     //               docker build -t demo .`;
@@ -277,21 +286,20 @@ export const startDocker = async function (req: any, res: any) {
     fs.writeFileSync(filePath, `${userCode}`);
 
     const CMD4 = `docker run --rm -v $(pwd)/${fileName}.py:/home/test.py demo`;
-    let result:any = execSync(CMD4);
+    let result: any = execSync(CMD4);
 
     fs.unlinkSync(filePath);
 
     let resultText = result.toString();
 
     console.log(resultText);
-    
+
     return res.json({
       result: resultText,
       isSuccess: true,
       code: 2000,
       message: "채점 성공",
     });
-    
   } catch (err) {
     console.log(err);
     console.log(`Api - grade problem error\n: ${JSON.stringify(err)}`);
