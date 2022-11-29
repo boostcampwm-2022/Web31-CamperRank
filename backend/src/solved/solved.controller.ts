@@ -17,6 +17,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SimpleSolvedDto } from './dto/simple-solved.dto';
 import { HttpService } from '@nestjs/axios';
 import { SolvedResult } from './entities/SolvedResult.enum';
+import { GradeResultSolvedDto } from './dto/grade-result-solved.dto';
 
 @Controller('solved')
 @ApiTags('답안 제출 기록 관련 API')
@@ -85,7 +86,7 @@ export class SolvedController {
       createSolvedDto,
     );
 
-    const results = await Promise.all(
+    const gradeResultList = await Promise.all(
       gradeSolvedDtos.map((value) => {
         return this.httpService.axiosRef
           .post(process.env.GRADING_SERVER_URL, {
@@ -98,17 +99,25 @@ export class SolvedController {
       }),
     );
 
-    const failList = results.filter((value) => {
+    const failList = gradeResultList.filter((value) => {
       return value.resultCode !== 1000;
     });
 
-    const simpleSolvedDto = await this.solvedService.updateResult(
-      results[0].solvedId,
-      failList.length === 0 ? SolvedResult.Success : SolvedResult.Fail,
+    const gradeResultDTO = gradeResultList.map((value) => {
+      return new GradeResultSolvedDto(value);
+    });
+
+    const solvedResult =
+      failList.length === 0 ? SolvedResult.Success : SolvedResult.Fail;
+
+    await this.solvedService.updateResult(
+      gradeResultList[0].solvedId,
+      solvedResult,
     );
+
     return {
       statusCode: HttpStatus.OK,
-      ...simpleSolvedDto,
+      ...gradeResultDTO,
     };
   }
 
@@ -124,16 +133,8 @@ export class SolvedController {
     type: SimpleSolvedDto,
   })
   async findProblemByProblemIdOrUserId(
-    @Query(
-      'problemId',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
-    )
-    problemId: number,
-    @Query(
-      'userId',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
-    )
-    userId: number,
+    @Query('problemId') problemId: number,
+    @Query('userId') userId: number,
   ) {
     const simpleSolvedDtos = await this.solvedService.findSolvedByOpt({
       problemId,
