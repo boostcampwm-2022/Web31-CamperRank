@@ -168,7 +168,7 @@ export const startGrade = async function (req: any, res: any) {
     if (language === "Python") {
       const pythonText = fs.readFileSync(__dirname + "/python.txt", "utf-8");
       codeStyle = "python";
-      filePath = __dirname + "../../../" + fileName + ".py";
+      filePath = __dirname + "/../../" + fileName + ".py";
       userCode = "import sys \n\n" + userCode + "\n\n" + pythonText;
       fileList.push(filePath);
 
@@ -184,7 +184,7 @@ export const startGrade = async function (req: any, res: any) {
       userCode += ")\nprint('##########')\nprint(answer)";
     } else if (language === "JavaScript") {
       codeStyle = "node";
-      filePath = __dirname + "../../../" + fileName + ".js";
+      filePath = __dirname + "/../../" + fileName + ".js";
       fileList.push(filePath);
       userCode += "\n\n" + "let answer = solution(";
       if (testCaseInput !== undefined) {
