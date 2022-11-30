@@ -47,7 +47,6 @@ function parserPython(userCode: string, testCaseInput: any[]) {
 }
 
 function parserNode(userCode: string, testCaseInput: any[]) {
-  // const totalCode = userCode + "\n\n" + "console.log(answer)";
   const argsArr = [];
   const varArr = [];
   for (let i = 0; i < testCaseInput.length; i++) {
@@ -84,7 +83,7 @@ function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
 
 export const gradingController = async (req: any, res: any) => {
   try {
-    const {
+    let {
       solvedId,
       language,
       userCode,
@@ -92,8 +91,11 @@ export const gradingController = async (req: any, res: any) => {
       testCaseInput,
       testCaseOutput,
     } = req.body.data;
+
+    testCaseInput = JSON.parse(testCaseInput);
+    testCaseOutput = JSON.parse(testCaseOutput);
+
     const fileName = uuid();
-    console.log(language);
     const plClassifier = PLClassifier(language);
     const filePath = process.env.NEW_FILE_PATH + fileName + plClassifier.ext;
     const totalCode = buildCode(userCode, testCaseInput, plClassifier.cmd);
@@ -115,7 +117,10 @@ export const gradingController = async (req: any, res: any) => {
     const userPrint = strings[0].replace(/\\r\\n/gi, "\n");
     const userAnswer = strings[1].trim();
 
-    if (errText.length === 0 && testCaseOutput === userAnswer) {
+    if (
+      errText.length === 0 &&
+      JSON.stringify(testCaseOutput) === JSON.stringify(JSON.parse(userAnswer))
+    ) {
       res.status(200).json({
         solvedId: solvedId,
         testCaseNumber: testCaseNumber,

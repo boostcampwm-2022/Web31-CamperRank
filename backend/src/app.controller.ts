@@ -120,39 +120,91 @@ export class AppController {
     );
 
     const simpleTestCaseDto1 = await this.testCaseService.create(
-      new CreateTestCaseDto(1, 1, '123', '111'),
+      new CreateTestCaseDto(1, 1, JSON.stringify([123]), JSON.stringify(111)),
     );
 
     const simpleTestCaseDto2 = await this.testCaseService.create(
-      new CreateTestCaseDto(1, 2, '234', '111'),
+      new CreateTestCaseDto(1, 2, JSON.stringify([234]), JSON.stringify(111)),
     );
 
     const simpleTestCaseDto3 = await this.testCaseService.create(
-      new CreateTestCaseDto(1, 3, '345', '111'),
+      new CreateTestCaseDto(1, 3, JSON.stringify([345]), JSON.stringify(111)),
     );
 
     const simpleTestCaseDto4 = await this.testCaseService.create(
-      new CreateTestCaseDto(2, 1, `'123'`, '222'),
+      new CreateTestCaseDto(2, 1, JSON.stringify(['123']), JSON.stringify(222)),
     );
 
     const simpleTestCaseDto5 = await this.testCaseService.create(
-      new CreateTestCaseDto(2, 2, `'234'`, '222'),
+      new CreateTestCaseDto(
+        2,
+        2,
+        JSON.stringify(['123 456']),
+        JSON.stringify(222),
+      ),
     );
 
     const simpleTestCaseDto6 = await this.testCaseService.create(
-      new CreateTestCaseDto(2, 3, `'345'`, '222'),
+      new CreateTestCaseDto(
+        2,
+        3,
+        JSON.stringify(['123 456 789']),
+        JSON.stringify(222),
+      ),
     );
 
     const simpleTestCaseDto7 = await this.testCaseService.create(
-      new CreateTestCaseDto(3, 1, '1 2\n3 4\n5', '15'),
+      new CreateTestCaseDto(
+        3,
+        1,
+        JSON.stringify([[1, 2], [3, 4], 5]),
+        JSON.stringify(15),
+      ),
     );
 
     const simpleTestCaseDto8 = await this.testCaseService.create(
-      new CreateTestCaseDto(3, 2, '6 7\n8 9\n10', '40'),
+      new CreateTestCaseDto(
+        3,
+        2,
+        JSON.stringify([[6, 7], [8, 9], 10]),
+        JSON.stringify(40),
+      ),
     );
 
     const simpleTestCaseDto9 = await this.testCaseService.create(
-      new CreateTestCaseDto(3, 3, '10 11\n12 13 14\n15', '75'),
+      new CreateTestCaseDto(
+        3,
+        3,
+        JSON.stringify([[10, 11, 12], [13, 14], 15]),
+        JSON.stringify(75),
+      ),
+    );
+
+    const simpleTestCaseDto10 = await this.testCaseService.create(
+      new CreateTestCaseDto(
+        4,
+        1,
+        JSON.stringify([[1, 2], [3, 4], 5]),
+        JSON.stringify([3, 7, 5]),
+      ),
+    );
+
+    const simpleTestCaseDto11 = await this.testCaseService.create(
+      new CreateTestCaseDto(
+        4,
+        2,
+        JSON.stringify([[6, 7], [8, 9], 10]),
+        JSON.stringify([13, 17, 10]),
+      ),
+    );
+
+    const simpleTestCaseDto12 = await this.testCaseService.create(
+      new CreateTestCaseDto(
+        4,
+        3,
+        JSON.stringify([[10, 11, 12], [13, 14], 15]),
+        JSON.stringify([33, 27, 15]),
+      ),
     );
 
     const simpleSolvedDto1 = await this.solvedService.create(
