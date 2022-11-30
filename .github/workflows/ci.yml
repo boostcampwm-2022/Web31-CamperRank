@@ -25,6 +25,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-          cache-dependency-path: /home/code/Web31-CamperRank/frontend/yarn.lock
+          cache-dependency-path: frontend/yarn.lock
       - run: yarn install
       - run: yarn test
