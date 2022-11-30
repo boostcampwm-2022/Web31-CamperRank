@@ -1,15 +1,20 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: deploy test
+
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: [main, dev]
   pull_request:
-    branches: [ "main", "dev" ]
+    branches: [main, dev]
+
 jobs:
-  deployment:
-    name: deployment
-    runs-on: ubuntu-latest
+  build:
+    name: deploy CamperRank
+    runs-on: ubuntu-18.04
+
     steps:
+      - name: checkout source code
+        uses: actions/checkout@v3
+
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
         with:
@@ -28,4 +33,6 @@ jobs:
             cd /home/code/Web31-CamperRank/backend
             npm install
             pm2 start -n server npm -- start
+            cd /home/code/Web31-CamperRank/grading
+            pm2 start -n grade-server npm -- start
             sudo nginx -s reload

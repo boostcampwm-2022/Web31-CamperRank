@@ -13,6 +13,7 @@ const io = new Server(httpServer, {
   },
   cookie: true,
 });
+
 io.on('connection', (socket: Socket) => {
   socket.on('hello', (data) => {
     console.log(data);
