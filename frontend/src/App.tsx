@@ -12,13 +12,14 @@ const App = () => {
   useEffect(() => {
     const token = localStorage.getItem('camperRankToken');
     const camperID = localStorage.getItem('camperID');
+    // const numID = localStorage.getItem('numID');
     if (!token || !camperID || user.isLoggedIn) {
       return;
     }
     setUser({
       token,
       isLoggedIn: true,
-      ID: camperID
+      ID: camperID,
     });
   }, []);
 

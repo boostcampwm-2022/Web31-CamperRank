@@ -1,12 +1,15 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useState, useEffect} from "react";
 import styled from "styled-components";
-import {editorState} from "../../../recoils/editorState";
+import {useParams} from "react-router-dom";
+import { editorState, userState, gradingState } from "../../../recoils";
 import {useRecoilState} from "recoil";
 
 type ButtonProp = {
   name: string;
   callback: any
 };
+
+const URL = import.meta.env.VITE_SERVER_URL;
 
 const ButtonWrapper = styled.button<ButtonProp>`
   width: 6rem;
@@ -15,9 +18,9 @@ const ButtonWrapper = styled.button<ButtonProp>`
   background: #ffffff;
   border: 2px solid ${(props) => (props.name === "제출" ? "#33C363" : "#888888")};
   box-shadow: ${(props) =>
-          props.name === "제출"
-                  ? "0px 8px 24px rgba(51, 195, 99, 0.5);"
-                  : "0px 4px 1px rgba(0, 0, 0, 0.25);"};
+    props.name === "제출"
+    ? "0px 4px 4px rgba(51, 195, 99, 0.5);"
+    : "0px 4px 4px rgba(0, 0, 0, 0.25);"};
   border-radius: 4px;
 
   &:hover {
@@ -29,21 +32,86 @@ const Button = ({name, callback}: ButtonProp) => {
   return <ButtonWrapper name={name} onClick={callback} callback={callback}>{name}</ButtonWrapper>;
 };
 
-const ProblemButtons = () => {
+const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
   const buttonNames = ["초기화", "코드테스트", "제출"];
-  const [content, setContent] = useRecoilState(editorState);
+  const [content] = useRecoilState(editorState);
+  const [user] = useRecoilState(userState);
+  const [grading, setGrading] = useRecoilState(gradingState);
 
   const reset = useCallback(() => {
-    setContent({
-      text: "",
-      language: content.language
-    });
+    if (confirm("코드를 초기화하시겠습니까?")) onClickClearBtn();
+    setGrading({
+      status: 'ready',
+      result: []
+    })
   }, [content.text]);
 
+  const {id} = useParams();
+
+  const makeGradingObj = () => {
+    const {text: userCode, language} = content;
+    if (!id) return;
+    return {
+      userCode,
+      language: 'JavaScript',
+      problemId: +id,
+      loginId: user.ID,
+    }
+  }
+
   const executeTest = useCallback(() => {
+    setGrading({
+      ...grading, 
+      status: 'run',
+    })
+    const param = makeGradingObj();
+    fetch(`${URL}/solved/test-case`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(param),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setGrading({
+          status: 'complete',
+          result:response,
+          kind:'테스트'
+        })
+      })
+      .catch((err) => {
+        console.log('err', err);
+      })
+      .finally(() => {
+      })
   }, [content.text]);
 
   const submit = useCallback(() => {
+    setGrading({
+      ...grading, 
+      status: 'run',
+    })
+    const param = makeGradingObj();
+    fetch(`${URL}/solved`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(param),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setGrading({
+          status: 'complete',
+          result: response,
+          kind: '제출',
+        })
+      })
+      .catch((err) => {
+        console.log('err', err);
+      })
+      .finally(() => {});
   }, [content.text]);
 
   const callbackList = [reset, executeTest, submit];

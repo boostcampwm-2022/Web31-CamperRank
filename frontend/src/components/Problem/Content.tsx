@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ProblemType } from "@types";
 
 const ContentWrapper = styled.div`
-  border: 3px double #888888;
+  border: 3px double #CBCBCB;
   border-radius: 5px;
   width: 100%;
   margin-top: 2rem;

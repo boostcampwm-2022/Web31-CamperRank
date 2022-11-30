@@ -3,10 +3,10 @@ import {useParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
-import {ProblemContent} from "../components/Problem";
+import {ProblemContent, Result} from "../components/Problem";
 import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
-import {userState} from "../recoils/userState";
+import { userState, editorState } from "../recoils";
 import {Video} from "../components/Problem/Video";
 
 import * as Y from 'yjs'
@@ -110,7 +110,7 @@ const EditorWrapper = styled.div`
   width: 100%;
   height: 65%;
   min-height: 10%;
-  padding: 0.5rem;
+  padding: 0.8rem;
   position: relative;
   -webkit-user-select: text;
   -moz-user-select: text;
@@ -125,13 +125,18 @@ const EditorWrapper = styled.div`
   .cm-activeLine, .cm-activeLineGutter {
     background: none;
   }
+  .cm-editor {
+    border: 2px double #CBCBCB;
+    background: #F5FDF8;
+    border-radius: 5px;
+    min-height: 95%;
+  }
 `;
 
 const ResultWrapper = styled.div`
   width: 100%;
   min-height: 10%;
   flex-grow: 1;
-  border: 2px solid black;
 `;
 
 const ButtonsWrapper = styled.div`
@@ -162,6 +167,9 @@ const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 const Problem = () => {
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
+  const [code, setCode] = useRecoilState(editorState);
+  const [eState, setEState] = useState<EditorState>();
+  const [eView, setEView] = useState<EditorView>();
   const [problem, setProblem] = useState<ProblemInfo>({
     title: "",
     description: "",
@@ -185,14 +193,32 @@ const Problem = () => {
   }, []);
   const undoManager = useMemo(() => new Y.UndoManager(ytext), []);
   const userColor = useMemo(() => usercolors[random.uint32() % usercolors.length], []);
+  const defaultCode = `/*
+ 함수 내부에 실행 코드를 작성하세요
+*/
 
-  useEffect(() => {
-    if (!isMultiVersion || !!roomNumber) {
-      return;
+function solution(param) {
+
+  let answer;
+  
+  return answer;
+
+}`;
+
+useEffect(() => {
+  if (!isMultiVersion || !!roomNumber) {
+    return;
+  }
+  alert("올바르지 않은 URL 입니다.");
+  navigate("/");
+}, [isMultiVersion, roomNumber]);
+
+  const clearEditor = () => {
+    if (eView) {
+      let transaction = eView.state.update({changes: {from: 0, to: eView.state.doc.length, insert: defaultCode}})
+      eView.dispatch(transaction)
     }
-    alert("올바르지 않은 URL 입니다.");
-    navigate("/");
-  }, [isMultiVersion, roomNumber]);
+  }
 
   useEffect(() => {
     if (user.isLoggedIn) {
@@ -237,7 +263,10 @@ const Problem = () => {
     const extensions = [
       basicSetup,
       javascript(),
-      keymap.of([indentWithTab])
+      keymap.of([indentWithTab]),
+      EditorView.updateListener.of(function(e) {
+        setCode({...code, text: e.state.doc.toString()});
+      })
     ];
     provider && extensions.push(yCollab(ytext, provider.awareness, {undoManager}));
 
@@ -245,9 +274,14 @@ const Problem = () => {
       doc: ytext.toString(),
       extensions
     });
+    setEState(state);
 
-    if (editorRef.current) new EditorView({state, parent: editorRef.current});
-
+    if (editorRef.current) {
+      const view = new EditorView({state, parent: editorRef.current});
+      setEView(view);
+      let transaction = view.state.update({changes: {from: 0, to: view.state.doc.length, insert: defaultCode}})
+      view.dispatch(transaction)
+    }
     return () => {
       provider && provider.destroy();
     };
@@ -322,9 +356,11 @@ const Problem = () => {
           <EditorWrapper ref={editorRef}>
           </EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
-          <ResultWrapper>Result</ResultWrapper>
+          <ResultWrapper>
+            <Result></Result>
+          </ResultWrapper>
           <ButtonsWrapper>
-            <ProblemButtons/>
+            <ProblemButtons onClickClearBtn={clearEditor}/>
           </ButtonsWrapper>
         </SolvingWrapper>
       </MainWrapper>
