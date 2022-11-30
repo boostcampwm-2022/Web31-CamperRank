@@ -35,6 +35,7 @@ const problem = {
   level: 1,
   title: "A + B = ?",
   description: "Lv1, Python, Javascript, Success Rate: 95.12%",
+  id: 1
 };
 
 const List = () => {

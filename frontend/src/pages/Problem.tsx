@@ -5,8 +5,8 @@ import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
 import {ProblemContent, Result} from "../components/Problem";
 import {ProblemInfo} from "@types";
-import {useRecoilState} from "recoil";
-import { userState, editorState, gradingState } from "../recoils";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {editorState, gradingState, userState} from "../recoils";
 import {Video} from "../components/Problem/Video";
 
 import * as Y from 'yjs'
@@ -21,6 +21,7 @@ import {keymap} from '@codemirror/view'
 import {indentWithTab} from "@codemirror/commands"
 
 import * as random from 'lib0/random'
+import {useUserState} from "../hooks/useUserState";
 
 const usercolors = [
   {color: '#30bced', light: '#30bced33'},
@@ -125,6 +126,7 @@ const EditorWrapper = styled.div`
   .cm-activeLine, .cm-activeLineGutter {
     background: none;
   }
+
   .cm-editor {
     border: 2px double #CBCBCB;
     background: #F5FDF8;
@@ -165,6 +167,7 @@ const REM = getComputedStyle(document.documentElement).fontSize;
 const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 
 const Problem = () => {
+  const user = useRecoilValue(userState);
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
   const [code, setCode] = useRecoilState(editorState);
@@ -179,7 +182,6 @@ const Problem = () => {
   const [isMultiVersion] = useState(version === "multi");
   const {roomNumber} = isMultiVersion ? useParams() : {roomNumber: null};
 
-  const [user, setUser] = useRecoilState(userState);
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -206,13 +208,13 @@ function solution(param) {
 
 }`;
 
-useEffect(() => {
-  if (!isMultiVersion || !!roomNumber) {
-    return;
-  }
-  alert("올바르지 않은 URL 입니다.");
-  navigate("/");
-}, [isMultiVersion, roomNumber]);
+  useEffect(() => {
+    if (!isMultiVersion || !!roomNumber) {
+      return;
+    }
+    alert("올바르지 않은 URL 입니다.");
+    navigate("/");
+  }, [isMultiVersion, roomNumber]);
 
   const clearEditor = () => {
     if (eView) {
@@ -221,24 +223,14 @@ useEffect(() => {
     }
   }
 
+  useUserState();
+
   useEffect(() => {
     if (user.isLoggedIn) {
       return;
     }
-    const token = localStorage.getItem('camperRankToken');
-    const camperID = localStorage.getItem('camperID');
-    if (!token || !camperID) {
-      navigate('/signin', {
-        state: `problem/${version}/${id}`
-      });
-      return;
-    }
-    setUser({
-      token,
-      isLoggedIn: true,
-      ID: camperID
-    });
-  }, []);
+    navigate('/signin');
+  }, [user, user.isLoggedIn]);
 
   useEffect(() => {
     fetch(`${URL}/problem/${id}`)
@@ -265,7 +257,7 @@ useEffect(() => {
       basicSetup,
       javascript(),
       keymap.of([indentWithTab]),
-      EditorView.updateListener.of(function(e) {
+      EditorView.updateListener.of(function (e) {
         setCode({...code, text: e.state.doc.toString()});
       })
     ];

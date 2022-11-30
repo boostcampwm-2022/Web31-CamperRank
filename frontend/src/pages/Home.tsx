@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { Banner, List } from "../components/Home";
-import { MainHeader } from "../components/MainHeader";
-import { Footer } from "../components/Footer";
+import {Banner, List} from "../components/Home";
+import {MainHeader} from "../components/MainHeader";
+import {Footer} from "../components/Footer";
+import {useUserState} from "../hooks/useUserState";
 
 const MainWrapper = styled.div`
   width: 100%;
@@ -38,6 +39,7 @@ const FooterWrapper = styled.div`
 `;
 
 const Main = () => {
+  useUserState();
   return (
     <MainWrapper>
       <HeaderWrapper>
@@ -50,7 +52,7 @@ const Main = () => {
         <List></List>
       </ListWrapper>
       <FooterWrapper>
-        <Footer />
+        <Footer/>
       </FooterWrapper>
     </MainWrapper>
   );
