@@ -21,8 +21,9 @@ export class RankService {
       .skip(skip && take ? skip : undefined)
       .take(skip && take ? skip : undefined)
       .getRawMany();
+
     return solvedList.map((value) => {
-      return new SimpleRankDto(value.userId, +value.solvedCount);
+      return new SimpleRankDto(value.userId, value.solvedCount);
     });
   }
 }

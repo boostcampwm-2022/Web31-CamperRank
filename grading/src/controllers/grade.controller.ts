@@ -93,6 +93,7 @@ export const gradingController = async (req: any, res: any) => {
       testCaseOutput,
     } = req.body.data;
     const fileName = uuid();
+    console.log(language);
     const plClassifier = PLClassifier(language);
     const filePath = process.env.NEW_FILE_PATH + fileName + plClassifier.ext;
     const totalCode = buildCode(userCode, testCaseInput, plClassifier.cmd);

@@ -34,6 +34,13 @@ export class UsersService {
     return new SimpleUserDto(savedUser);
   }
 
+  async findUserByLoginId({ loginId }) {
+    const user = await this.usersRepository.findOneBy({
+      loginId: loginId,
+    });
+    return user !== null ? new SimpleUserDto(user) : null;
+  }
+
   async findUser({ userId, loginId }: FindUserOption) {
     const user = await this.usersRepository.findOneBy({
       id: userId,

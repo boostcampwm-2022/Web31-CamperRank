@@ -13,6 +13,13 @@ import { SimpleRankDto } from './dto/simple-rank.dto';
 export class RankController {
   constructor(private readonly rankService: RankService) {}
 
+  /**
+   * queryString 으로 skip, take 으로 받는다.
+   * skip 은 0, take 는 1000 을 기본 값으로 가진다.
+   * @param skip
+   * @param take
+   * @return { statusCode, SimpleRankDto[] }
+   */
   @Get()
   @ApiOperation({
     summary: '유저 랭킹 API',
@@ -20,7 +27,7 @@ export class RankController {
   })
   @ApiResponse({
     description:
-      'skip, take를 받아서 페이징을 이용하여 받을 수 있고, 없다면 전체 사용자를 응답으로 보내준다.',
+      'skip, take 를 받아서 페이징을 이용하여 받을 수 있고, 없다면 전체 사용자를 응답으로 보내준다.',
     status: HttpStatus.OK,
     type: SimpleRankDto,
   })
@@ -30,15 +37,11 @@ export class RankController {
     @Query('take', new DefaultValuePipe(1000))
     take: number,
   ) {
-    if (skip && !take) {
-      return {
-        statusCode: HttpStatus.BAD_REQUEST,
-      };
-    }
-    const simpleRankDtos = await this.rankService.getUserRanks(skip, take);
+    const simpleRankDtoList = await this.rankService.getUserRanks(skip, take);
+
     return {
       statusCode: HttpStatus.OK,
-      ...simpleRankDtos,
+      ...simpleRankDtoList,
     };
   }
 }
