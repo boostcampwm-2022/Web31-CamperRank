@@ -40,9 +40,7 @@ export class GradeSolvedDto {
 
     this.testCaseId = testCase.id;
     this.testCaseNumber = testCase.caseNumber;
-    this.testCaseInput = testCase.testInput.split('\n').map((value) => {
-      return value.split(' ');
-    });
+    this.testCaseInput = testCase.testInput;
     this.testCaseOutput = testCase.testOutput;
   }
 }
