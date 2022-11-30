@@ -70,7 +70,7 @@ const PageButtonsWrapper = styled.div`
 
 const ProblemWrapper = styled.div`
   width: 47%;
-  min-width: 20rem;
+  min-width: 15%;
   height: auto;
   padding: 1rem;
   position: relative;
@@ -104,13 +104,12 @@ const SolvingWrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  min-width: 30%;
+  min-width: 25%;
 `;
 
 const EditorWrapper = styled.div`
   width: 100%;
   height: 65%;
-  border: 3px solid black;
   min-height: 10%;
   padding: 0.8rem;
   position: relative;
@@ -119,7 +118,6 @@ const EditorWrapper = styled.div`
   -ms-user-select: text;
   user-select: text;
   overflow: auto;
-
   .cm-editor.cm-focused {
     outline: none;
   }
@@ -291,12 +289,12 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
-    if (editorRef.current) editorRef.current.style.maxWidth = `${window.innerWidth * 0.485}px`;
+    window.addEventListener("resize", handleSize);
+    return () => {
+      window.removeEventListener("resize", handleSize);
+    };
   }, []);
 
-  useEffect(() => {
-    console.log(editorRef.current?.style.maxWidth);
-  })
   useEffect(() => {
     setGrade({
       status: 'ready',
@@ -304,14 +302,21 @@ useEffect(() => {
     })
   }, []);
 
+  const handleSize = () => {
+    const PX = +REM.replace("px", "");
+    if (editorRef.current) editorRef.current.style.maxWidth = `${Math.max(80 * PX * 0.485, window.innerWidth * 0.485)}px`;
+    if (problemRef.current) problemRef.current.style.width = `${Math.max(80 * PX * 0.47, window.innerWidth * 0.47)}px`;
+  }
   const resizeProblemWrapper = (x: number) => {
     if (problemRef.current != null && editorRef.current != null) {
-      problemRef.current.style.width = `${x - window.innerWidth * 0.032}px`;
       const problemRefWidth = +problemRef.current.style.width.replace('px', '');
-      const editorRefWidth = +editorRef.current.style.width.replace('px', '');
-      if (editorRefWidth < window.innerWidth * 0.3) return;
-      editorRef.current.style.maxWidth = `${window.innerWidth * 0.95 - problemRefWidth}px`;
-      console.log(problemRefWidth, editorRef.current.style.maxWidth);
+      const editorRefWidth = +editorRef.current.style.maxWidth.replace('px', '');
+      const PX = +REM.replace("px", "");
+      if (x > 0.175 * window.innerWidth) problemRef.current.style.width = `${Math.max(80 * PX * 0.15, x - window.innerWidth * 0.032)}px`;
+      const editorWidth = Math.max(80 * PX * 0.95 - problemRefWidth, window.innerWidth* 0.96 - problemRefWidth);
+      editorRef.current.style.width = `${editorWidth}px`;
+      editorRef.current.style.maxWidth = `${editorWidth}px`;
+      editorRef.current.style.minWidth = `${Math.max(80 * PX * 0.25, window.innerWidth * 0.25)}px`;
     }
   };
   const resizeEditorWrapper = (y: number) => {
