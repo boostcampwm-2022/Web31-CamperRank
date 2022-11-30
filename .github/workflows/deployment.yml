@@ -1,4 +1,4 @@
-name: deploy test
+name: Deploy CamperRank Server
 
 on:
   push:
@@ -23,7 +23,6 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            whoami
             cd /home/code/Web31-CamperRank
             git pull origin dev
             pm2 kill
