@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: deploy CamperRank
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: checkout source code
