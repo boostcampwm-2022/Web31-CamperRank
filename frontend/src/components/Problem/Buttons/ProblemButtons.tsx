@@ -63,6 +63,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     setGrading({
       ...grading, 
       status: 'run',
+      result: [],
     })
     const param = makeGradingObj();
     fetch(`${URL}/solved/test-case`, {
@@ -74,6 +75,8 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     })
       .then((res) => res.json())
       .then((response) => {
+        if (Object.keys(response).length == 1) throw new Error();
+        if (response.statusCode !== 200) throw new Error();
         setGrading({
           status: 'complete',
           result:response,
@@ -81,9 +84,10 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
         })
       })
       .catch((err) => {
-        console.log('err', err);
-      })
-      .finally(() => {
+        setGrading({
+          status: 'error',
+          result: []
+        });
       })
   }, [content.text]);
 
@@ -91,6 +95,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     setGrading({
       ...grading, 
       status: 'run',
+      result: [],
     })
     const param = makeGradingObj();
     fetch(`${URL}/solved`, {
@@ -102,6 +107,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     })
       .then((res) => res.json())
       .then((response) => {
+        if (response.statusCode !== 200) throw new Error();
         setGrading({
           status: 'complete',
           result: response,
@@ -109,7 +115,10 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
         })
       })
       .catch((err) => {
-        console.log('err', err);
+        setGrading({
+          status: 'error',
+          result: []
+        });
       })
       .finally(() => {});
   }, [content.text]);

@@ -6,7 +6,7 @@ import {ProblemHeader} from "../components/ProblemHeader";
 import {ProblemContent, Result} from "../components/Problem";
 import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
-import { userState, editorState } from "../recoils";
+import { userState, editorState, gradingState } from "../recoils";
 import {Video} from "../components/Problem/Video";
 
 import * as Y from 'yjs'
@@ -168,6 +168,7 @@ const Problem = () => {
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
   const [code, setCode] = useRecoilState(editorState);
+  const [grade, setGrade] = useRecoilState(gradingState);
   const [eState, setEState] = useState<EditorState>();
   const [eView, setEView] = useState<EditorView>();
   const [problem, setProblem] = useState<ProblemInfo>({
@@ -289,6 +290,13 @@ useEffect(() => {
 
   useEffect(() => {
     if (editorRef.current) editorRef.current.style.maxWidth = `${window.innerWidth * 0.485}px`;
+  }, []);
+
+  useEffect(() => {
+    setGrade({
+      status: 'ready',
+      result: []
+    })
   }, []);
 
   const resizeProblemWrapper = (x: number) => {
