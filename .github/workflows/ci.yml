@@ -26,9 +26,10 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock')}}
-      - run: cd frontend
-      - run: yarn install
-      - run: yarn test
+      - run: |
+          cd frontend
+          yarn install
+          yarn test
 
       # - name: Use Node.js ${{ matrix.node-version }}
       #   uses: actions/setup-node@v3
