@@ -1,4 +1,4 @@
-name: CI CamperRank Frontend Source Code
+name: CI CamperRank Backend Source Code
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   ci:
-    name: ci frontend source code
+    name: ci backend source code
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -25,6 +25,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+          cache-dependency-path: "./backend/package-lock.json"
       - run: |
           cd backend
           npm install
