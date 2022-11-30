@@ -3,12 +3,12 @@ import {Home, ProblemList, Problem} from "./pages";
 import {SignUp} from "./pages/SignUp";
 import {SignIn} from "./pages/SignIn";
 import {useRecoilValue} from "recoil";
-import {userState} from "./recoils/userState";
-import {setUserState} from "./hooks/useUserState";
+import {userState} from "./recoils";
+import {useUserState} from "./hooks/useUserState";
 
 const App = () => {
   const user = useRecoilValue(userState);
-  setUserState();
+  useUserState();
 
   return (
     <BrowserRouter>

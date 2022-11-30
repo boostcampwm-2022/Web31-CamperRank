@@ -6,23 +6,18 @@ import {
 } from "../styles/MainHeader.style";
 import {Link} from "react-router-dom";
 import {useRecoilState} from "recoil";
-import {userState} from "../recoils/userState";
-import React, {useCallback, useEffect} from "react";
+import {userState} from "../recoils";
+import React, {useCallback} from "react";
+import {useUserState} from "../hooks/useUserState";
 
 export const MainHeader = () => {
   const [user, setUser] = useRecoilState(userState);
-
+  const {logoutHandler} = useUserState();
   const handleLogoutClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     if (!user.isLoggedIn) {
       return;
     }
-    setUser({
-      token: "",
-      isLoggedIn: false,
-      ID: ""
-    })
-    localStorage.removeItem('camperRankToken');
-    localStorage.removeItem('camperID');
+    logoutHandler();
   }, [user, setUser, user.isLoggedIn]);
 
   return (

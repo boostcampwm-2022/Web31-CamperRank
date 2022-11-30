@@ -3,9 +3,10 @@ import {Footer} from "../components/Footer";
 import React, {useEffect} from "react";
 import styled from "styled-components";
 import {InputForm} from "../components/SignIn/InputForm";
-import {useRecoilState} from "recoil";
-import {userState} from "../recoils/userState";
+import {useRecoilValue} from "recoil";
+import {userState} from "../recoils";
 import {useNavigate} from "react-router-dom";
+import {useUserState} from "../hooks/useUserState";
 
 const MainWrapper = styled.div`
   width: 100%;
@@ -37,23 +38,13 @@ const FooterWrapper = styled.div`
 `;
 
 export const SignIn = () => {
-  const [user, setUser] = useRecoilState(userState);
+  const user = useRecoilValue(userState);
   const navigate = useNavigate();
+  useUserState();
   useEffect(() => {
-    if (user.isLoggedIn) {
-      navigate(-1);
+    if (!user.isLoggedIn) {
       return;
     }
-    const token = localStorage.getItem('camperRankToken');
-    const camperID = localStorage.getItem('camperID');
-    if (!token || !camperID) {
-      return;
-    }
-    setUser({
-      token,
-      isLoggedIn: true,
-      ID: camperID
-    });
     navigate(-1);
   }, []);
 

@@ -6,7 +6,7 @@ import {ProblemHeader} from "../components/ProblemHeader";
 import {ProblemContent, Result} from "../components/Problem";
 import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
-import { userState, editorState, gradingState } from "../recoils";
+import {editorState, gradingState } from "../recoils";
 import {Video} from "../components/Problem/Video";
 
 import * as Y from 'yjs'
@@ -21,7 +21,7 @@ import {keymap} from '@codemirror/view'
 import {indentWithTab} from "@codemirror/commands"
 
 import * as random from 'lib0/random'
-import {setUserState} from "../hooks/useUserState";
+import {useUserState} from "../hooks/useUserState";
 
 const usercolors = [
   {color: '#30bced', light: '#30bced33'},
@@ -181,7 +181,6 @@ const Problem = () => {
   const [isMultiVersion] = useState(version === "multi");
   const {roomNumber} = isMultiVersion ? useParams() : {roomNumber: null};
 
-  const user = useRecoilValue(userState);
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -223,7 +222,7 @@ function solution(param) {
     }
   }
 
-  setUserState();
+  useUserState();
 
   useEffect(() => {
     fetch(`${URL}/problem/${id}`)

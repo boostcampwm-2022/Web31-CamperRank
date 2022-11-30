@@ -6,9 +6,10 @@ import {
 } from "../styles/ProblemHeader.style";
 import {Link} from "react-router-dom";
 import {useRecoilState} from "recoil";
-import {userState} from "../recoils/userState";
+import {userState} from "../recoils";
 import React, {useCallback} from "react";
 import {ReactComponent as Greater} from "../assets/Greater.svg";
+import {useUserState} from "../hooks/useUserState";
 
 interface propsType {
   URL: string;
@@ -21,18 +22,12 @@ interface propsType {
 
 export const ProblemHeader = ({URL, problemName, type}: propsType) => {
   const [user, setUser] = useRecoilState(userState);
-
+  const {logoutHandler} = useUserState();
   const handleLogoutClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     if (!user.isLoggedIn) {
       return;
     }
-    setUser({
-      token: "",
-      isLoggedIn: false,
-      ID: ""
-    })
-    localStorage.removeItem('camperRankToken');
-    localStorage.removeItem('camperID');
+    logoutHandler();
   }, [user, setUser, user.isLoggedIn]);
 
   return (

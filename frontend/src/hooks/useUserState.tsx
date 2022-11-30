@@ -1,24 +1,57 @@
-import {useEffect} from "react";
-import {calculateRemainingTime, getLocalToken, login, logout} from "../utils/userUtil";
-import {useRecoilValue} from "recoil";
+import {useCallback, useEffect} from "react";
+import {calculateRemainingTime, getLocalToken, removeLocalToken, setLocalToken} from "../utils/userUtil";
+import {useRecoilState} from "recoil";
 import {userState} from "../recoils";
 
-export const setUserState = () => {
-  const user = useRecoilValue(userState);
+let logoutTimer: any;
+
+export const useUserState = () => {
+  const [user, setUser] = useRecoilState(userState);
+  const {token, camperID, expirationTime} = getLocalToken();
+  const remainingTime = expirationTime === null ? 0 : calculateRemainingTime(expirationTime);
+
+  const logoutHandler = useCallback(() => {
+    removeLocalToken();
+    setUser({
+      token: "",
+      isLoggedIn: false,
+      ID: "",
+    });
+    if (logoutTimer) {
+      clearTimeout(logoutTimer);
+    }
+  }, []);
+
+  const loginHandler = useCallback((token: string, expirationTime: string, camperID: string) => {
+    const remainingTime = expirationTime === null ? 0 : calculateRemainingTime(expirationTime);
+    // @ts-ignore
+    setLocalToken(token, expirationTime, camperID);
+    setUser({
+      // @ts-ignore
+      token,
+      isLoggedIn: true,
+      // @ts-ignore
+      ID: camperID
+    });
+    logoutTimer = setTimeout(logoutHandler, remainingTime);
+  }, []);
+
   useEffect(() => {
-    const {token, camperID, expirationTime} = getLocalToken();
-    const logoutCond = !token || !camperID || !expirationTime
-      || calculateRemainingTime(expirationTime) <= 0;
+    const logoutCond = !token || !camperID || !expirationTime || remainingTime <= 0;
     if (logoutCond) {
       if (user.isLoggedIn) {
-        logout();
+        logoutHandler();
       }
       return;
     }
     if (user.isLoggedIn) {
       return;
     }
-    login(token, expirationTime, camperID);
+    loginHandler(token, expirationTime, camperID);
   }, []);
-}
 
+  return {
+    loginHandler,
+    logoutHandler
+  }
+};
