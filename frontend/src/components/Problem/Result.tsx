@@ -27,6 +27,11 @@ const Text = styled.div`
   font-size: 0.8rem;
 `;
 
+const ErrorText = styled(Text)`
+  color: #B75555;
+  font-weight: 500;
+`;
+
 const Grade = styled.div`
   margin: 1rem 0.5rem;
   font-size: 0.9rem;
@@ -74,7 +79,10 @@ const Result = () => {
 
   useEffect(() => {
     if (grading.status !== 'run') return;
-    const interval = setInterval(() => setPoint(point + '.'), 800);
+    const interval = setInterval(() => {
+      if (point === '.....') setPoint('.');
+      else setPoint(point + '.')
+    }, 800);
     return () => clearInterval(interval);
   });
 
@@ -115,6 +123,10 @@ const Result = () => {
           <Grade>{result} {grading.kind === '테스트' && `테스트케이스 ${cases.length}개 중 ${number}개 맞추셨습니다`}</Grade>
           </>
         )
+      }
+      {
+        grading.status === 'error' && <ErrorText>코드 실행 중 오류가 발생했습니다. 코드를 확인한 뒤 다시 실행해주세요.</ErrorText>
+
       }
     </ResultWrapper>
   )

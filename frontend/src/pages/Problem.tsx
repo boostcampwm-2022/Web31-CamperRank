@@ -299,10 +299,6 @@ useEffect(() => {
     })
   }, []);
 
-  useEffect(() => {
-    console.log(grade);
-  }, [grade]);
-
   const resizeProblemWrapper = (x: number) => {
     if (problemRef.current != null && editorRef.current != null) {
       problemRef.current.style.width = `${x - window.innerWidth * 0.032}px`;
