@@ -10,6 +10,7 @@ import { SolvedRepository } from './solved.repository';
 import { UserRepository } from '../users/user.repository';
 import { TestCaseRepository } from '../test-case/test-case.repository';
 import { ProblemRepository } from '../problem/problem.repository';
+import { FindSolvedByOpt } from './dto/findSolvedByOpt.interface';
 
 @Injectable()
 export class SolvedService {
@@ -82,7 +83,7 @@ export class SolvedService {
    * solved가 저장되지 않는다.
    * @param createSolvedDto
    */
-  async createToTest(createSolvedDto: CreateSolvedDto) {
+  async createSolvedToTest(createSolvedDto: CreateSolvedDto) {
     const foundProblem = await this.problemRepository.findOneBy({
       id: createSolvedDto.problemId,
     });
@@ -106,8 +107,10 @@ export class SolvedService {
             id: createSolvedDto.problemId,
           },
         },
+        skip: 0,
         take: 3,
       });
+
       return foundTestCases.map((value) => {
         return new GradeSolvedDto(solved, value);
       });
@@ -131,22 +134,31 @@ export class SolvedService {
   async updateResult(solvedId, solvedResult) {
     const solved = await this.solvedRepository.findOneBy({ id: solvedId });
     solved.result = solvedResult;
+
     const updatedSolved = await this.solvedRepository.save(solved);
     // console.log(updatedSolved);
     return new SimpleSolvedDto(updatedSolved);
   }
 
-  async findSolvedByOpt({ problemId, userId }) {
+  async findSolvedByOption({
+    problemId,
+    loginId,
+    skip,
+    take,
+  }: FindSolvedByOpt) {
     const solvedList = await this.solvedRepository.find({
       where: {
         problem: {
           id: problemId,
         },
         user: {
-          id: userId,
+          loginId: loginId,
         },
       },
+      skip: skip,
+      take: take,
     });
+
     return solvedList.map((value: Solved) => {
       return new SimpleSolvedDto(value);
     });

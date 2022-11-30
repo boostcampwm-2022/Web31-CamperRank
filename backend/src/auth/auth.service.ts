@@ -25,6 +25,7 @@ export class AuthService {
       return {
         userId: loginId,
         accessToken,
+        effectiveTime: 86400000,
         msg: 'success',
       };
     }
