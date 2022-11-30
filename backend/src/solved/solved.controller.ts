@@ -129,6 +129,7 @@ export class SolvedController {
     return {
       statusCode: HttpStatus.OK,
       solvedId: gradeResultList[0].solvedId,
+      solvedResult: solvedResult,
       ...gradeResultDTO,
     };
   }
