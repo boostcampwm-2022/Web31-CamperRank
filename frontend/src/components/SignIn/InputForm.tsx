@@ -30,6 +30,7 @@ export const InputForm = () => {
         setLoading(false);
         if (data.msg === 'success') {
           localStorage.setItem('camperRankToken', data.accessToken);
+          localStorage.setItem('camperRankTokenTime', data.effectiveTime);
           localStorage.setItem('camperID', data.userId);
           setUser({
             token: data.accessToken,

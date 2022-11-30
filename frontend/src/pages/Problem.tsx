@@ -6,7 +6,7 @@ import {ProblemHeader} from "../components/ProblemHeader";
 import {ProblemContent, Result} from "../components/Problem";
 import {ProblemInfo} from "@types";
 import {useRecoilState} from "recoil";
-import { userState, editorState } from "../recoils";
+import {userState, editorState} from "../recoils";
 import {Video} from "../components/Problem/Video";
 
 import * as Y from 'yjs'
@@ -125,6 +125,7 @@ const EditorWrapper = styled.div`
   .cm-activeLine, .cm-activeLineGutter {
     background: none;
   }
+
   .cm-editor {
     border: 2px double #CBCBCB;
     background: #F5FDF8;
@@ -205,13 +206,13 @@ function solution(param) {
 
 }`;
 
-useEffect(() => {
-  if (!isMultiVersion || !!roomNumber) {
-    return;
-  }
-  alert("올바르지 않은 URL 입니다.");
-  navigate("/");
-}, [isMultiVersion, roomNumber]);
+  useEffect(() => {
+    if (!isMultiVersion || !!roomNumber) {
+      return;
+    }
+    alert("올바르지 않은 URL 입니다.");
+    navigate("/");
+  }, [isMultiVersion, roomNumber]);
 
   const clearEditor = () => {
     if (eView) {
@@ -221,15 +222,19 @@ useEffect(() => {
   }
 
   useEffect(() => {
-    if (user.isLoggedIn) {
-      return;
-    }
     const token = localStorage.getItem('camperRankToken');
     const camperID = localStorage.getItem('camperID');
     if (!token || !camperID) {
-      navigate('/signin', {
-        state: `problem/${version}/${id}`
-      });
+      if (user.isLoggedIn) {
+        setUser({
+          token: "",
+          isLoggedIn: false,
+          ID: ""
+        });
+      }
+      return;
+    }
+    if (user.isLoggedIn) {
       return;
     }
     setUser({
@@ -237,7 +242,7 @@ useEffect(() => {
       isLoggedIn: true,
       ID: camperID
     });
-  }, []);
+  }, [user, setUser, user.isLoggedIn]);
 
   useEffect(() => {
     fetch(`${URL}/problem/${id}`)
@@ -264,7 +269,7 @@ useEffect(() => {
       basicSetup,
       javascript(),
       keymap.of([indentWithTab]),
-      EditorView.updateListener.of(function(e) {
+      EditorView.updateListener.of(function (e) {
         setCode({...code, text: e.state.doc.toString()});
       })
     ];

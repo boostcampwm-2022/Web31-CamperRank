@@ -4,7 +4,7 @@ import {
   GreenMark,
   MenuContainer,
 } from "../styles/ProblemHeader.style";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
 import React, {useCallback} from "react";
@@ -21,7 +21,6 @@ interface propsType {
 
 export const ProblemHeader = ({URL, problemName, type}: propsType) => {
   const [user, setUser] = useRecoilState(userState);
-  const navigate = useNavigate();
 
   const handleLogoutClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     if (!user.isLoggedIn) {
@@ -33,8 +32,8 @@ export const ProblemHeader = ({URL, problemName, type}: propsType) => {
       ID: ""
     })
     localStorage.removeItem('camperRankToken');
-    navigate(import.meta.env.VITE_SERVER_URL + "/problems");
-  }, [user, setUser]);
+    localStorage.removeItem('camperID');
+  }, [user, setUser, user.isLoggedIn]);
 
   return (
     <HeaderContainer>
@@ -47,7 +46,7 @@ export const ProblemHeader = ({URL, problemName, type}: propsType) => {
             <Link to="/problems">문제 리스트</Link>
           </li>
           <li>
-            <Greater className={"greater"} />
+            <Greater className={"greater"}/>
           </li>
           <li>
             <Link to={URL}>{problemName}</Link>
@@ -69,7 +68,7 @@ export const ProblemHeader = ({URL, problemName, type}: propsType) => {
         <Link to={user.isLoggedIn ? "/profile" : "/signup"}>
           <button type={"button"}>{user.isLoggedIn ? user.ID : "회원가입"}</button>
         </Link>
-        <Link to={user.isLoggedIn ? "/" : "/signin"}>
+        <Link to={user.isLoggedIn ? "" : "/signin"}>
           <button type={"button"} onClick={handleLogoutClick}>{user.isLoggedIn ? "로그아웃" : "로그인"}</button>
         </Link>
       </MenuContainer>

@@ -9,7 +9,7 @@ const ProblemWrapper = styled.div`
   position: relative;
   background: #ffffff;
   min-width: 36rem;
-  &: hover {
+  &:hover {
     background: #e6f3ea;
     border: none;
     box-shadow: 3px 3px 3px 3px #b9b9b9;
@@ -65,7 +65,7 @@ const Button = styled.button`
   line-height: 3rem;
   text-align: center;
   cursor: pointer;
-  &: hover {
+  &:hover {
     background: #aad4b6;
     color: white;
     font-weight: bold;
@@ -75,8 +75,7 @@ const Button = styled.button`
 `;
 
 const Problem = ({ problem }: ProblemType) => {
-  const { level, title, description } = problem;
-  const id = 1;
+  const { level, title, description, id } = problem;
   const problemURL = `/problem/single/${id}`;
   return (
     <ProblemWrapper>

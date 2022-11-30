@@ -7,7 +7,7 @@ import {
 import {Link} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {userState} from "../recoils/userState";
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 
 export const MainHeader = () => {
   const [user, setUser] = useRecoilState(userState);
@@ -22,7 +22,8 @@ export const MainHeader = () => {
       ID: ""
     })
     localStorage.removeItem('camperRankToken');
-  }, [user, setUser]);
+    localStorage.removeItem('camperID');
+  }, [user, setUser, user.isLoggedIn]);
 
   return (
     <MainHeaderContainer>
@@ -46,7 +47,7 @@ export const MainHeader = () => {
         <Link to={user.isLoggedIn ? "/profile" : "/signup"}>
           <button type={"button"}>{user.isLoggedIn ? user.ID : "회원가입"}</button>
         </Link>
-        <Link to={user.isLoggedIn ? "/" : "/signin"}>
+        <Link to={user.isLoggedIn ? "" : "/signin"}>
           <button type={"button"} onClick={handleLogoutClick}>{user.isLoggedIn ? "로그아웃" : "로그인"}</button>
         </Link>
       </MenuContainer>
