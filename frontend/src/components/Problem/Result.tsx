@@ -46,10 +46,12 @@ const Case = styled.div<CaseProp>`
   ${props => {
     if (props.resultCode === 1000) {
       return css`
-      border: 3px solid #BAD6DB`;
+      border: 3px solid #BAD6DB;
+      background: #DEEDF0`;
     } else {
       return css`
-      border: 3px solid #D19292`;
+      border: 3px solid #ECD6D6;
+      background: #FAEFEF`;
     }
   }}
 `

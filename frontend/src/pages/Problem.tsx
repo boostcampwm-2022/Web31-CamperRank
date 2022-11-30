@@ -70,7 +70,7 @@ const PageButtonsWrapper = styled.div`
 
 const ProblemWrapper = styled.div`
   width: 47%;
-  min-width: 15%;
+  min-width: 20rem;
   height: auto;
   padding: 1rem;
   position: relative;
@@ -104,11 +104,13 @@ const SolvingWrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  min-width: 30%;
 `;
 
 const EditorWrapper = styled.div`
   width: 100%;
   height: 65%;
+  border: 3px solid black;
   min-height: 10%;
   padding: 0.8rem;
   position: relative;
@@ -293,6 +295,9 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
+    console.log(editorRef.current?.style.maxWidth);
+  })
+  useEffect(() => {
     setGrade({
       status: 'ready',
       result: []
@@ -303,7 +308,10 @@ useEffect(() => {
     if (problemRef.current != null && editorRef.current != null) {
       problemRef.current.style.width = `${x - window.innerWidth * 0.032}px`;
       const problemRefWidth = +problemRef.current.style.width.replace('px', '');
+      const editorRefWidth = +editorRef.current.style.width.replace('px', '');
+      if (editorRefWidth < window.innerWidth * 0.3) return;
       editorRef.current.style.maxWidth = `${window.innerWidth * 0.95 - problemRefWidth}px`;
+      console.log(problemRefWidth, editorRef.current.style.maxWidth);
     }
   };
   const resizeEditorWrapper = (y: number) => {
