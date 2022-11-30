@@ -5,8 +5,8 @@ import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
 import {ProblemContent, Result} from "../components/Problem";
 import {ProblemInfo} from "@types";
-import {useRecoilState} from "recoil";
-import {editorState, gradingState } from "../recoils";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {editorState, gradingState, userState} from "../recoils";
 import {Video} from "../components/Problem/Video";
 
 import * as Y from 'yjs'
@@ -167,6 +167,7 @@ const REM = getComputedStyle(document.documentElement).fontSize;
 const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 
 const Problem = () => {
+  const user = useRecoilValue(userState);
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
   const [code, setCode] = useRecoilState(editorState);
@@ -223,6 +224,13 @@ function solution(param) {
   }
 
   useUserState();
+
+  useEffect(() => {
+    if (user.isLoggedIn) {
+      return;
+    }
+    navigate('/signin');
+  }, [user, user.isLoggedIn]);
 
   useEffect(() => {
     fetch(`${URL}/problem/${id}`)

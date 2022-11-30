@@ -1,6 +1,6 @@
 import {IDInputContainer, InputFormContainer, PasswordInputContainer} from "../../styles/SignIn.style";
 import React, {useCallback, useMemo, useState, useRef} from "react";
-import {useNavigate, useLocation} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useUserState} from "../../hooks/useUserState";
 
 export const InputForm = () => {
@@ -9,7 +9,6 @@ export const InputForm = () => {
   const password = useRef<HTMLInputElement>(null);
   const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/auth/signin", []);
   const navigate = useNavigate();
-  const {state} = useLocation();
   const {loginHandler} = useUserState();
 
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,7 +29,7 @@ export const InputForm = () => {
         if (data.msg === 'success') {
           const expirationTime = new Date(new Date().getTime() + data.effectiveTime).toISOString();
           loginHandler(data.accessToken, expirationTime, data.userId);
-          state ? navigate(`../${state}`) : navigate(-1);
+          navigate(-1);
           return;
         }
         alert('로그인에 실패하였습니다.');
