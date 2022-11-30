@@ -5,7 +5,7 @@ import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
 import {ProblemHeader} from "../components/ProblemHeader";
 import {ProblemContent, Result} from "../components/Problem";
 import {ProblemInfo} from "@types";
-import {useRecoilState} from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import {userState, editorState} from "../recoils";
 import {Video} from "../components/Problem/Video";
 
@@ -21,6 +21,7 @@ import {keymap} from '@codemirror/view'
 import {indentWithTab} from "@codemirror/commands"
 
 import * as random from 'lib0/random'
+import {setUserState} from "../hooks/useUserState";
 
 const usercolors = [
   {color: '#30bced', light: '#30bced33'},
@@ -179,7 +180,7 @@ const Problem = () => {
   const [isMultiVersion] = useState(version === "multi");
   const {roomNumber} = isMultiVersion ? useParams() : {roomNumber: null};
 
-  const [user, setUser] = useRecoilState(userState);
+  const user = useRecoilValue(userState);
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -221,28 +222,7 @@ function solution(param) {
     }
   }
 
-  useEffect(() => {
-    const token = localStorage.getItem('camperRankToken');
-    const camperID = localStorage.getItem('camperID');
-    if (!token || !camperID) {
-      if (user.isLoggedIn) {
-        setUser({
-          token: "",
-          isLoggedIn: false,
-          ID: ""
-        });
-      }
-      return;
-    }
-    if (user.isLoggedIn) {
-      return;
-    }
-    setUser({
-      token,
-      isLoggedIn: true,
-      ID: camperID
-    });
-  }, [user, setUser, user.isLoggedIn]);
+  setUserState();
 
   useEffect(() => {
     fetch(`${URL}/problem/${id}`)

@@ -2,35 +2,13 @@ import {Route, Routes, BrowserRouter, Navigate} from "react-router-dom";
 import {Home, ProblemList, Problem} from "./pages";
 import {SignUp} from "./pages/SignUp";
 import {SignIn} from "./pages/SignIn";
-import {useRecoilState} from "recoil";
-import {useEffect, useMemo} from "react";
+import {useRecoilValue} from "recoil";
 import {userState} from "./recoils/userState";
+import {setUserState} from "./hooks/useUserState";
 
 const App = () => {
-  const [user, setUser] = useRecoilState(userState);
-
-  useEffect(() => {
-    const token = localStorage.getItem('camperRankToken');
-    const camperID = localStorage.getItem('camperID');
-    if (!token || !camperID) {
-      if (user.isLoggedIn) {
-        setUser({
-          token: "",
-          isLoggedIn: false,
-          ID: "",
-        });
-      }
-      return;
-    }
-    if (user.isLoggedIn) {
-      return;
-    }
-    setUser({
-      token,
-      isLoggedIn: true,
-      ID: camperID,
-    });
-  }, []);
+  const user = useRecoilValue(userState);
+  setUserState();
 
   return (
     <BrowserRouter>

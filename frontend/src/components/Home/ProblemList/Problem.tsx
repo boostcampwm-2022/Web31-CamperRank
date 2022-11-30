@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { ProblemType } from "@types";
 import { Link } from "react-router-dom";

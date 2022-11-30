@@ -1,8 +1,7 @@
 import {IDInputContainer, InputFormContainer, PasswordInputContainer} from "../../styles/SignIn.style";
 import React, {useCallback, useMemo, useState, useRef} from "react";
 import {useNavigate, useLocation} from "react-router-dom";
-import {useSetRecoilState} from "recoil";
-import {userState} from "../../recoils/userState";
+import {login} from "../../utils/userUtil";
 
 export const InputForm = () => {
   const [isLoading, setLoading] = useState(false);
@@ -10,7 +9,6 @@ export const InputForm = () => {
   const password = useRef<HTMLInputElement>(null);
   const requestURL = useMemo(() => import.meta.env.VITE_SERVER_URL + "/auth/signin", []);
   const navigate = useNavigate();
-  const setUser = useSetRecoilState(userState);
   const {state} = useLocation();
 
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,14 +27,8 @@ export const InputForm = () => {
       .then(data => {
         setLoading(false);
         if (data.msg === 'success') {
-          localStorage.setItem('camperRankToken', data.accessToken);
-          localStorage.setItem('camperRankTokenTime', data.effectiveTime);
-          localStorage.setItem('camperID', data.userId);
-          setUser({
-            token: data.accessToken,
-            isLoggedIn: true,
-            ID: data.userId
-          });
+          const expirationTime = new Date(new Date().getTime() + data.effectiveTime).toISOString();
+          login(data.accessToken, expirationTime, data.userId);
           state ? navigate(`../${state}`) : navigate(-1);
           return;
         }
