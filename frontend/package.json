@@ -26,6 +26,7 @@
     "react-testing-library": "^8.0.1",
     "react-uuid": "^2.0.0",
     "recoil": "^0.7.6",
+    "socket.io-client": "^4.5.4",
     "styled-components": "^5.3.6",
     "vite-plugin-svgr": "^2.2.2",
     "y-codemirror": "^3.0.1",
