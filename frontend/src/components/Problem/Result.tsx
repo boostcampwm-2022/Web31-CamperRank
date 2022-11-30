@@ -97,7 +97,7 @@ const Result = () => {
     <ResultWrapper>
       <Text>{textObj[grading.status]}{grading.status === 'run' && point}</Text>
       <>
-        {grading.status === 'complete' && cases.map((elem: any, idx: number) => {
+        {grading.status === 'complete' && grading.kind === '테스트' && cases.map((elem: any, idx: number) => {
           const {testCaseNumber, userPrint, userAnswer, resultCode} = elem[1];
           return (
             <Case key={idx} resultCode={resultCode}>
@@ -112,8 +112,7 @@ const Result = () => {
         grading.status === 'complete' &&
         (
           <>
-          <Grade>{result}</Grade>
-          <Grade>{grading.kind === '테스트' && `테스트케이스 ${cases.length}개 중 ${number}개 맞추셨습니다`}</Grade>
+          <Grade>{result} {grading.kind === '테스트' && `테스트케이스 ${cases.length}개 중 ${number}개 맞추셨습니다`}</Grade>
           </>
         )
       }
