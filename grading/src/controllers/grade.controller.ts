@@ -167,7 +167,7 @@ export const startGrade = async function (req: any, res: any) {
 
     if (language === "Python") {
       const pythonText = fs.readFileSync(__dirname + "/python.txt", "utf-8");
-      codeStyle = "python";
+      codeStyle = "python3";
       filePath = __dirname + "/../../" + fileName + ".py";
       userCode = "import sys \n\n" + userCode + "\n\n" + pythonText;
       fileList.push(filePath);
@@ -206,6 +206,7 @@ export const startGrade = async function (req: any, res: any) {
       maxBuffer: 1000,
       /* timeout 3s */
       timeout: 3000,
+      // uid: 1001
     });
     const resultText = codeResult.stdout.toString();
     const errText = codeResult.stderr.toString();
