@@ -1,5 +1,5 @@
 import React, {useCallback, useState, useEffect} from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import {useParams} from "react-router-dom";
 import { editorState, userState, gradingState } from "../../../recoils";
 import {useRecoilState} from "recoil";
@@ -7,6 +7,7 @@ import {useRecoilState} from "recoil";
 type ButtonProp = {
   name: string;
   callback: any
+  disabled: boolean;
 };
 
 const URL = import.meta.env.VITE_SERVER_URL;
@@ -15,21 +16,33 @@ const ButtonWrapper = styled.button<ButtonProp>`
   width: 6rem;
   height: 80%;
   margin: 0.5rem;
-  background: #ffffff;
   border: 2px solid ${(props) => (props.name === "제출" ? "#33C363" : "#888888")};
   box-shadow: ${(props) =>
     props.name === "제출"
     ? "0px 4px 4px rgba(51, 195, 99, 0.5);"
     : "0px 4px 4px rgba(0, 0, 0, 0.25);"};
   border-radius: 4px;
-
   &:hover {
-    background: ${(props) => (props.name === "제출" ? "#DBF6E4" : "#eeeeee")};
+    background: ${(props) => (props.name === "제출" ? "#DBF6E4" : "#dddddd")};
+  }
+   ${props =>
+    props.disabled ?
+    css`
+    background: #BBBBBB;
+    cursor: not-allowed;
+    &:hover {
+      background: #BBBBBB;
+    }
+    `:
+    css`
+    backgroudn: #ffffff;
+    cursor: pointer;
+  `
   }
 `;
 
-const Button = ({name, callback}: ButtonProp) => {
-  return <ButtonWrapper name={name} onClick={callback} callback={callback}>{name}</ButtonWrapper>;
+const Button = ({disabled, name, callback}: ButtonProp) => {
+  return <ButtonWrapper disabled={name === '초기화' ? false : disabled} name={name} onClick={callback} callback={callback}>{name}</ButtonWrapper>;
 };
 
 const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
@@ -37,7 +50,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
   const [content] = useRecoilState(editorState);
   const [user] = useRecoilState(userState);
   const [grading, setGrading] = useRecoilState(gradingState);
-
+  const [working, setWorking] = useState(false);
   const reset = useCallback(() => {
     if (confirm("코드를 초기화하시겠습니까?")) onClickClearBtn();
     setGrading({
@@ -60,6 +73,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
   }
 
   const executeTest = useCallback(() => {
+    setWorking(true);
     setGrading({
       ...grading, 
       status: 'run',
@@ -89,9 +103,11 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
           result: []
         });
       })
+      .finally(() => setWorking(false));
   }, [content.text]);
 
   const submit = useCallback(() => {
+    setWorking(true);
     setGrading({
       ...grading, 
       status: 'run',
@@ -120,7 +136,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
           result: []
         });
       })
-      .finally(() => {});
+      .finally(() => setWorking(false));
   }, [content.text]);
 
   const callbackList = [reset, executeTest, submit];
@@ -128,7 +144,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
   return (
     <>
       {buttonNames.map((name, idx) => (
-        <Button key={idx} name={name} callback={callbackList[idx]}/>
+        <Button disabled={working} key={idx} name={name} callback={callbackList[idx]}/>
       ))}
     </>
   );

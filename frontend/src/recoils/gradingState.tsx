@@ -5,6 +5,9 @@ type Result ={
   resultCode?: number,
   userAnswer?: string,
   userPring?: string,
+  statusCode?: number,
+  solvedId?: number,
+  solvedResult?: string,
 }
 
 interface Grading {

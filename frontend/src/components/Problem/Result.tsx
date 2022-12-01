@@ -40,16 +40,18 @@ const Grade = styled.div`
 const Case = styled.div<CaseProp>`
   padding: 0.3rem 0.5rem;
   width: fit-content;
-  min-width: 10rem;
+  min-width: 50%;
   margin: 0.5rem;
   border-radius: 0.5rem;
   ${props => {
     if (props.resultCode === 1000) {
       return css`
-      border: 3px solid #BAD6DB`;
+      border: 3px solid #BAD6DB;
+      background: #DEEDF0`;
     } else {
       return css`
-      border: 3px solid #D19292`;
+      border: 3px solid #ECD6D6;
+      background: #FAEFEF`;
     }
   }}
 `
@@ -94,11 +96,20 @@ const Result = () => {
 
   const checkGrading = useCallback(() => {
     const resArr = Object.entries(grading.result);
-    if (grading.kind === '테스트') setCases(resArr.slice(0, resArr.length - 1));
-    else setCases([]);
-    const results = resArr.filter(elem => elem[1].resultCode === 1000);
-    setNumber(results.length);
-    results.length === resArr.length - 1 ? setResult('정답입니다!') : setResult('틀렸습니다!');
+    if (grading.kind === '테스트') {
+      setCases(resArr.slice(0, resArr.length - 1));
+      const results = resArr.filter(elem => elem[1].resultCode === 1000);
+      setNumber(results.length);
+      results.length === resArr.length - 1 ? setResult('정답입니다!') : setResult('틀렸습니다!');
+    }
+    else {
+      if (grading.kind === '제출') {
+        const {solvedResult} = grading.result;
+        solvedResult === 'Success' ? setResult('정답입니다!') : setResult('틀렸습니다!');
+      }
+      setCases([]);
+    }
+    
   }, [grading.result, grading.kind]);
 
   return (
