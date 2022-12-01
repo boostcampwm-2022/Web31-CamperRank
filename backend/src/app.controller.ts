@@ -39,171 +39,705 @@ export class AppController {
       new CreateUserDto('loginId3', '12341234'),
     );
 
-    const simpleProblemDto1 = await this.problemService.create(
+    const simpleProblemDto12 = await this.problemService.create(
       new CreateProblemDto(
         'problem1',
-        1,
+        12,
         JSON.stringify(`<div><div>문제 내용</div><div>답은 111</div></div>`),
+      ),
+    );
+
+    // const simpleProblemDto2 = await this.problemService.create(
+    //   new CreateProblemDto(
+    //     'problem2',
+    //     2,
+    //     JSON.stringify(`<div><div>문제 내용</div><div>답은 222</div></div>`),
+    //   ),
+    // );
+
+    // const simpleProblemDto3 = await this.problemService.create(
+    //   new CreateProblemDto(
+    //     'problem3',
+    //     3,
+    //     JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+    //   ),
+    // );
+
+    // const simpleProblemDto4 = await this.problemService.create(
+    //   new CreateProblemDto(
+    //     'problem3',
+    //     3,
+    //     JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+    //   ),
+    // );
+
+    // const simpleProblemDto5 = await this.problemService.create(
+    //   new CreateProblemDto(
+    //     'problem3',
+    //     3,
+    //     JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+    //   ),
+    // );
+
+    // const simpleProblemDto6 = await this.problemService.create(
+    //   new CreateProblemDto(
+    //     'problem3',
+    //     3,
+    //     JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+    //   ),
+    // );
+
+    // const simpleProblemDto7 = await this.problemService.create(
+    //   new CreateProblemDto(
+    //     'problem3',
+    //     3,
+    //     JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+    //   ),
+    // );
+
+    // const simpleProblemDto8 = await this.problemService.create(
+    //   new CreateProblemDto(
+    //     'problem3',
+    //     3,
+    //     JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+    //   ),
+    // );
+
+    // const simpleProblemDto9 = await this.problemService.create(
+    //   new CreateProblemDto(
+    //     'problem3',
+    //     3,
+    //     JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+    //   ),
+    // );
+
+    // const simpleProblemDto10 = await this.problemService.create(
+    //   new CreateProblemDto(
+    //     'problem3',
+    //     3,
+    //     JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+    //   ),
+    // );
+
+    const simpleTestCaseDto34 = await this.testCaseService.create(
+      new CreateTestCaseDto(12, 1, JSON.stringify([123]), JSON.stringify(111)),
+    );
+
+    const simpleTestCaseDto35 = await this.testCaseService.create(
+      new CreateTestCaseDto(12, 2, JSON.stringify([234]), JSON.stringify(111)),
+    );
+
+    const simpleTestCaseDto36 = await this.testCaseService.create(
+      new CreateTestCaseDto(12, 3, JSON.stringify([345]), JSON.stringify(111)),
+    );
+
+    // const simpleTestCaseDto4 = await this.testCaseService.create(
+    //   new CreateTestCaseDto(2, 1, JSON.stringify(['123']), JSON.stringify(222)),
+    // );
+
+    // const simpleTestCaseDto5 = await this.testCaseService.create(
+    //   new CreateTestCaseDto(
+    //     2,
+    //     2,
+    //     JSON.stringify(['123 456']),
+    //     JSON.stringify(222),
+    //   ),
+    // );
+
+    // const simpleTestCaseDto6 = await this.testCaseService.create(
+    //   new CreateTestCaseDto(
+    //     2,
+    //     3,
+    //     JSON.stringify(['123 456 789']),
+    //     JSON.stringify(222),
+    //   ),
+    // );
+
+    // const simpleTestCaseDto7 = await this.testCaseService.create(
+    //   new CreateTestCaseDto(
+    //     3,
+    //     1,
+    //     JSON.stringify([[1, 2], [3, 4], 5]),
+    //     JSON.stringify(15),
+    //   ),
+    // );
+
+    // const simpleTestCaseDto8 = await this.testCaseService.create(
+    //   new CreateTestCaseDto(
+    //     3,
+    //     2,
+    //     JSON.stringify([[6, 7], [8, 9], 10]),
+    //     JSON.stringify(40),
+    //   ),
+    // );
+
+    // const simpleTestCaseDto9 = await this.testCaseService.create(
+    //   new CreateTestCaseDto(
+    //     3,
+    //     3,
+    //     JSON.stringify([[10, 11, 12], [13, 14], 15]),
+    //     JSON.stringify(75),
+    //   ),
+    // );
+
+    // const simpleTestCaseDto10 = await this.testCaseService.create(
+    //   new CreateTestCaseDto(
+    //     4,
+    //     1,
+    //     JSON.stringify([[1, 2], [3, 4], 5]),
+    //     JSON.stringify([3, 7, 5]),
+    //   ),
+    // );
+
+    // const simpleTestCaseDto11 = await this.testCaseService.create(
+    //   new CreateTestCaseDto(
+    //     4,
+    //     2,
+    //     JSON.stringify([[6, 7], [8, 9], 10]),
+    //     JSON.stringify([13, 17, 10]),
+    //   ),
+    // );
+
+    // const simpleTestCaseDto12 = await this.testCaseService.create(
+    //   new CreateTestCaseDto(
+    //     4,
+    //     3,
+    //     JSON.stringify([[10, 11, 12], [13, 14], 15]),
+    //     JSON.stringify([33, 27, 15]),
+    //   ),
+    // );
+
+    const simpleProblemDto1 = await this.problemService.create(
+      new CreateProblemDto(
+        'A + B = ?',
+        1,
+        JSON.stringify(
+          `
+        <div>
+          <h4>문제 내용</h4>
+          <div>A와 B의 합을 출력하시오</div><br>
+          <h4>입력 형태</h4>
+          <div>A와 B</div><br>
+          <h4>출력 형태</h4>
+          <div>A와 B의 합</div><br>
+          <h4>제한 사항</h4>
+          <p>0 <= A <= 10</p>
+          <p>0 <= B <= 10</p><br>
+          <h4>예시 입력#1</h4>
+          <div>[3, 5]</div><br>
+          <h4>예시 출력#1</h4>
+          <div>[8]</div><br>
+          <h4>예시 입력#2</h4>
+          <div>[9, 9]</div><br>
+          <h4>예시 출력#2</h4>
+          <div>[18]</div>
+        </div>
+        `.replace(/[ \n]/g, ''),
+        ),
       ),
     );
 
     const simpleProblemDto2 = await this.problemService.create(
       new CreateProblemDto(
-        'problem2',
+        'A * B = ?',
         2,
-        JSON.stringify(`<div><div>문제 내용</div><div>답은 222</div></div>`),
+        JSON.stringify(
+          `
+        <div>
+          <h4>문제 내용</h4>
+          <div>A와 B의 곱을 출력하시오</div><br>
+          <h4>입력 형태</h4>
+          <div>A와 B</div><br>
+          <h4>출력 형태</h4>
+          <div>A와 B의 곱</div><br>
+          <h4>제한 사항</h4>
+          <p>0 <= A <= 10</p>
+          <p>0 <= B <= 10</p><br>
+          <h4>예시 입력#1</h4>
+          <div>[3, 5]</div><br>
+          <h4>예시 출력#1</h4>
+          <div>[15]</div><br>
+          <h4>예시 입력#2</h4>
+          <div>[9, 9]</div><br>
+          <h4>예시 출력#2</h4>
+          <div>[81]</div>
+        </div>
+        `.replace(/[ \n]/g, ''),
+        ),
       ),
     );
 
     const simpleProblemDto3 = await this.problemService.create(
       new CreateProblemDto(
-        'problem3',
-        3,
-        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+        'A / B = ?',
+        2,
+        JSON.stringify(
+          `
+        <div>
+          <h4>문제 내용</h4>
+          <div>A에서 B를 나눈 값을 출력하시오</div><br>
+          <h4>입력 형태</h4>
+          <div>A와 B</div><br>
+          <h4>출력 형태</h4>
+          <div>A / B 의 몫</div><br>
+          <h4>제한 사항</h4>
+          <p>0 <= A <= 10</p>
+          <p>0 <= B <= 10</p><br>
+          <h4>예시 입력#1</h4>
+          <div>[15, 3]</div><br>
+          <h4>예시 출력#1</h4>
+          <div>[5]</div><br>
+          <h4>예시 입력#2</h4>
+          <div>[9, 9]</div><br>
+          <h4>예시 출력#2</h4>
+          <div>[1]</div>
+        </div>
+        `.replace(/[ \n]/g, ''),
+        ),
       ),
     );
 
     const simpleProblemDto4 = await this.problemService.create(
       new CreateProblemDto(
-        'problem3',
-        3,
-        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+        'A % B = ?',
+        2,
+        JSON.stringify(
+          `
+        <div>
+          <h4>문제 내용</h4>
+          <div>A % B을 출력하시오</div><br>
+          <h4>입력 형태</h4>
+          <div>A와 B</div><br>
+          <h4>출력 형태</h4>
+          <div>A % B</div><br>
+          <h4>제한 사항</h4>
+          <p>0 <= A <= 10</p>
+          <p>0 <= B <= 10</p><br>
+          <h4>예시 입력#1</h4>
+          <div>[15, 3]</div><br>
+          <h4>예시 출력#1</h4>
+          <div>[0]</div><br>
+          <h4>예시 입력#2</h4>
+          <div>[9, 8]</div><br>
+          <h4>예시 출력#2</h4>
+          <div>[1]</div>
+        </div>
+        `.replace(/[ \n]/g, ''),
+        ),
       ),
     );
 
     const simpleProblemDto5 = await this.problemService.create(
       new CreateProblemDto(
-        'problem3',
+        'A ** B = ?',
         3,
-        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+        JSON.stringify(
+          `
+        <div>
+          <h4>문제 내용</h4>
+          <div>A의 B제곱 을 출력하시오</div><br>
+          <h4>입력 형태</h4>
+          <div>A와 B</div><br>
+          <h4>출력 형태</h4>
+          <div>A의 B제곱</div><br>
+          <h4>제한 사항</h4>
+          <p>0 <= A <= 10</p>
+          <p>0 <= B <= 5</p><br>
+          <h4>예시 입력#1</h4>
+          <div>[3, 3]</div><br>
+          <h4>예시 출력#1</h4>
+          <div>[27]</div><br>
+          <h4>예시 입력#2</h4>
+          <div>[10, 1]</div><br>
+          <h4>예시 출력#2</h4>
+          <div>[100]</div>
+        </div>
+        `.replace(/[ \n]/g, ''),
+        ),
       ),
     );
 
     const simpleProblemDto6 = await this.problemService.create(
       new CreateProblemDto(
-        'problem3',
+        'A + B + C = ?',
         3,
-        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+        JSON.stringify(
+          `
+        <div>
+          <h4>문제 내용</h4>
+          <div>A, B, C의 합 을 출력하시오</div><br>
+          <h4>입력 형태</h4>
+          <div>A와 B와 C</div><br>
+          <h4>출력 형태</h4>
+          <div>A의 B와 C의 합</div><br>
+          <h4>제한 사항</h4>
+          <p>0 <= A <= 10</p>
+          <p>0 <= B <= 10</p>
+          <p>0 <= C <= 10</p><br>
+          <h4>예시 입력#1</h4>
+          <div>[3, 3, 9]</div><br>
+          <h4>예시 출력#1</h4>
+          <div>[15]</div><br>
+          <h4>예시 입력#2</h4>
+          <div>[10, 1, 9]</div><br>
+          <h4>예시 출력#2</h4>
+          <div>[20]</div>
+        </div>
+        `.replace(/[ \n]/g, ''),
+        ),
       ),
     );
 
     const simpleProblemDto7 = await this.problemService.create(
       new CreateProblemDto(
-        'problem3',
+        'A + B - C = ?',
         3,
-        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+        JSON.stringify(
+          `
+        <div>
+          <h4>문제 내용</h4>
+          <div>A + B - C의 값 을 출력하시오</div><br>
+          <h4>입력 형태</h4>
+          <div>A와 B와 C</div><br>
+          <h4>출력 형태</h4>
+          <div>A + B - C의 값</div><br>
+          <h4>제한 사항</h4>
+          <p>0 <= A <= 10</p>
+          <p>0 <= B <= 10</p>
+          <p>0 <= C <= 10</p><br>
+          <h4>예시 입력#1</h4>
+          <div>[3, 3, 3]</div><br>
+          <h4>예시 출력#1</h4>
+          <div>[6]</div><br>
+          <h4>예시 입력#2</h4>
+          <div>[10, 6, 9]</div><br>
+          <h4>예시 출력#2</h4>
+          <div>[7]</div>
+        </div>
+        `.replace(/[ \n]/g, ''),
+        ),
       ),
     );
 
     const simpleProblemDto8 = await this.problemService.create(
       new CreateProblemDto(
-        'problem3',
+        'A + B * C = ?',
         3,
-        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+        JSON.stringify(
+          `
+        <div>
+          <h4>문제 내용</h4>
+          <div>A + B * C의 값 을 출력하시오</div><br>
+          <h4>입력 형태</h4>
+          <div>A와 B와 C</div><br>
+          <h4>출력 형태</h4>
+          <div>A + B * C의 값</div><br>
+          <h4>제한 사항</h4>
+          <p>0 <= A <= 10</p>
+          <p>0 <= B <= 10</p>
+          <p>0 <= C <= 10</p><br>
+          <h4>예시 입력#1</h4>
+          <div>[3, 3, 3]</div><br>
+          <h4>예시 출력#1</h4>
+          <div>[12]</div><br>
+          <h4>예시 입력#2</h4>
+          <div>[10, 5, 5]</div><br>
+          <h4>예시 출력#2</h4>
+          <div>[35]</div>
+        </div>
+        `.replace(/[ \n]/g, ''),
+        ),
       ),
     );
 
     const simpleProblemDto9 = await this.problemService.create(
       new CreateProblemDto(
-        'problem3',
+        'A + B / C = ?',
         3,
-        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+        JSON.stringify(
+          `
+        <div>
+          <h4>문제 내용</h4>
+          <div>A + B / C의 값 을 출력하시오</div><br>
+          <h4>입력 형태</h4>
+          <div>A와 B와 C</div><br>
+          <h4>출력 형태</h4>
+          <div>A + B / C의 값</div><br>
+          <h4>제한 사항</h4>
+          <p>0 <= A <= 10</p>
+          <p>0 <= B <= 10</p>
+          <p>0 <= C <= 10</p><br>
+          <h4>예시 입력#1</h4>
+          <div>[3, 3, 3]</div><br>
+          <h4>예시 출력#1</h4>
+          <div>[4]</div><br>
+          <h4>예시 입력#2</h4>
+          <div>[10, 10, 5]</div><br>
+          <h4>예시 출력#2</h4>
+          <div>[12]</div>
+        </div>
+        `.replace(/[ \n]/g, ''),
+        ),
       ),
     );
 
     const simpleProblemDto10 = await this.problemService.create(
       new CreateProblemDto(
-        'problem3',
+        'A * B * C = ?',
         3,
-        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
+        JSON.stringify(
+          `
+        <div>
+          <h4>문제 내용</h4>
+          <div>A * B * C의 값 을 출력하시오</div><br>
+          <h4>입력 형태</h4>
+          <div>A와 B와 C</div><br>
+          <h4>출력 형태</h4>
+          <div>A * B * C의 값</div><br>
+          <h4>제한 사항</h4>
+          <p>0 <= A <= 10</p>
+          <p>0 <= B <= 10</p>
+          <p>0 <= C <= 10</p><br>
+          <h4>예시 입력#1</h4>
+          <div>[3, 3, 3]</div><br>
+          <h4>예시 출력#1</h4>
+          <div>[27]</div><br>
+          <h4>예시 입력#2</h4>
+          <div>[10, 10, 5]</div><br>
+          <h4>예시 출력#2</h4>
+          <div>[500]</div>
+        </div>
+        `.replace(/[ \n]/g, ''),
+        ),
       ),
     );
 
+    const simpleProblemDto11 = await this.problemService.create(
+      new CreateProblemDto(
+        'A - B - C = ?',
+        3,
+        JSON.stringify(
+          `
+        <div>
+          <h4>문제 내용</h4>
+          <div>A - B - C의 값 을 출력하시오</div><br>
+          <h4>입력 형태</h4>
+          <div>A와 B와 C</div><br>
+          <h4>출력 형태</h4>
+          <div>A - B - C의 값</div><br>
+          <h4>제한 사항</h4>
+          <p>0 <= A <= 10</p>
+          <p>0 <= B <= 10</p>
+          <p>0 <= C <= 10</p><br>
+          <h4>예시 입력#1</h4>
+          <div>[3, 3, 3]</div><br>
+          <h4>예시 출력#1</h4>
+          <div>[-3]</div><br>
+          <h4>예시 입력#2</h4>
+          <div>[10, 10, 5]</div><br>
+          <h4>예시 출력#2</h4>
+          <div>[15]</div>
+        </div>
+        `.replace(/[ \n]/g, ''),
+        ),
+      ),
+    );
+
+    //A + B
     const simpleTestCaseDto1 = await this.testCaseService.create(
-      new CreateTestCaseDto(1, 1, JSON.stringify([123]), JSON.stringify(111)),
+      new CreateTestCaseDto(1, 1, JSON.stringify([1, 2]), JSON.stringify(3)),
     );
 
     const simpleTestCaseDto2 = await this.testCaseService.create(
-      new CreateTestCaseDto(1, 2, JSON.stringify([234]), JSON.stringify(111)),
+      new CreateTestCaseDto(1, 2, JSON.stringify([6, 7]), JSON.stringify(13)),
     );
 
     const simpleTestCaseDto3 = await this.testCaseService.create(
-      new CreateTestCaseDto(1, 3, JSON.stringify([345]), JSON.stringify(111)),
+      new CreateTestCaseDto(1, 3, JSON.stringify([10, 10]), JSON.stringify(20)),
     );
 
+    //A * B
     const simpleTestCaseDto4 = await this.testCaseService.create(
-      new CreateTestCaseDto(2, 1, JSON.stringify(['123']), JSON.stringify(222)),
+      new CreateTestCaseDto(2, 1, JSON.stringify([3, 2]), JSON.stringify(6)),
     );
 
     const simpleTestCaseDto5 = await this.testCaseService.create(
-      new CreateTestCaseDto(
-        2,
-        2,
-        JSON.stringify(['123 456']),
-        JSON.stringify(222),
-      ),
+      new CreateTestCaseDto(2, 2, JSON.stringify([6, 7]), JSON.stringify(42)),
     );
 
     const simpleTestCaseDto6 = await this.testCaseService.create(
       new CreateTestCaseDto(
         2,
         3,
-        JSON.stringify(['123 456 789']),
-        JSON.stringify(222),
+        JSON.stringify([10, 10]),
+        JSON.stringify(100),
       ),
     );
 
+    //A / B
     const simpleTestCaseDto7 = await this.testCaseService.create(
-      new CreateTestCaseDto(
-        3,
-        1,
-        JSON.stringify([[1, 2], [3, 4], 5]),
-        JSON.stringify(15),
-      ),
+      new CreateTestCaseDto(3, 1, JSON.stringify([4, 2]), JSON.stringify(2)),
     );
 
     const simpleTestCaseDto8 = await this.testCaseService.create(
-      new CreateTestCaseDto(
-        3,
-        2,
-        JSON.stringify([[6, 7], [8, 9], 10]),
-        JSON.stringify(40),
-      ),
+      new CreateTestCaseDto(3, 2, JSON.stringify([10, 2]), JSON.stringify(5)),
     );
 
     const simpleTestCaseDto9 = await this.testCaseService.create(
-      new CreateTestCaseDto(
-        3,
-        3,
-        JSON.stringify([[10, 11, 12], [13, 14], 15]),
-        JSON.stringify(75),
-      ),
+      new CreateTestCaseDto(3, 3, JSON.stringify([10, 5]), JSON.stringify(2)),
     );
 
+    //A % B
     const simpleTestCaseDto10 = await this.testCaseService.create(
-      new CreateTestCaseDto(
-        4,
-        1,
-        JSON.stringify([[1, 2], [3, 4], 5]),
-        JSON.stringify([3, 7, 5]),
-      ),
+      new CreateTestCaseDto(4, 1, JSON.stringify([4, 2]), JSON.stringify(0)),
     );
 
     const simpleTestCaseDto11 = await this.testCaseService.create(
-      new CreateTestCaseDto(
-        4,
-        2,
-        JSON.stringify([[6, 7], [8, 9], 10]),
-        JSON.stringify([13, 17, 10]),
-      ),
+      new CreateTestCaseDto(4, 2, JSON.stringify([10, 7]), JSON.stringify(3)),
     );
 
     const simpleTestCaseDto12 = await this.testCaseService.create(
+      new CreateTestCaseDto(4, 3, JSON.stringify([9, 5]), JSON.stringify(4)),
+    );
+
+    //A ** B
+    const simpleTestCaseDto13 = await this.testCaseService.create(
+      new CreateTestCaseDto(5, 1, JSON.stringify([4, 2]), JSON.stringify(16)),
+    );
+
+    const simpleTestCaseDto14 = await this.testCaseService.create(
       new CreateTestCaseDto(
-        4,
+        5,
+        2,
+        JSON.stringify([10, 3]),
+        JSON.stringify(1000),
+      ),
+    );
+
+    const simpleTestCaseDto15 = await this.testCaseService.create(
+      new CreateTestCaseDto(5, 3, JSON.stringify([3, 2]), JSON.stringify(9)),
+    );
+
+    //A + B + C
+    const simpleTestCaseDto16 = await this.testCaseService.create(
+      new CreateTestCaseDto(6, 1, JSON.stringify([4, 2, 3]), JSON.stringify(9)),
+    );
+
+    const simpleTestCaseDto17 = await this.testCaseService.create(
+      new CreateTestCaseDto(
+        6,
+        2,
+        JSON.stringify([10, 3, 9]),
+        JSON.stringify(22),
+      ),
+    );
+
+    const simpleTestCaseDto18 = await this.testCaseService.create(
+      new CreateTestCaseDto(
+        6,
         3,
-        JSON.stringify([[10, 11, 12], [13, 14], 15]),
-        JSON.stringify([33, 27, 15]),
+        JSON.stringify([7, 7, 9]),
+        JSON.stringify(23),
+      ),
+    );
+
+    //A + B - C
+    const simpleTestCaseDto19 = await this.testCaseService.create(
+      new CreateTestCaseDto(7, 1, JSON.stringify([4, 2, 3]), JSON.stringify(3)),
+    );
+
+    const simpleTestCaseDto20 = await this.testCaseService.create(
+      new CreateTestCaseDto(7, 2, JSON.stringify([9, 3, 9]), JSON.stringify(3)),
+    );
+
+    const simpleTestCaseDto21 = await this.testCaseService.create(
+      new CreateTestCaseDto(7, 3, JSON.stringify([7, 7, 9]), JSON.stringify(5)),
+    );
+
+    //A + B * C
+    const simpleTestCaseDto22 = await this.testCaseService.create(
+      new CreateTestCaseDto(
+        8,
+        1,
+        JSON.stringify([4, 2, 3]),
+        JSON.stringify(10),
+      ),
+    );
+
+    const simpleTestCaseDto23 = await this.testCaseService.create(
+      new CreateTestCaseDto(8, 2, JSON.stringify([3, 3, 2]), JSON.stringify(9)),
+    );
+
+    const simpleTestCaseDto24 = await this.testCaseService.create(
+      new CreateTestCaseDto(8, 3, JSON.stringify([2, 2, 2]), JSON.stringify(6)),
+    );
+
+    //A + B / C
+    const simpleTestCaseDto25 = await this.testCaseService.create(
+      new CreateTestCaseDto(9, 1, JSON.stringify([4, 3, 3]), JSON.stringify(4)),
+    );
+
+    const simpleTestCaseDto26 = await this.testCaseService.create(
+      new CreateTestCaseDto(9, 2, JSON.stringify([3, 3, 1]), JSON.stringify(6)),
+    );
+
+    const simpleTestCaseDto27 = await this.testCaseService.create(
+      new CreateTestCaseDto(9, 3, JSON.stringify([2, 4, 2]), JSON.stringify(4)),
+    );
+
+    //A * B * C
+    const simpleTestCaseDto28 = await this.testCaseService.create(
+      new CreateTestCaseDto(
+        10,
+        1,
+        JSON.stringify([4, 2, 3]),
+        JSON.stringify(24),
+      ),
+    );
+
+    const simpleTestCaseDto29 = await this.testCaseService.create(
+      new CreateTestCaseDto(
+        10,
+        2,
+        JSON.stringify([3, 3, 2]),
+        JSON.stringify(18),
+      ),
+    );
+
+    const simpleTestCaseDto30 = await this.testCaseService.create(
+      new CreateTestCaseDto(
+        10,
+        3,
+        JSON.stringify([2, 4, 2]),
+        JSON.stringify(16),
+      ),
+    );
+
+    //A - B - C
+    const simpleTestCaseDto31 = await this.testCaseService.create(
+      new CreateTestCaseDto(
+        11,
+        1,
+        JSON.stringify([4, 2, 3]),
+        JSON.stringify(-1),
+      ),
+    );
+
+    const simpleTestCaseDto32 = await this.testCaseService.create(
+      new CreateTestCaseDto(
+        11,
+        2,
+        JSON.stringify([5, 3, 2]),
+        JSON.stringify(0),
+      ),
+    );
+
+    const simpleTestCaseDto33 = await this.testCaseService.create(
+      new CreateTestCaseDto(
+        11,
+        3,
+        JSON.stringify([8, 4, 2]),
+        JSON.stringify(2),
       ),
     );
 
