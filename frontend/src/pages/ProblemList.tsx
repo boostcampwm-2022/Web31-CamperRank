@@ -7,6 +7,8 @@ import { Footer } from "../components/Footer";
 import { filterState } from "../recoils";
 import problems from "../utils/ProblemsDummy";
 import { ProblemInfo } from "@types";
+import { userState } from "../recoils";
+
 const URL = import.meta.env.VITE_SERVER_URL;
 
 const MainWrapper = styled.div`
@@ -39,10 +41,14 @@ const ProblemList = () => {
   const [filter, setFilter] = useRecoilState(filterState);
   const [list, setList] = useState<ProblemInfo[]>([]);
   const [filtered, setFiltered] = useState<ProblemInfo[]>([]);
-
+  const [user] = useRecoilState(userState);
+  
   useEffect(() => {
+    const {ID} = user;
+    console.log(ID);
+    const fetchURL = ID ? `${URL}/problem?loginId=${ID}` : `${URL}/problem`;
     setFilter({solved: '푼 상태', level: '문제 레벨', search: ''});
-    fetch(`${URL}/problem`)
+    fetch(fetchURL)
     .then(res => res.json())
     .then(res => {
       if (res.statusCode === 200) {
@@ -50,7 +56,7 @@ const ProblemList = () => {
         setList(Object.values(res));
       }
     })
-  }, []);
+  }, [user]);
   
   useEffect(() => {
     const { solved, level, search } = filter;
