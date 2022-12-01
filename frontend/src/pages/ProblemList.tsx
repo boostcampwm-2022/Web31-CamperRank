@@ -36,11 +36,12 @@ const FooterWrapper = styled.div`
 `;
 
 const ProblemList = () => {
-  const [filter] = useRecoilState(filterState);
+  const [filter, setFilter] = useRecoilState(filterState);
   const [list, setList] = useState<ProblemInfo[]>([]);
   const [filtered, setFiltered] = useState<ProblemInfo[]>([]);
 
   useEffect(() => {
+    setFilter({solved: '푼 상태', level: '문제 레벨', search: ''});
     fetch(`${URL}/problem`)
     .then(res => res.json())
     .then(res => {
