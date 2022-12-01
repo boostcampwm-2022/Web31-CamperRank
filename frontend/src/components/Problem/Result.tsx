@@ -74,7 +74,6 @@ const Result = () => {
   const [number, setNumber] = useState(0);
 
   useEffect(() => {
-    console.log('grading', grading);
     setPoint("");
     setResult("");
     setCases([]);
@@ -103,10 +102,7 @@ const Result = () => {
       let resArr = Object.entries(grading.result);
       resArr = resArr.slice(0, resArr.length - 1);
       setCases(resArr);
-      const results = resArr.filter((elem) => {
-        if (elem[1] && elem[1].resultCode) return elem[1].resultCode === 1000;
-        return false;
-      });
+      const results = resArr.filter((elem) => elem[1].resultCode === 1000);
       setNumber(results.length);
       results.length === resArr.length - 1
         ? setResult("정답입니다!")
