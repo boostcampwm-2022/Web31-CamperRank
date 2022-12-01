@@ -1,14 +1,14 @@
 import { atom } from "recoil";
 
-type Result ={
-  testCaseNumber?: string,
-  resultCode?: number,
-  userAnswer?: string,
-  userPring?: string,
-  statusCode?: number,
-  solvedId?: number,
-  solvedResult?: string,
-}
+type Result = {
+  testCaseNumber?: string;
+  resultCode?: number;
+  userAnswer?: string;
+  userPring?: string;
+  statusCode?: number;
+  solvedId?: number;
+  solvedResult?: string;
+};
 
 interface Grading {
   status: string;
@@ -19,7 +19,7 @@ interface Grading {
 export const gradingState = atom<Grading>({
   key: "gradingState",
   default: {
-    status: 'ready',
-    result: []
+    status: "ready",
+    result: [],
   },
 });

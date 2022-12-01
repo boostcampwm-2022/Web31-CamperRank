@@ -10,7 +10,7 @@ const VideoContainer = styled.div`
   align-items: center;
 `;
 
-const UserVideo = styled.div`
+const UserVideoContainer = styled.div`
   min-width: 15rem;
   height: 9rem;
   border: 3px inset;
@@ -25,8 +25,21 @@ export const Video = () => {
   const [userList] = useState(["testuser1", "testuser2", "testuser3"]);
 
   useEffect(() => {
-    const socket = io("http://localhost:3333/");
+    const socket = io(import.meta.env.VITE_SOCKET_SERVER_URL);
     socket.emit("hello", { data: "hello, socket.io" });
+  }, []);
+
+  useEffect(() => {
+    const openMediaDevices = async (constraints: UserMediaConstraints) => {
+      return await navigator.mediaDevices.getUserMedia(constraints);
+    };
+
+    try {
+      const stream = openMediaDevices({ video: true, audio: true });
+      console.log("Got MediaStream:", stream);
+    } catch (error) {
+      console.error("Error accessing media devices.", error);
+    }
   }, []);
 
   return (
@@ -35,5 +48,22 @@ export const Video = () => {
         <UserVideo key={idx} />
       ))}
     </VideoContainer>
+  );
+};
+
+export interface UserMediaConstraints {
+  video: boolean;
+  audio: boolean;
+}
+
+export interface UserVideoType {
+  key: number;
+}
+
+export const UserVideo = ({ key: idx }: UserVideoType) => {
+  return (
+    <UserVideoContainer>
+      <div>123</div>
+    </UserVideoContainer>
   );
 };
