@@ -79,17 +79,17 @@ const getRoomNumber = (id: number) => {
 };
 
 const Problem = ({problem}: ProblemType) => {
-  const {id, title, description} = problem;
-  const singleURL = `/problem/single/${id}`;
-  let multiURL = `/problem/multi/${id}/`;
-  if (id != null) {
-    multiURL = `/problem/multi/${id}/${getRoomNumber(id)}`;
+  const {problemId, title, level} = problem;
+  const singleURL = `/problem/single/${problemId}`;
+  let multiURL = `/problem/multi/${problemId}/`;
+  if (problemId != null) {
+    multiURL = `/problem/multi/${problemId}/${getRoomNumber(problemId)}`;
   }
 
   return (
     <ProblemWrapper>
       <Title>{title}</Title>
-      <Description>{description}</Description>
+      <Description>Lv{level}, Python, Javascript, Success Rate: 95.12%</Description>
       <ButtonWrapper>
         <Link to={singleURL}>
           <Button>혼자 풀기</Button>
@@ -100,6 +100,6 @@ const Problem = ({problem}: ProblemType) => {
       </ButtonWrapper>
     </ProblemWrapper>
   );
-};
+}
 
 export default Problem;
