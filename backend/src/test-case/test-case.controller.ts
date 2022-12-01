@@ -24,13 +24,6 @@ import { SimpleTestCaseDto } from './dto/simple-testCase.dto';
 export class TestCaseController {
   constructor(private readonly testCaseService: TestCaseService) {}
 
-  /**
-   * problemId, caseNumber, testInput, testOutput 을 body 로 입력받는다.
-   * problemId 와 caseNumber 를 조건으로 검색하여 동일한 테스트 케이스를 찾으면 BAD_REQUEST 를 반환한다.
-   * 동일한 테스트 케이스가 없고 저장이 완료되면 OK 와 저장된 테스트 케이스의 DTO 가 반환된다.
-   * @param createTestCaseDto
-   * @return { statusCode, SimpleTestCaseDto }
-   */
   @Post()
   @ApiOperation({
     summary: '테스트 케이스 추가 API',
@@ -55,14 +48,6 @@ export class TestCaseController {
     };
   }
 
-  /**
-   * testCaseId 와 problemId 를 이용하여 테스트 케이스를 조회한다.
-   * testCaseId 와 problemId 모두 undefined 라면 Select * FROM testCase OFFSET 0 LIMIT 30; 쿼리가 보내진다.
-   * @param testCaseId
-   * @param problemId
-   * @param skip
-   * @param take
-   */
   @Get()
   @ApiOperation({
     summary: '테스트 케이스 검색 API',
@@ -90,12 +75,6 @@ export class TestCaseController {
     };
   }
 
-  /**
-   * testCaseId 를 이용하여 testCase 를 검색하고 해당 testCase 를 업데이트 한다.
-   * @param testCaseId
-   * @param updateTestCaseDto
-   * @return { statusCode, SimpleTestCaseDto }
-   */
   @Patch(':testCaseId')
   @ApiOperation({
     summary: '테스트 케이스 수정 API',
@@ -128,13 +107,6 @@ export class TestCaseController {
     };
   }
 
-  /**
-   * testCaseId 를 이용하여 검색을 진행한다.
-   * 존재하는 testCase 인 경우 삭제를 한다.
-   * 존재하지 않으면 삭제를 진행할 수 없고, BAD_REQUEST 가 반환된다.
-   * @param testCaseId
-   * @return { statusCode, SimpleTestCaseDto }
-   */
   @Delete(':testCaseId')
   @ApiOperation({
     summary: '테스트 케이스 삭제 API',
