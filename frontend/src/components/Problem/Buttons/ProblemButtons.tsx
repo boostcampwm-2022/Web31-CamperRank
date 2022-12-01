@@ -66,7 +66,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     return {
       userCode,
       language: 'JavaScript',
-      problemId: id,
+      problemId: 1,
       loginId: user.ID,
     }
   }
@@ -119,6 +119,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     })
       .then((res) => res.json())
       .then((response) => {
+        console.log(response);
         if (response.statusCode !== 200) throw new Error();
         setGrading({
           status: 'complete',

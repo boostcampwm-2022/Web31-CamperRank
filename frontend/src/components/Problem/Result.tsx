@@ -104,9 +104,6 @@ const Result = () => {
       setCases(resArr);
       const results = resArr.filter((elem) => elem[1].resultCode === 1000);
       setNumber(results.length);
-      results.length === resArr.length - 1
-        ? setResult("정답입니다!")
-        : setResult("틀렸습니다!");
     } else {
       if (grading.kind === "제출") {
         const { solvedResult } = grading.result;
@@ -121,7 +118,7 @@ const Result = () => {
   return (
     <ResultWrapper>
       <Text>
-        {textObj[grading.status]}
+        {grading.kind === "제출" && textObj[grading.status]}
         {grading.status === "run" && point}
       </Text>
       <>
