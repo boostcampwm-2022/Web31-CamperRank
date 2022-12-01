@@ -118,7 +118,7 @@ const Result = () => {
   return (
     <ResultWrapper>
       <Text>
-        {grading.kind === "제출" && textObj[grading.status]}
+        {textObj[grading.status]}
         {grading.status === "run" && point}
       </Text>
       <>
@@ -139,7 +139,7 @@ const Result = () => {
       {grading.status === "complete" && (
         <>
           <Grade>
-            {result}{" "}
+            {grading.kind === "제출" && result}{" "}
             {grading.kind === "테스트" &&
               `테스트케이스 ${cases.length}개 중 ${number}개 맞추셨습니다`}
           </Grade>

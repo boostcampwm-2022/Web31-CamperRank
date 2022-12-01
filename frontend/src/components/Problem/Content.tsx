@@ -46,12 +46,12 @@ const ProblemDummy = `
 `;
 
 const ProblemContent = ({ problem }: ProblemType) => {
+  if (!problem) return;
   const { level, description } = problem;
-
   return (
     <>
       <Level>LV. {level}</Level>
-      <ContentWrapper dangerouslySetInnerHTML={{ __html: description ? ProblemDummy : "" }} />
+      <ContentWrapper dangerouslySetInnerHTML={{ __html: description ? description.slice(1, description.length - 1) : "" }} />
     </>
   );
 };

@@ -174,10 +174,7 @@ const Problem = () => {
   const [grade, setGrade] = useRecoilState(gradingState);
   const [eState, setEState] = useState<EditorState>();
   const [eView, setEView] = useState<EditorView>();
-  const [problem, setProblem] = useState<ProblemInfo>({
-    title: "",
-    description: "",
-  });
+  const [problem, setProblem] = useState<ProblemInfo>();
   const {id, version} = useParams();
   const [isMultiVersion] = useState(version === "multi");
   const {roomNumber} = isMultiVersion ? useParams() : {roomNumber: null};
@@ -244,7 +241,7 @@ function solution(param) {
         alert("문제를 불러올 수 없습니다");
         navigate("/problems");
       });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     provider && provider.awareness.setLocalStateField('user', {
@@ -352,7 +349,7 @@ function solution(param) {
       <HeaderWrapper>
         <ProblemHeader
           URL={!!roomNumber ? `/problem/${version}/${id}/${roomNumber}` : `/problem/${version}/${id}`}
-          problemName={problem.title ? problem.title : ""}
+          problemName={problem?.title ? problem.title : ""}
           type={0}
         />
       </HeaderWrapper>
@@ -362,7 +359,7 @@ function solution(param) {
         </PageButtonsWrapper>
         <ProblemWrapper ref={problemRef}>
           {version === "multi" && <Video/>}
-          <ProblemContent problem={problem}></ProblemContent>
+          {problem && <ProblemContent problem={problem}></ProblemContent>}
         </ProblemWrapper>
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
