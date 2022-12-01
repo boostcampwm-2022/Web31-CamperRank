@@ -13,13 +13,6 @@ import { SimpleRankDto } from './dto/simple-rank.dto';
 export class RankController {
   constructor(private readonly rankService: RankService) {}
 
-  /**
-   * queryString 으로 skip, take 으로 받는다.
-   * skip 은 0, take 는 1000 을 기본 값으로 가진다.
-   * @param skip
-   * @param take
-   * @return { statusCode, SimpleRankDto[] }
-   */
   @Get()
   @ApiOperation({
     summary: '유저 랭킹 API',

@@ -1,4 +1,5 @@
 export interface findAllWithPaging {
-  skip: number;
-  take: number;
+  loginId?: string;
+  skip?: number;
+  take?: number;
 }

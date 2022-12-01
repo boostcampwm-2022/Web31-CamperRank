@@ -24,13 +24,6 @@ import { SimpleProblemDto } from './dto/simple-problem.dto';
 export class ProblemController {
   constructor(private readonly problemService: ProblemService) {}
 
-  /**
-   * title, level, description 을 body 로 입력받는다.
-   * 중복 검사를 하지 않기 때문에 응답은 OK 를 응답으로 보내준다.
-   * 예외 상황에 대한 처리가 필요할 수 있다.
-   * @param createProblemDto
-   * @return { statusCode, SimpleProblemDto }
-   */
   @Post()
   @ApiOperation({
     summary: '문제 추가 API',
@@ -51,13 +44,6 @@ export class ProblemController {
     };
   }
 
-  /**
-   * queryString 으로 skip 과 take 으로 받는다.
-   * skip 은 0, take 는 1000 을 기본 값으로 가진다.
-   * @param skip
-   * @param take
-   * @return { statusCode, SimpleProblemDto[] }
-   */
   @Get()
   @ApiOperation({
     summary: '전체 문제 반환 API',
@@ -69,12 +55,14 @@ export class ProblemController {
     type: SimpleProblemDto,
   })
   async findAllQuestions(
+    @Query('loginId') loginId: string,
     @Query('skip', new DefaultValuePipe(0))
     skip: number,
     @Query('take', new DefaultValuePipe(1000))
     take: number,
   ) {
     const simpleProblemDtoList = await this.problemService.findAllWithPaging({
+      loginId,
       skip,
       take,
     });
@@ -85,12 +73,28 @@ export class ProblemController {
     };
   }
 
-  /**
-   * problemId 를 이용하여 problem 을 검색한다.
-   * 존재하지 않으면 응답으로 BAD_REQUEST 가 반환되고, 존재하면 OK 가 응답으로 반환된다.
-   * @param problemId
-   * @return { statusCode, SimpleProblemDto }
-   */
+  @Get('random')
+  @ApiOperation({
+    summary: '문제 정보 제공 API',
+    description: '문제 정보를 제공한다.',
+  })
+  @ApiResponse({
+    description:
+      '문제 식별 아이디를 이용해 찾은 문제를 문제 제목, 레벨, 문제 내용을 담아 반환한다.',
+    status: HttpStatus.OK,
+    type: SimpleProblemDto,
+  })
+  async findRandomProblem(@Query('loginId') loginId: string) {
+    const simpleProblemDto = await this.problemService.findRandomProblem({
+      loginId,
+    });
+
+    return {
+      statusCode: HttpStatus.OK,
+      ...simpleProblemDto,
+    };
+  }
+
   @Get(':problemId')
   @ApiOperation({
     summary: '문제 정보 제공 API',
@@ -109,6 +113,7 @@ export class ProblemController {
     )
     problemId: number,
   ) {
+    console.log(2);
     const simpleProblemDto = await this.problemService.findProblem(problemId);
 
     return {
@@ -118,14 +123,6 @@ export class ProblemController {
     };
   }
 
-  /**
-   * problemId 를 이용하여 problem 을 검색한다.
-   * 존재하지 않으면 update 가 일어나지 않고 BAD_REQUEST 를 응답으로 반환한다.
-   * 존재하면 update 가 일어나고 OK 가 응답으로 반환된다.
-   * @param problemId
-   * @param updateProblemDto
-   * @return { statusCode, SimpleProblemDto[] }
-   */
   @Patch(':problemId')
   @ApiOperation({
     summary: '문제 정보 수정 API',
@@ -158,13 +155,6 @@ export class ProblemController {
     };
   }
 
-  /**
-   * problemId 를 이용하여 problem 을 검색한다.
-   * 존재하지 않으면 delete 가 일어나지 않고 BAD_REQUEST 를 응답으로 반환한다.
-   * 존재하면 delete 가 일어나고 OK 가 응답으로 반환된다.
-   * @param problemId
-   * @return { statusCode, SimpleProblemDto }
-   */
   @Delete(':problemId')
   @ApiOperation({
     summary: '문제 정보 삭제 API',
