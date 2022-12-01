@@ -1,9 +1,12 @@
 declare module "@types" {
   interface ProblemInfo {
-    level?: number;
+    level: number;
     title: string;
     description: string;
-    id?: number;
+    problemId: number;
+    createdAt: string;
+    updatedAt: string;
+    isSolved: boolean;
   }
 
   type ProblemType = {

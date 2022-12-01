@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Problem from "./Problem";
+import { userState } from "../../../recoils";
+import {useRecoilState} from "recoil";
+import { ProblemInfo } from "@types";
+
+const URL = import.meta.env.VITE_SERVER_URL;
 
 const ListWrapper = styled.div`
   width: 100%;
@@ -26,7 +31,7 @@ const ProblemListWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 15rem 15rem 15rem;
-  column-gap: 5rem;
+  column-gap: 3rem;
   row-gap: 3rem;
   width: 95%;
 `;
@@ -39,11 +44,26 @@ const problem = {
 };
 
 const List = () => {
+  const [user] = useRecoilState(userState);
+  const [problems, setProblems] = useState<ProblemInfo[]>([]);
+  useEffect(() => {
+    const {ID} = user;
+    console.log(ID);
+    const fetchURL = ID ? `${URL}/problem/random?loginId=${ID}` : `${URL}/problem/random`;
+    fetch(fetchURL)
+    .then(res => res.json())
+    .then(res => {
+      if (res.statusCode === 200) {
+        delete res.statusCode;
+        setProblems(Object.values(res));
+      }
+    })
+  }, [user]);
   return (
     <ListWrapper>
       <ListTitle>오늘의 랜덤 문제</ListTitle>
       <ProblemListWrapper>
-        {new Array(6).fill(problem).map((elem, idx) => (
+        {problems.map((elem, idx) => (
           <Problem key={idx} problem={elem}></Problem>
         ))}
       </ProblemListWrapper>

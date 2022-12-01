@@ -32,7 +32,7 @@ const Level = styled.div`
 
 const Name = styled.div`
   position: absolute;
-  width: 10rem;
+  width: fit-content;
   height: 3rem;
   left: 2rem;
   top: 6rem;
@@ -75,13 +75,13 @@ const Button = styled.button`
 `;
 
 const Problem = ({ problem }: ProblemType) => {
-  const { level, title, description, id } = problem;
-  const problemURL = `/problem/single/${id}`;
+  const { level, title, problemId } = problem;
+  const problemURL = `/problem/single/${problemId}`;
   return (
     <ProblemWrapper>
       <Level>LV. {level}</Level>
       <Name>{title}</Name>
-      <Description>{description}</Description>
+      <Description>Lv{level}, Python, Javascript, Success Rate: 95.12%</Description>
       <Link to={problemURL}>
         <Button>문제 풀기</Button>
       </Link>
