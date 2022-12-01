@@ -193,26 +193,26 @@ export class AppController {
         1,
         JSON.stringify(
           `
-        <div>
-          <h4>문제 내용</h4>
-          <div>A와 B의 합을 출력하시오</div><br>
-          <h4>입력 형태</h4>
-          <div>A와 B</div><br>
-          <h4>출력 형태</h4>
-          <div>A와 B의 합</div><br>
-          <h4>제한 사항</h4>
-          <p>0 <= A <= 10</p>
-          <p>0 <= B <= 10</p><br>
-          <h4>예시 입력#1</h4>
-          <div>[3, 5]</div><br>
-          <h4>예시 출력#1</h4>
-          <div>[8]</div><br>
-          <h4>예시 입력#2</h4>
-          <div>[9, 9]</div><br>
-          <h4>예시 출력#2</h4>
-          <div>[18]</div>
-        </div>
-        `.replace(/[ \n]/g, ''),
+<div>
+<h4>문제 내용</h4>
+<div>A와 B의 합을 출력하시오</div><br>
+<h4>입력 형태</h4>
+<div>A와 B</div><br>
+<h4>출력 형태</h4>
+<div>A와 B의 합</div><br>
+<h4>제한 사항</h4>
+<p>0 <= A <= 10</p>
+<p>0 <= B <= 10</p><br>
+<h4>예시 입력#1</h4>
+<div>[3, 5]</div><br>
+<h4>예시 출력#1</h4>
+<div>[8]</div><br>
+<h4>예시 입력#2</h4>
+<div>[9, 9]</div><br>
+<h4>예시 출력#2</h4>
+<div>[18]</div>
+</div>
+`.replace(/\n/g, ''),
         ),
       ),
     );
@@ -223,26 +223,26 @@ export class AppController {
         2,
         JSON.stringify(
           `
-        <div>
-          <h4>문제 내용</h4>
-          <div>A와 B의 곱을 출력하시오</div><br>
-          <h4>입력 형태</h4>
-          <div>A와 B</div><br>
-          <h4>출력 형태</h4>
-          <div>A와 B의 곱</div><br>
-          <h4>제한 사항</h4>
-          <p>0 <= A <= 10</p>
-          <p>0 <= B <= 10</p><br>
-          <h4>예시 입력#1</h4>
-          <div>[3, 5]</div><br>
-          <h4>예시 출력#1</h4>
-          <div>[15]</div><br>
-          <h4>예시 입력#2</h4>
-          <div>[9, 9]</div><br>
-          <h4>예시 출력#2</h4>
-          <div>[81]</div>
-        </div>
-        `.replace(/[ \n]/g, ''),
+<div>
+<h4>문제 내용</h4>
+<div>A와 B의 곱을 출력하시오</div><br>
+<h4>입력 형태</h4>
+<div>A와 B</div><br>
+<h4>출력 형태</h4>
+<div>A와 B의 곱</div><br>
+<h4>제한 사항</h4>
+<p>0 <= A <= 10</p>
+<p>0 <= B <= 10</p><br>
+<h4>예시 입력#1</h4>
+<div>[3, 5]</div><br>
+<h4>예시 출력#1</h4>
+<div>[15]</div><br>
+<h4>예시 입력#2</h4>
+<div>[9, 9]</div><br>
+<h4>예시 출력#2</h4>
+<div>[81]</div>
+</div>
+`.replace(/\n/g, ''),
         ),
       ),
     );
@@ -253,26 +253,26 @@ export class AppController {
         2,
         JSON.stringify(
           `
-        <div>
-          <h4>문제 내용</h4>
-          <div>A에서 B를 나눈 값을 출력하시오</div><br>
-          <h4>입력 형태</h4>
-          <div>A와 B</div><br>
-          <h4>출력 형태</h4>
-          <div>A / B 의 몫</div><br>
-          <h4>제한 사항</h4>
-          <p>0 <= A <= 10</p>
-          <p>0 <= B <= 10</p><br>
-          <h4>예시 입력#1</h4>
-          <div>[15, 3]</div><br>
-          <h4>예시 출력#1</h4>
-          <div>[5]</div><br>
-          <h4>예시 입력#2</h4>
-          <div>[9, 9]</div><br>
-          <h4>예시 출력#2</h4>
-          <div>[1]</div>
-        </div>
-        `.replace(/[ \n]/g, ''),
+<div>
+<h4>문제 내용</h4>
+<div>A에서 B를 나눈 값을 출력하시오</div><br>
+<h4>입력 형태</h4>
+<div>A와 B</div><br>
+<h4>출력 형태</h4>
+<div>A / B 의 몫</div><br>
+<h4>제한 사항</h4>
+<p>0 <= A <= 10</p>
+<p>0 <= B <= 10</p><br>
+<h4>예시 입력#1</h4>
+<div>[15, 3]</div><br>
+<h4>예시 출력#1</h4>
+<div>[5]</div><br>
+<h4>예시 입력#2</h4>
+<div>[9, 9]</div><br>
+<h4>예시 출력#2</h4>
+<div>[1]</div>
+</div>
+`.replace(/\n/g, ''),
         ),
       ),
     );
@@ -283,26 +283,26 @@ export class AppController {
         2,
         JSON.stringify(
           `
-        <div>
-          <h4>문제 내용</h4>
-          <div>A % B을 출력하시오</div><br>
-          <h4>입력 형태</h4>
-          <div>A와 B</div><br>
-          <h4>출력 형태</h4>
-          <div>A % B</div><br>
-          <h4>제한 사항</h4>
-          <p>0 <= A <= 10</p>
-          <p>0 <= B <= 10</p><br>
-          <h4>예시 입력#1</h4>
-          <div>[15, 3]</div><br>
-          <h4>예시 출력#1</h4>
-          <div>[0]</div><br>
-          <h4>예시 입력#2</h4>
-          <div>[9, 8]</div><br>
-          <h4>예시 출력#2</h4>
-          <div>[1]</div>
-        </div>
-        `.replace(/[ \n]/g, ''),
+<div>
+<h4>문제 내용</h4>
+<div>A % B을 출력하시오</div><br>
+<h4>입력 형태</h4>
+<div>A와 B</div><br>
+<h4>출력 형태</h4>
+<div>A % B</div><br>
+<h4>제한 사항</h4>
+<p>0 <= A <= 10</p>
+<p>0 <= B <= 10</p><br>
+<h4>예시 입력#1</h4>
+<div>[15, 3]</div><br>
+<h4>예시 출력#1</h4>
+<div>[0]</div><br>
+<h4>예시 입력#2</h4>
+<div>[9, 8]</div><br>
+<h4>예시 출력#2</h4>
+<div>[1]</div>
+</div>
+`.replace(/\n/g, ''),
         ),
       ),
     );
@@ -313,26 +313,26 @@ export class AppController {
         3,
         JSON.stringify(
           `
-        <div>
-          <h4>문제 내용</h4>
-          <div>A의 B제곱 을 출력하시오</div><br>
-          <h4>입력 형태</h4>
-          <div>A와 B</div><br>
-          <h4>출력 형태</h4>
-          <div>A의 B제곱</div><br>
-          <h4>제한 사항</h4>
-          <p>0 <= A <= 10</p>
-          <p>0 <= B <= 5</p><br>
-          <h4>예시 입력#1</h4>
-          <div>[3, 3]</div><br>
-          <h4>예시 출력#1</h4>
-          <div>[27]</div><br>
-          <h4>예시 입력#2</h4>
-          <div>[10, 1]</div><br>
-          <h4>예시 출력#2</h4>
-          <div>[100]</div>
-        </div>
-        `.replace(/[ \n]/g, ''),
+<div>
+<h4>문제 내용</h4>
+<div>A의 B제곱 을 출력하시오</div><br>
+<h4>입력 형태</h4>
+<div>A와 B</div><br>
+<h4>출력 형태</h4>
+<div>A의 B제곱</div><br>
+<h4>제한 사항</h4>
+<p>0 <= A <= 10</p>
+<p>0 <= B <= 5</p><br>
+<h4>예시 입력#1</h4>
+<div>[3, 3]</div><br>
+<h4>예시 출력#1</h4>
+<div>[27]</div><br>
+<h4>예시 입력#2</h4>
+<div>[10, 1]</div><br>
+<h4>예시 출력#2</h4>
+<div>[100]</div>
+</div>
+`.replace(/\n/g, ''),
         ),
       ),
     );
@@ -343,27 +343,27 @@ export class AppController {
         3,
         JSON.stringify(
           `
-        <div>
-          <h4>문제 내용</h4>
-          <div>A, B, C의 합 을 출력하시오</div><br>
-          <h4>입력 형태</h4>
-          <div>A와 B와 C</div><br>
-          <h4>출력 형태</h4>
-          <div>A의 B와 C의 합</div><br>
-          <h4>제한 사항</h4>
-          <p>0 <= A <= 10</p>
-          <p>0 <= B <= 10</p>
-          <p>0 <= C <= 10</p><br>
-          <h4>예시 입력#1</h4>
-          <div>[3, 3, 9]</div><br>
-          <h4>예시 출력#1</h4>
-          <div>[15]</div><br>
-          <h4>예시 입력#2</h4>
-          <div>[10, 1, 9]</div><br>
-          <h4>예시 출력#2</h4>
-          <div>[20]</div>
-        </div>
-        `.replace(/[ \n]/g, ''),
+<div>
+<h4>문제 내용</h4>
+<div>A, B, C의 합 을 출력하시오</div><br>
+<h4>입력 형태</h4>
+<div>A와 B와 C</div><br>
+<h4>출력 형태</h4>
+<div>A의 B와 C의 합</div><br>
+<h4>제한 사항</h4>
+<p>0 <= A <= 10</p>
+<p>0 <= B <= 10</p>
+<p>0 <= C <= 10</p><br>
+<h4>예시 입력#1</h4>
+<div>[3, 3, 9]</div><br>
+<h4>예시 출력#1</h4>
+<div>[15]</div><br>
+<h4>예시 입력#2</h4>
+<div>[10, 1, 9]</div><br>
+<h4>예시 출력#2</h4>
+<div>[20]</div>
+</div>
+`.replace(/\n/g, ''),
         ),
       ),
     );
@@ -374,27 +374,27 @@ export class AppController {
         3,
         JSON.stringify(
           `
-        <div>
-          <h4>문제 내용</h4>
-          <div>A + B - C의 값 을 출력하시오</div><br>
-          <h4>입력 형태</h4>
-          <div>A와 B와 C</div><br>
-          <h4>출력 형태</h4>
-          <div>A + B - C의 값</div><br>
-          <h4>제한 사항</h4>
-          <p>0 <= A <= 10</p>
-          <p>0 <= B <= 10</p>
-          <p>0 <= C <= 10</p><br>
-          <h4>예시 입력#1</h4>
-          <div>[3, 3, 3]</div><br>
-          <h4>예시 출력#1</h4>
-          <div>[6]</div><br>
-          <h4>예시 입력#2</h4>
-          <div>[10, 6, 9]</div><br>
-          <h4>예시 출력#2</h4>
-          <div>[7]</div>
-        </div>
-        `.replace(/[ \n]/g, ''),
+<div>
+<h4>문제 내용</h4>
+<div>A + B - C의 값 을 출력하시오</div><br>
+<h4>입력 형태</h4>
+<div>A와 B와 C</div><br>
+<h4>출력 형태</h4>
+<div>A + B - C의 값</div><br>
+<h4>제한 사항</h4>
+<p>0 <= A <= 10</p>
+<p>0 <= B <= 10</p>
+<p>0 <= C <= 10</p><br>
+<h4>예시 입력#1</h4>
+<div>[3, 3, 3]</div><br>
+<h4>예시 출력#1</h4>
+<div>[6]</div><br>
+<h4>예시 입력#2</h4>
+<div>[10, 6, 9]</div><br>
+<h4>예시 출력#2</h4>
+<div>[7]</div>
+</div>
+`.replace(/\n/g, ''),
         ),
       ),
     );
@@ -405,27 +405,27 @@ export class AppController {
         3,
         JSON.stringify(
           `
-        <div>
-          <h4>문제 내용</h4>
-          <div>A + B * C의 값 을 출력하시오</div><br>
-          <h4>입력 형태</h4>
-          <div>A와 B와 C</div><br>
-          <h4>출력 형태</h4>
-          <div>A + B * C의 값</div><br>
-          <h4>제한 사항</h4>
-          <p>0 <= A <= 10</p>
-          <p>0 <= B <= 10</p>
-          <p>0 <= C <= 10</p><br>
-          <h4>예시 입력#1</h4>
-          <div>[3, 3, 3]</div><br>
-          <h4>예시 출력#1</h4>
-          <div>[12]</div><br>
-          <h4>예시 입력#2</h4>
-          <div>[10, 5, 5]</div><br>
-          <h4>예시 출력#2</h4>
-          <div>[35]</div>
-        </div>
-        `.replace(/[ \n]/g, ''),
+<div>
+<h4>문제 내용</h4>
+<div>A + B * C의 값 을 출력하시오</div><br>
+<h4>입력 형태</h4>
+<div>A와 B와 C</div><br>
+<h4>출력 형태</h4>
+<div>A + B * C의 값</div><br>
+<h4>제한 사항</h4>
+<p>0 <= A <= 10</p>
+<p>0 <= B <= 10</p>
+<p>0 <= C <= 10</p><br>
+<h4>예시 입력#1</h4>
+<div>[3, 3, 3]</div><br>
+<h4>예시 출력#1</h4>
+<div>[12]</div><br>
+<h4>예시 입력#2</h4>
+<div>[10, 5, 5]</div><br>
+<h4>예시 출력#2</h4>
+<div>[35]</div>
+</div>
+`.replace(/\n/g, ''),
         ),
       ),
     );
@@ -436,27 +436,27 @@ export class AppController {
         3,
         JSON.stringify(
           `
-        <div>
-          <h4>문제 내용</h4>
-          <div>A + B / C의 값 을 출력하시오</div><br>
-          <h4>입력 형태</h4>
-          <div>A와 B와 C</div><br>
-          <h4>출력 형태</h4>
-          <div>A + B / C의 값</div><br>
-          <h4>제한 사항</h4>
-          <p>0 <= A <= 10</p>
-          <p>0 <= B <= 10</p>
-          <p>0 <= C <= 10</p><br>
-          <h4>예시 입력#1</h4>
-          <div>[3, 3, 3]</div><br>
-          <h4>예시 출력#1</h4>
-          <div>[4]</div><br>
-          <h4>예시 입력#2</h4>
-          <div>[10, 10, 5]</div><br>
-          <h4>예시 출력#2</h4>
-          <div>[12]</div>
-        </div>
-        `.replace(/[ \n]/g, ''),
+<div>
+<h4>문제 내용</h4>
+<div>A + B / C의 값 을 출력하시오</div><br>
+<h4>입력 형태</h4>
+<div>A와 B와 C</div><br>
+<h4>출력 형태</h4>
+<div>A + B / C의 값</div><br>
+<h4>제한 사항</h4>
+<p>0 <= A <= 10</p>
+<p>0 <= B <= 10</p>
+<p>0 <= C <= 10</p><br>
+<h4>예시 입력#1</h4>
+<div>[3, 3, 3]</div><br>
+<h4>예시 출력#1</h4>
+<div>[4]</div><br>
+<h4>예시 입력#2</h4>
+<div>[10, 10, 5]</div><br>
+<h4>예시 출력#2</h4>
+<div>[12]</div>
+</div>
+`.replace(/\n/g, ''),
         ),
       ),
     );
@@ -467,27 +467,27 @@ export class AppController {
         3,
         JSON.stringify(
           `
-        <div>
-          <h4>문제 내용</h4>
-          <div>A * B * C의 값 을 출력하시오</div><br>
-          <h4>입력 형태</h4>
-          <div>A와 B와 C</div><br>
-          <h4>출력 형태</h4>
-          <div>A * B * C의 값</div><br>
-          <h4>제한 사항</h4>
-          <p>0 <= A <= 10</p>
-          <p>0 <= B <= 10</p>
-          <p>0 <= C <= 10</p><br>
-          <h4>예시 입력#1</h4>
-          <div>[3, 3, 3]</div><br>
-          <h4>예시 출력#1</h4>
-          <div>[27]</div><br>
-          <h4>예시 입력#2</h4>
-          <div>[10, 10, 5]</div><br>
-          <h4>예시 출력#2</h4>
-          <div>[500]</div>
-        </div>
-        `.replace(/[ \n]/g, ''),
+<div>
+<h4>문제 내용</h4>
+<div>A * B * C의 값 을 출력하시오</div><br>
+<h4>입력 형태</h4>
+<div>A와 B와 C</div><br>
+<h4>출력 형태</h4>
+<div>A * B * C의 값</div><br>
+<h4>제한 사항</h4>
+<p>0 <= A <= 10</p>
+<p>0 <= B <= 10</p>
+<p>0 <= C <= 10</p><br>
+<h4>예시 입력#1</h4>
+<div>[3, 3, 3]</div><br>
+<h4>예시 출력#1</h4>
+<div>[27]</div><br>
+<h4>예시 입력#2</h4>
+<div>[10, 10, 5]</div><br>
+<h4>예시 출력#2</h4>
+<div>[500]</div>
+</div>
+`.replace(/\n/g, ''),
         ),
       ),
     );
@@ -498,27 +498,27 @@ export class AppController {
         3,
         JSON.stringify(
           `
-        <div>
-          <h4>문제 내용</h4>
-          <div>A - B - C의 값 을 출력하시오</div><br>
-          <h4>입력 형태</h4>
-          <div>A와 B와 C</div><br>
-          <h4>출력 형태</h4>
-          <div>A - B - C의 값</div><br>
-          <h4>제한 사항</h4>
-          <p>0 <= A <= 10</p>
-          <p>0 <= B <= 10</p>
-          <p>0 <= C <= 10</p><br>
-          <h4>예시 입력#1</h4>
-          <div>[3, 3, 3]</div><br>
-          <h4>예시 출력#1</h4>
-          <div>[-3]</div><br>
-          <h4>예시 입력#2</h4>
-          <div>[10, 10, 5]</div><br>
-          <h4>예시 출력#2</h4>
-          <div>[15]</div>
-        </div>
-        `.replace(/[ \n]/g, ''),
+<div>
+<h4>문제 내용</h4>
+<div>A - B - C의 값 을 출력하시오</div><br>
+<h4>입력 형태</h4>
+<div>A와 B와 C</div><br>
+<h4>출력 형태</h4>
+<div>A - B - C의 값</div><br>
+<h4>제한 사항</h4>
+<p>0 <= A <= 10</p>
+<p>0 <= B <= 10</p>
+<p>0 <= C <= 10</p><br>
+<h4>예시 입력#1</h4>
+<div>[3, 3, 3]</div><br>
+<h4>예시 출력#1</h4>
+<div>[-3]</div><br>
+<h4>예시 입력#2</h4>
+<div>[10, 10, 5]</div><br>
+<h4>예시 출력#2</h4>
+<div>[15]</div>
+</div>
+`.replace(/\n/g, ''),
         ),
       ),
     );
