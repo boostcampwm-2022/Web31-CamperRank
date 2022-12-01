@@ -7,6 +7,16 @@ import { Footer } from "../components/Footer";
 import { filterState } from "../recoils";
 import problems from "../utils/ProblemsDummy";
 
+const URL = import.meta.env.VITE_SERVER_URL;
+
+type Problem = {
+  title: string;
+  level: number;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const MainWrapper = styled.div`
   width: 100%;
   height: 135rem;
@@ -35,16 +45,30 @@ const FooterWrapper = styled.div`
 
 const ProblemList = () => {
   const [filter] = useRecoilState(filterState);
-  const [list, setList] = useState(problems);
+  const [list, setList] = useState<Problem[]>([]);
+
+  useEffect(() => {
+    fetch(`${URL}/problem`)
+    .then(res => res.json())
+    .then(res => {
+      if (res.statusCode === 200) {
+        delete res.statusCode;
+        setList(Object.values(res));
+      }
+    })
+  }, []);
+  
   useEffect(() => {
     const { solved, level, search } = filter;
-    let filtered = [...problems];
-    if (level !== "문제 레벨")
-      filtered = filtered.filter((elem) => elem.level == level?.slice(-1));
-    if (search !== "")
+    let filtered = [...list];
+    if (level && level !== "문제 레벨")
+      filtered = filtered.filter((elem) => elem.level === +level.slice(-1));
+    if (search && search !== "")
       filtered = filtered.filter((elem) => elem.title.includes(search));
     setList(filtered);
   }, [filter]);
+
+
   return (
     <MainWrapper>
       <HeaderWrapper>

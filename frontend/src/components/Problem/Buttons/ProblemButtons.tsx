@@ -78,7 +78,6 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
       status: 'run',
     })
     const param = makeGradingObj();
-    console.log(param);
     fetch(`${URL}/solved/test-case`, {
       method: "POST",
       headers: {
@@ -88,7 +87,6 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     })
       .then((res) => res.json())
       .then((response) => {
-        console.log(response);
         if (Object.keys(response).length == 1) throw new Error();
         if (response.statusCode !== 200) throw new Error();
         setGrading({
