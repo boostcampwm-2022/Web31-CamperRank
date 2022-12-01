@@ -43,7 +43,7 @@ export class AppController {
       new CreateProblemDto(
         'problem1',
         1,
-        '<div><div>문제 내용</div><div>답은 111</div></div>',
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 111</div></div>`),
       ),
     );
 
@@ -51,7 +51,7 @@ export class AppController {
       new CreateProblemDto(
         'problem2',
         2,
-        '<div><div>문제 내용</div><div>답은 222</div></div>',
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 222</div></div>`),
       ),
     );
 
@@ -59,7 +59,7 @@ export class AppController {
       new CreateProblemDto(
         'problem3',
         3,
-        '<div><div>문제 내용</div><div>답은 333</div></div>',
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
       ),
     );
 
@@ -67,7 +67,7 @@ export class AppController {
       new CreateProblemDto(
         'problem3',
         3,
-        '<div><div>문제 내용</div><div>답은 333</div></div>',
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
       ),
     );
 
@@ -75,7 +75,7 @@ export class AppController {
       new CreateProblemDto(
         'problem3',
         3,
-        '<div><div>문제 내용</div><div>답은 333</div></div>',
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
       ),
     );
 
@@ -83,7 +83,7 @@ export class AppController {
       new CreateProblemDto(
         'problem3',
         3,
-        '<div><div>문제 내용</div><div>답은 333</div></div>',
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
       ),
     );
 
@@ -91,7 +91,7 @@ export class AppController {
       new CreateProblemDto(
         'problem3',
         3,
-        '<div><div>문제 내용</div><div>답은 333</div></div>',
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
       ),
     );
 
@@ -99,7 +99,7 @@ export class AppController {
       new CreateProblemDto(
         'problem3',
         3,
-        '<div><div>문제 내용</div><div>답은 333</div></div>',
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
       ),
     );
 
@@ -107,7 +107,7 @@ export class AppController {
       new CreateProblemDto(
         'problem3',
         3,
-        '<div><div>문제 내용</div><div>답은 333</div></div>',
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
       ),
     );
 
@@ -115,7 +115,7 @@ export class AppController {
       new CreateProblemDto(
         'problem3',
         3,
-        '<div><div>문제 내용</div><div>답은 333</div></div>',
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 333</div></div>`),
       ),
     );
 
