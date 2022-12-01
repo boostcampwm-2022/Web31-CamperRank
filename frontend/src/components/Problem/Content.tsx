@@ -51,7 +51,7 @@ const ProblemContent = ({ problem }: ProblemType) => {
   return (
     <>
       <Level>LV. {level}</Level>
-      <ContentWrapper dangerouslySetInnerHTML={{ __html: description ? ProblemDummy : "" }} />
+      <ContentWrapper dangerouslySetInnerHTML={{ __html: description ? description : "" }} />
     </>
   );
 };
