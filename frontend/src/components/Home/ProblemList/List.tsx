@@ -31,7 +31,7 @@ const ProblemListWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 15rem 15rem 15rem;
-  column-gap: 5rem;
+  column-gap: 3rem;
   row-gap: 3rem;
   width: 95%;
 `;

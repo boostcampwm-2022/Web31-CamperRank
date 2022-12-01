@@ -32,7 +32,7 @@ const Level = styled.div`
 
 const Name = styled.div`
   position: absolute;
-  width: 10rem;
+  width: fit-content;
   height: 3rem;
   left: 2rem;
   top: 6rem;
