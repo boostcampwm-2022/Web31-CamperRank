@@ -74,9 +74,11 @@ const Result = () => {
   const [number, setNumber] = useState(0);
 
   useEffect(() => {
+    console.log('grading', grading);
     setPoint("");
     setResult("");
     setCases([]);
+    if (!grading.result) return;
     Object.keys(grading.result).length > 0 && checkGrading();
   }, [grading]);
 
@@ -96,22 +98,23 @@ const Result = () => {
   };
 
   const checkGrading = useCallback(() => {
-    const resArr = Object.entries(grading.result);
+    if (!grading.result) return;
     if (grading.kind === "테스트") {
-      setCases(resArr.slice(0, resArr.length - 1));
-      const results = resArr.filter((elem) => elem[1].resultCode === 1000);
+      let resArr = Object.entries(grading.result);
+      resArr = resArr.slice(0, resArr.length - 1);
+      setCases(resArr);
+      const results = resArr.filter((elem) => {
+        if (elem[1] && elem[1].resultCode) return elem[1].resultCode === 1000;
+        return false;
+      });
       setNumber(results.length);
       results.length === resArr.length - 1
         ? setResult("정답입니다!")
         : setResult("틀렸습니다!");
     } else {
       if (grading.kind === "제출") {
-        // console.log(grading.result);
-        // const resultCode = "Success";
-        // TODO : ts-ignore 삭제
-        // @ts-ignore
-        const { resultCode } = grading.result;
-        resultCode === "Success"
+        const { solvedResult } = grading.result;
+        solvedResult === "Success"
           ? setResult("정답입니다!")
           : setResult("틀렸습니다!");
       }

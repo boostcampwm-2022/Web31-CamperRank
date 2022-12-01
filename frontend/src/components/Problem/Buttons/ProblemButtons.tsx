@@ -54,8 +54,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
   const reset = useCallback(() => {
     if (confirm("코드를 초기화하시겠습니까?")) onClickClearBtn();
     setGrading({
-      status: 'ready',
-      result: []
+      status: 'ready'
     })
   }, [content.text]);
 
@@ -67,7 +66,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     return {
       userCode,
       language: 'JavaScript',
-      problemId: +id,
+      problemId: id,
       loginId: user.ID,
     }
   }
@@ -77,9 +76,9 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     setGrading({
       ...grading, 
       status: 'run',
-      result: [],
     })
     const param = makeGradingObj();
+    console.log(param);
     fetch(`${URL}/solved/test-case`, {
       method: "POST",
       headers: {
@@ -89,6 +88,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     })
       .then((res) => res.json())
       .then((response) => {
+        console.log(response);
         if (Object.keys(response).length == 1) throw new Error();
         if (response.statusCode !== 200) throw new Error();
         setGrading({
@@ -100,7 +100,6 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
       .catch((err) => {
         setGrading({
           status: 'error',
-          result: []
         });
       })
       .finally(() => setWorking(false));
@@ -111,7 +110,6 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     setGrading({
       ...grading, 
       status: 'run',
-      result: [],
     })
     const param = makeGradingObj();
     fetch(`${URL}/solved`, {
@@ -133,7 +131,6 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
       .catch((err) => {
         setGrading({
           status: 'error',
-          result: []
         });
       })
       .finally(() => setWorking(false));
