@@ -1,11 +1,11 @@
-import { useState, useRef, useMemo, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ButtonContainer,
   CheckButton,
   IDInputContainer,
   InputFormContainer,
-  PasswordInputContainer,
   LightContainer,
+  PasswordInputContainer,
 } from "../../styles/SignUp.style";
 import useInput from "../../hooks/useInput";
 import { useNavigate } from "react-router-dom";
@@ -43,13 +43,11 @@ export const InputForm = () => {
   });
 
   const idValid = (str: string) => {
-    return /[a-z0-9]{6,}/g.test(str);
+    return /\w{6,20}/g.test(str);
   };
 
   const pwValid = (str: string) => {
-    return /[a-z0-9\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]{8,}/g.test(
-      str
-    );
+    return /[\w\[\]\/?.,;:|*~`!^\-_+<>@$%&\\]{8,}/g.test(str);
   };
 
   const handleKeyPress = (
@@ -101,6 +99,7 @@ export const InputForm = () => {
     }
   };
   const handleIdCheck = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log(!idValid(id.value));
     if (!idValid(id.value)) alert("올바른 아이디를 입력해주세요");
     else {
       fetch(`${URL}/users?loginId=${id.value}`)
