@@ -3,19 +3,21 @@ import styled from "styled-components";
 import {io} from "socket.io-client";
 
 const VideoContainer = styled.div`
+  margin-top: 1rem;
   width: 100%;
-  height: 8rem;
+  height: 9rem;
   display: flex;
   justify-content: right;
   align-items: center;
 `;
 
 const UserVideoContainer = styled.video`
-  width: 18rem;
-  height: 9.75rem;
+  min-width: 16rem;
+  min-height: 9rem;
+  max-width: 16rem;
+  max-height: 9rem;
   border: 3px inset;
   margin-right: 2rem;
-  z-index: 999;
   box-sizing: border-box;
 
   :last-child {
@@ -26,16 +28,17 @@ const UserVideoContainer = styled.video`
 const Constraints = {
   video: {
     width: {
-      min: 1920
+      exact: 1280
     },
     height: {
-      min: 1080
+      exact: 720
     }
-  }
+  },
+  audio: true
 }
 
 export const Video = () => {
-  const [userList] = useState(["testuser1", "testuser2", "testuser3"]);
+  const [userList, addUser] = useState([]);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -61,17 +64,13 @@ export const Video = () => {
 
   return (
     <VideoContainer>
+      <UserVideoContainer ref={videoRef} muted autoPlay playsInline/>
       {userList.map((user, idx) => (
-        <UserVideoContainer ref={videoRef} muted autoPlay playsInline key={idx}/>
+        <UserVideoContainer autoPlay playsInline key={idx}/>
       ))}
     </VideoContainer>
   );
 };
-
-// export interface UserMediaConstraints {
-//   video: boolean;
-//   audio: boolean;
-// }
 
 export interface UserVideoType {
   key: number;
