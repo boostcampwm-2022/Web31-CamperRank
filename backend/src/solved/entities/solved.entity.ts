@@ -17,6 +17,7 @@ export class Solved extends BaseTimeEntity {
   user: User;
 
   @Column({
+    name: 'user_code',
     nullable: false,
     type: 'text',
   })

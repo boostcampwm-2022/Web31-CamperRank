@@ -14,7 +14,7 @@ const MainWrapper = styled.div`
 
 const HeaderWrapper = styled.div`
   width: 100%;
-  height: 10rem;
+  height: 8rem;
 `;
 
 const ContentWrapper = styled.div`

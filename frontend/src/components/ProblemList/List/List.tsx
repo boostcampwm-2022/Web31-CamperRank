@@ -30,16 +30,19 @@ const SubWrapper = styled.div`
 const List = ({ list }: ListType) => {
   const [page, setPage] = useState({ now: 1, max: Math.ceil(list.length / 7) });
   const [pagedList, setPagedList] = useState(list);
+
   useEffect(() => {
     const { now } = page;
     now && setPagedList([...list.slice(7 * (now - 1), 7 * now)]);
   }, [page]);
+
   useEffect(() => {
     setPage({
       now: 1,
       max: Math.ceil(list.length / 7),
     });
   }, [list]);
+
   return (
     <>
       <ListWrapper>

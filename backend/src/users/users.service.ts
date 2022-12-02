@@ -2,16 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { SimpleUserDto } from './dto/simple-user.dto';
+import { UserRepository } from './user.repository';
+import { FindUserOption } from './dto/findUser.option';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
-  ) {}
+  constructor(private readonly usersRepository: UserRepository) {}
 
   /**
    * 약속된 규격을 따르는 loginId,password 가 넘어온 상태로 이미 존재하는 회원인지 확인한다.
@@ -37,33 +34,18 @@ export class UsersService {
     return new SimpleUserDto(savedUser);
   }
 
-  async findUserByLoginId(loginId: string) {
+  async findUserByLoginId({ loginId }) {
     const user = await this.usersRepository.findOneBy({
       loginId: loginId,
     });
     return user !== null ? new SimpleUserDto(user) : null;
   }
 
-  async findAll() {
-    const users = await this.usersRepository.find();
-    return users.map((value: User) => {
-      return new SimpleUserDto(value);
-    });
-  }
-
-  async findUser({ userId, loginId }) {
+  async findUser({ userId, loginId }: FindUserOption) {
     const user = await this.usersRepository.findOneBy({
       id: userId,
       loginId: loginId,
     });
     return user !== null ? new SimpleUserDto(user) : null;
   }
-
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
-  //
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
 }

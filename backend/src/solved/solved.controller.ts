@@ -1,13 +1,17 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { SolvedService } from './solved.service';
 import { CreateSolvedDto } from './dto/create-solved.dto';
@@ -16,6 +20,8 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SimpleSolvedDto } from './dto/simple-solved.dto';
 import { HttpService } from '@nestjs/axios';
 import { SolvedResult } from './entities/SolvedResult.enum';
+import { GradeResultSolvedDto } from './dto/grade-result-solved.dto';
+import { isFalsy } from '../utils/boolUtils';
 
 @Controller('solved')
 @ApiTags('답안 제출 기록 관련 API')
@@ -36,15 +42,16 @@ export class SolvedController {
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
+  @UsePipes(ValidationPipe)
   async nonCreateJustTest(@Body() createSolvedDto: CreateSolvedDto) {
-    const gradeSolvedDtos = await this.solvedService.createToTest(
+    const gradeSolvedDtoList = await this.solvedService.createSolvedToTest(
       createSolvedDto,
     );
 
-    const results = await Promise.all(
-      gradeSolvedDtos.map((value) => {
+    const gradeResultList = await Promise.all(
+      gradeSolvedDtoList.map((value) => {
         return this.httpService.axiosRef
-          .post('http://localhost:4000/v1/grading', { data: value })
+          .post(process.env.GRADING_SERVER_URL, { data: value })
           .then((response) => response.data)
           .catch((err) => {
             console.error(err);
@@ -54,7 +61,7 @@ export class SolvedController {
 
     return {
       statusCode: HttpStatus.OK,
-      ...results,
+      ...gradeResultList,
     };
   }
 
@@ -69,15 +76,16 @@ export class SolvedController {
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
-  async create(@Body() createSolvedDto: CreateSolvedDto) {
-    const gradeSolvedDtos = await this.solvedService.createToGrade(
+  @UsePipes(ValidationPipe)
+  async createSolvedRecord(@Body() createSolvedDto: CreateSolvedDto) {
+    const gradeSolvedDtoList = await this.solvedService.createToGrade(
       createSolvedDto,
     );
 
-    const results = await Promise.all(
-      gradeSolvedDtos.map((value) => {
+    const gradeResultList = await Promise.all(
+      gradeSolvedDtoList.map((value) => {
         return this.httpService.axiosRef
-          .post('http://localhost:4000/v1/grading', { data: value })
+          .post(process.env.GRADING_SERVER_URL, { data: value })
           .then((response) => response.data)
           .catch((err) => {
             console.error(err);
@@ -85,14 +93,28 @@ export class SolvedController {
       }),
     );
 
-    const failList = results.filter((value) => {
+    const failList = gradeResultList.filter((value) => {
       return value.resultCode !== 1000;
     });
 
-    return await this.solvedService.updateResult(
-      results[0].solvedId,
-      failList.length === 0 ? SolvedResult.Success : SolvedResult.Fail,
+    const gradeResultDTO = gradeResultList.map((value) => {
+      return new GradeResultSolvedDto(value);
+    });
+
+    const solvedResult =
+      failList.length === 0 ? SolvedResult.Success : SolvedResult.Fail;
+
+    await this.solvedService.updateResult(
+      gradeResultList[0].solvedId,
+      solvedResult,
     );
+
+    return {
+      statusCode: HttpStatus.OK,
+      solvedId: gradeResultList[0].solvedId,
+      solvedResult: solvedResult,
+      ...gradeResultDTO,
+    };
   }
 
   @Get()
@@ -102,42 +124,60 @@ export class SolvedController {
   })
   @ApiResponse({
     description:
-      '문제 식별 아이디 또는 사용자 식별 아이디를 이용하여 문제 답안 제출 기록을 조회한다.',
+      '문제 식별 아이디 또는 사용자 식별 아이디를 이용하여 문제 답안 제출 기록을 조회한다.' +
+      '만약, problemId 와 loginId가 모두 비어있다면 전체 조회가 된다.',
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
-  async findOne(
-    @Query('problemId') problemId: string,
-    @Query('userId') userId: string,
+  async findSolvedByProblemIdOrLoginId(
+    @Query('problemId') problemId: number,
+    @Query('loginId') loginId: string,
+    @Query('skip', new DefaultValuePipe(0)) skip: number,
+    @Query('take', new DefaultValuePipe(1000)) take: number,
   ) {
-    const simpleSolvedDtos = await this.solvedService.findSolvedByOpt({
+    if (isFalsy(problemId) && isFalsy(loginId)) {
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
+      };
+    }
+
+    const simpleSolvedDtoList = await this.solvedService.findSolvedByOption({
       problemId,
-      userId,
+      loginId,
+      skip,
+      take,
     });
+
     return {
       statusCode: HttpStatus.OK,
-      ...simpleSolvedDtos,
+      ...simpleSolvedDtoList,
     };
   }
 
   @Patch(':solvedId')
   @ApiOperation({
     summary: '문제 답안 제출 기록 수정 API',
-    description: '답안 제출 이후에 채점이 완료되면 상태를 변경한다..',
+    description: '답안 제출 이후에 채점이 완료되면 상태를 변경한다.',
   })
   @ApiResponse({
     description: '문제 식별 아이디를 이용하여 문제 답안 제출 기록을 수정한다.',
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
+  @UsePipes(ValidationPipe)
   async update(
-    @Param('solvedId') solvedId: string,
+    @Param(
+      'solvedId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    solvedId: number,
     @Body() updateSolvedDto: UpdateSolvedDto,
   ) {
     const simpleSolvedDto = await this.solvedService.update(
-      +solvedId,
+      solvedId,
       updateSolvedDto,
     );
+
     return {
       statusCode:
         simpleSolvedDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
@@ -155,8 +195,15 @@ export class SolvedController {
     status: HttpStatus.OK,
     type: SimpleSolvedDto,
   })
-  async remove(@Param('solvedId') solvedId: string) {
-    const simpleSolvedDto = await this.solvedService.remove(+solvedId);
+  async remove(
+    @Param(
+      'solvedId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    solvedId: number,
+  ) {
+    const simpleSolvedDto = await this.solvedService.remove(solvedId);
+
     return {
       statusCode:
         simpleSolvedDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,

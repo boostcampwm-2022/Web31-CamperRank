@@ -1,25 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSolvedDto } from './dto/create-solved.dto';
 import { UpdateSolvedDto } from './dto/update-solved.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Solved } from './entities/solved.entity';
-import { Problem } from '../problem/entities/problem.entity';
-import { User } from '../users/entities/user.entity';
 import { SimpleSolvedDto } from './dto/simple-solved.dto';
 import { isFalsy } from '../utils/boolUtils';
 import { SolvedResult } from './entities/SolvedResult.enum';
-import { TestCase } from '../test-case/entities/test-case.entity';
 import { GradeSolvedDto } from './dto/grade-solved.dto';
+import { SolvedRepository } from './solved.repository';
+import { UserRepository } from '../users/user.repository';
+import { TestCaseRepository } from '../test-case/test-case.repository';
+import { ProblemRepository } from '../problem/problem.repository';
+import { FindSolvedByOpt } from './dto/findSolvedByOpt.interface';
 
 @Injectable()
 export class SolvedService {
   constructor(
-    @InjectRepository(Solved) private solvedRepository: Repository<Solved>,
-    @InjectRepository(Problem) private problemRepository: Repository<Problem>,
-    @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(TestCase)
-    private testCaseRepository: Repository<TestCase>,
+    private readonly solvedRepository: SolvedRepository,
+    private readonly problemRepository: ProblemRepository,
+    private readonly userRepository: UserRepository,
+    private readonly testCaseRepository: TestCaseRepository,
   ) {}
 
   async create(createSolvedDto: CreateSolvedDto) {
@@ -28,7 +27,7 @@ export class SolvedService {
     });
 
     const foundUser = await this.userRepository.findOneBy({
-      id: createSolvedDto.userId,
+      loginId: createSolvedDto.loginId,
     });
 
     if (foundProblem !== null && foundUser !== null) {
@@ -37,9 +36,7 @@ export class SolvedService {
         user: foundUser,
         userCode: createSolvedDto.userCode,
         language: createSolvedDto.language,
-        result: createSolvedDto.result
-          ? createSolvedDto.result
-          : SolvedResult.Ready,
+        result: SolvedResult.Ready,
       });
       const savedSolved = await this.solvedRepository.save(solved);
       return new SimpleSolvedDto(savedSolved);
@@ -54,7 +51,7 @@ export class SolvedService {
     });
 
     const foundUser = await this.userRepository.findOneBy({
-      id: createSolvedDto.userId,
+      loginId: createSolvedDto.loginId,
     });
 
     if (foundProblem !== null && foundUser !== null) {
@@ -63,9 +60,7 @@ export class SolvedService {
         user: foundUser,
         userCode: createSolvedDto.userCode,
         language: createSolvedDto.language,
-        result: createSolvedDto.result
-          ? createSolvedDto.result
-          : SolvedResult.Ready,
+        result: SolvedResult.Ready,
       });
 
       const savedSolved = await this.solvedRepository.save(solved);
@@ -88,13 +83,13 @@ export class SolvedService {
    * solved가 저장되지 않는다.
    * @param createSolvedDto
    */
-  async createToTest(createSolvedDto: CreateSolvedDto) {
+  async createSolvedToTest(createSolvedDto: CreateSolvedDto) {
     const foundProblem = await this.problemRepository.findOneBy({
       id: createSolvedDto.problemId,
     });
 
     const foundUser = await this.userRepository.findOneBy({
-      id: createSolvedDto.userId,
+      loginId: createSolvedDto.loginId,
     });
 
     if (foundProblem !== null && foundUser !== null) {
@@ -103,9 +98,7 @@ export class SolvedService {
         user: foundUser,
         userCode: createSolvedDto.userCode,
         language: createSolvedDto.language,
-        result: createSolvedDto.result
-          ? createSolvedDto.result
-          : SolvedResult.Ready,
+        result: SolvedResult.Ready,
       });
 
       const foundTestCases = await this.testCaseRepository.find({
@@ -114,8 +107,10 @@ export class SolvedService {
             id: createSolvedDto.problemId,
           },
         },
+        skip: 0,
         take: 3,
       });
+
       return foundTestCases.map((value) => {
         return new GradeSolvedDto(solved, value);
       });
@@ -138,24 +133,32 @@ export class SolvedService {
 
   async updateResult(solvedId, solvedResult) {
     const solved = await this.solvedRepository.findOneBy({ id: solvedId });
-    console.log(solved);
     solved.result = solvedResult;
+
     const updatedSolved = await this.solvedRepository.save(solved);
     // console.log(updatedSolved);
     return new SimpleSolvedDto(updatedSolved);
   }
 
-  async findSolvedByOpt({ problemId, userId }) {
+  async findSolvedByOption({
+    problemId,
+    loginId,
+    skip,
+    take,
+  }: FindSolvedByOpt) {
     const solvedList = await this.solvedRepository.find({
       where: {
         problem: {
           id: problemId,
         },
         user: {
-          id: userId,
+          loginId: loginId,
         },
       },
+      skip: skip,
+      take: take,
     });
+
     return solvedList.map((value: Solved) => {
       return new SimpleSolvedDto(value);
     });
@@ -167,9 +170,9 @@ export class SolvedService {
     });
 
     if (foundSolved !== null) {
-      if (!isFalsy(updateSolvedDto.userId)) {
+      if (!isFalsy(updateSolvedDto.loginId)) {
         foundSolved.user = await this.userRepository.findOneBy({
-          id: updateSolvedDto.userId,
+          loginId: updateSolvedDto.loginId,
         });
       }
 

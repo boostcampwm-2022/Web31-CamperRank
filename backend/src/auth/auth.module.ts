@@ -15,10 +15,11 @@ import { User } from '../users/entities/user.entity';
     JwtModule.register({
       secret: 'Secret1234',
       signOptions: {
-        expiresIn: 3600,
+        expiresIn: 86400,
       },
     }),
     TypeOrmModule.forFeature([User]),
+    // TypeOrmExModule.forCustomRepository([UserRepository]),
   ],
 
   // 다른곳에서도 jwt 인증을 사용하기 위해 export

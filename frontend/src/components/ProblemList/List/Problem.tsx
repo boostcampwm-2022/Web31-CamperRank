@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
-import { ProblemType } from "@types";
-import { Link } from "react-router-dom";
+import {ProblemType} from "@types";
+import {Link} from "react-router-dom";
+import uuid from 'react-uuid';
 
 const ProblemWrapper = styled.div`
   width: 100%;
@@ -11,7 +12,8 @@ const ProblemWrapper = styled.div`
   background: #fff;
   position: relative;
   min-width: 800px;
-  &: hover {
+
+  &:hover {
     background: #e6f3ea;
     border: none;
     box-shadow: 3px 3px 3px 3px #b9b9b9;
@@ -46,7 +48,6 @@ const ButtonWrapper = styled.div`
 `;
 
 const Button = styled.button`
-  border: none;
   outline: none;
   width: 8rem;
   height: 2.6rem;
@@ -58,7 +59,8 @@ const Button = styled.button`
   line-height: 1.5rem;
   text-align: center;
   box-shadow: 0.5px 0.5px 0.5px 0.5px #75efa2;
-  &: hover {
+
+  &:hover {
     background: #aad4b6;
     color: white;
     font-weight: bold;
@@ -67,14 +69,27 @@ const Button = styled.button`
   }
 `;
 
-const Problem = ({ problem }: ProblemType) => {
-  const id = 1;
-  const singleURL = `/problem/single/${id}`;
-  const multiURL = `/problem/multi/${id}`;
+const getRoomNumber = (id: number) => {
+  let room = localStorage.getItem(`problem${id}`);
+  if (!room) {
+    room = btoa(uuid());
+    localStorage.setItem(`problem${id}`, room);
+  }
+  return room;
+};
+
+const Problem = ({problem}: ProblemType) => {
+  const {problemId, title, level} = problem;
+  const singleURL = `/problem/single/${problemId}`;
+  let multiURL = `/problem/multi/${problemId}/`;
+  if (problemId != null) {
+    multiURL = `/problem/multi/${problemId}/${getRoomNumber(problemId)}`;
+  }
+
   return (
     <ProblemWrapper>
-      <Title>{problem.title}</Title>
-      <Description>{problem.description}</Description>
+      <Title>{title}</Title>
+      <Description>Lv{level}, Python, Javascript, Success Rate: 95.12%</Description>
       <ButtonWrapper>
         <Link to={singleURL}>
           <Button>혼자 풀기</Button>
@@ -85,6 +100,6 @@ const Problem = ({ problem }: ProblemType) => {
       </ButtonWrapper>
     </ProblemWrapper>
   );
-};
+}
 
 export default Problem;

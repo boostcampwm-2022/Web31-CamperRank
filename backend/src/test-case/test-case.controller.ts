@@ -1,13 +1,17 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { TestCaseService } from './test-case.service';
 import { CreateTestCaseDto } from './dto/create-test-case.dto';
@@ -31,10 +35,12 @@ export class TestCaseController {
     status: HttpStatus.OK,
     type: SimpleTestCaseDto,
   })
+  @UsePipes(ValidationPipe)
   async create(@Body() createTestCaseDto: CreateTestCaseDto) {
     const simpleTestCaseDto = await this.testCaseService.create(
       createTestCaseDto,
     );
+
     return {
       statusCode:
         simpleTestCaseDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
@@ -54,16 +60,18 @@ export class TestCaseController {
     type: SimpleTestCaseDto,
   })
   async findTestCase(
-    @Query('testCaseId') testCaseId: string,
-    @Query('problemId') problemId: string,
+    @Query('testCaseId') testCaseId: number,
+    @Query('problemId') problemId: number,
+    @Query('skip', new DefaultValuePipe(0)) skip: number,
+    @Query('take', new DefaultValuePipe(30)) take: number,
   ) {
-    const simpleTestCaseDtos = await this.testCaseService.findTestCaseOpt({
-      testCaseId: testCaseId,
-      problemId: problemId,
-    });
+    const simpleTestCaseDtoList = await this.testCaseService.findTestCaseOption(
+      { testCaseId, problemId, skip, take },
+    );
+
     return {
       statusCode: HttpStatus.OK,
-      ...simpleTestCaseDtos,
+      ...simpleTestCaseDtoList,
     };
   }
 
@@ -78,14 +86,20 @@ export class TestCaseController {
     status: HttpStatus.OK,
     type: SimpleTestCaseDto,
   })
+  @UsePipes(ValidationPipe)
   async update(
-    @Param('testCaseId') testCaseId: string,
+    @Param(
+      'testCaseId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    testCaseId: number,
     @Body() updateTestCaseDto: UpdateTestCaseDto,
   ) {
     const simpleTestCaseDto = await this.testCaseService.update(
-      +testCaseId,
+      testCaseId,
       updateTestCaseDto,
     );
+
     return {
       statusCode:
         simpleTestCaseDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
@@ -93,7 +107,7 @@ export class TestCaseController {
     };
   }
 
-  @Delete(':id')
+  @Delete(':testCaseId')
   @ApiOperation({
     summary: '테스트 케이스 삭제 API',
     description: '테스트 케이스를 삭제한다.',
@@ -103,8 +117,15 @@ export class TestCaseController {
     status: HttpStatus.OK,
     type: SimpleTestCaseDto,
   })
-  async remove(@Param('id') id: string) {
-    const simpleTestCaseDto = await this.testCaseService.remove(+id);
+  async remove(
+    @Param(
+      'testCaseId',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
+    )
+    testCaseId: number,
+  ) {
+    const simpleTestCaseDto = await this.testCaseService.remove(testCaseId);
+
     return {
       statusCode:
         simpleTestCaseDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,

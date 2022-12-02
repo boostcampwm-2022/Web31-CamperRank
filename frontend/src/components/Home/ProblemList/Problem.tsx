@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { ProblemType } from "@types";
 import { Link } from "react-router-dom";
@@ -9,7 +9,7 @@ const ProblemWrapper = styled.div`
   position: relative;
   background: #ffffff;
   min-width: 36rem;
-  &: hover {
+  &:hover {
     background: #e6f3ea;
     border: none;
     box-shadow: 3px 3px 3px 3px #b9b9b9;
@@ -32,7 +32,7 @@ const Level = styled.div`
 
 const Name = styled.div`
   position: absolute;
-  width: 10rem;
+  width: fit-content;
   height: 3rem;
   left: 2rem;
   top: 6rem;
@@ -65,7 +65,7 @@ const Button = styled.button`
   line-height: 3rem;
   text-align: center;
   cursor: pointer;
-  &: hover {
+  &:hover {
     background: #aad4b6;
     color: white;
     font-weight: bold;
@@ -75,14 +75,13 @@ const Button = styled.button`
 `;
 
 const Problem = ({ problem }: ProblemType) => {
-  const { level, title, description } = problem;
-  const id = 1;
-  const problemURL = `/problem/single/${id}`;
+  const { level, title, problemId } = problem;
+  const problemURL = `/problem/single/${problemId}`;
   return (
     <ProblemWrapper>
       <Level>LV. {level}</Level>
       <Name>{title}</Name>
-      <Description>{description}</Description>
+      <Description>Lv{level}, Python, Javascript, Success Rate: 95.12%</Description>
       <Link to={problemURL}>
         <Button>문제 풀기</Button>
       </Link>

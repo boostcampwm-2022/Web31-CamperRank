@@ -1,9 +1,9 @@
-import { spawnSync } from "child_process";
+import { execSync, spawnSync } from "child_process";
 import { v4 as uuid } from "uuid";
 
 import fs from "fs";
 
-const IDENTIFY_CODE = "secret";
+const IDENTIFY_CODE = process.env.IDENTIFY_CODE || "secret";
 
 function PLClassifier(pl: string) {
   switch (pl) {
@@ -46,7 +46,29 @@ function parserPython(userCode: string, testCaseInput: any[]) {
   );
 }
 
-function parserNode(userCode: string, testCaseInput: any[]) {}
+function parserNode(userCode: string, testCaseInput: any[]) {
+  const argsArr = [];
+  const varArr = [];
+  for (let i = 0; i < testCaseInput.length; i++) {
+    varArr.push(
+      `\nlet argv${i + 1} = ${
+        testCaseInput[i].length > 1
+          ? "[" + testCaseInput[i] + "]"
+          : testCaseInput[i]
+      }`
+    );
+    argsArr.push(`argv${i + 1}`);
+  }
+  const argsStr = argsArr.join(",");
+  const varStr = varArr.join("\n\t");
+  return (
+    userCode +
+    varStr +
+    "\nconst answer = solution(" +
+    argsStr +
+    `)\nconsole.log('${IDENTIFY_CODE}')\nconsole.log(answer)`
+  );
+}
 
 function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
   switch (cmd) {
@@ -61,14 +83,21 @@ function buildCode(userCode: string, testCaseInput: any[], cmd: string) {
 
 export const gradingController = async (req: any, res: any) => {
   try {
-    const testCaseInput = req.body.data.testCaseInput;
-    const userCode = req.body.data.userCode;
+    let {
+      solvedId,
+      language,
+      userCode,
+      testCaseNumber,
+      testCaseInput,
+      testCaseOutput,
+    } = req.body.data;
+
+    testCaseInput = JSON.parse(testCaseInput);
+    testCaseOutput = JSON.parse(testCaseOutput);
+
     const fileName = uuid();
-    const plClassifier = PLClassifier(req.body.data.language);
-    const filePath =
-      "C:\\Users\\SeHyun\\Code\\boostcamp_Membership\\CamperRank\\tempCodes\\" +
-      fileName +
-      plClassifier.ext;
+    const plClassifier = PLClassifier(language);
+    const filePath = process.env.NEW_FILE_PATH + fileName + plClassifier.ext;
     const totalCode = buildCode(userCode, testCaseInput, plClassifier.cmd);
 
     fs.writeFileSync(filePath, `${totalCode}`);
@@ -87,41 +116,48 @@ export const gradingController = async (req: any, res: any) => {
     const strings = resultText.split(IDENTIFY_CODE);
     const userPrint = strings[0].replace(/\\r\\n/gi, "\n");
     const userAnswer = strings[1].trim();
-    console.log(errText);
 
-    if (errText.length === 0 && req.body.data.testCaseOutput === userAnswer) {
+    if (
+      errText.length === 0 &&
+      JSON.stringify(testCaseOutput) === JSON.stringify(JSON.parse(userAnswer))
+    ) {
       res.status(200).json({
-        solvedId: req.body.data.solvedId,
-        result: "success",
+        solvedId: solvedId,
+        testCaseNumber: testCaseNumber,
         userPrint: userPrint,
         userAnswer: userAnswer,
         resultCode: 1000,
-        msg: "정답",
       });
     } else {
       res.status(200).json({
-        solvedId: req.body.data.solvedId,
-        result: "fail",
+        solvedId: solvedId,
+        testCaseNumber: testCaseNumber,
         userPrint: userPrint,
         userAnswer: userAnswer,
         resultCode: 1001,
-        msg: "오답",
       });
     }
   } catch (err) {
     console.error(err);
     res.status(400).json({
       solvedId: req.body.data.solvedId,
-      result: "fail",
+      testCaseNumber: req.body.data.testCaseNumber,
       resultCode: 2000,
-      msg: "채점 실패",
     });
   }
 };
 
 export const startGrade = async function (req: any, res: any) {
   try {
-    let { problemId, userCode, language, input, output } = req.body.data;
+    console.log("data", req.body.data);
+    let {
+      solvedId,
+      problemId,
+      userCode,
+      language,
+      testCaseInput,
+      testCaseOutput,
+    } = req.body.data;
     let filePath = "";
     let codeStyle = "";
     let fileList = [];
@@ -131,39 +167,38 @@ export const startGrade = async function (req: any, res: any) {
 
     if (language === "Python") {
       const pythonText = fs.readFileSync(__dirname + "/python.txt", "utf-8");
-      codeStyle = "python";
-      filePath = __dirname + "../../../" + fileName + ".py";
+      codeStyle = "python3";
+      filePath = __dirname + "/../../" + fileName + ".py";
       userCode = "import sys \n\n" + userCode + "\n\n" + pythonText;
       fileList.push(filePath);
 
-      if (input !== undefined) {
-        for (let i = 0; i < input.length; i++) {
+      if (testCaseInput !== undefined) {
+        for (let i = 0; i < testCaseInput.length; i++) {
           if (i !== 0) {
             userCode += ",";
           }
           userCode += `sys.argv[${i + 1}]`;
-          fileList.push(input[i]);
+          fileList.push(testCaseInput[i]);
         }
       }
       userCode += ")\nprint('##########')\nprint(answer)";
-      console.log(userCode);
     } else if (language === "JavaScript") {
       codeStyle = "node";
-      filePath = __dirname + "../../../" + fileName + ".js";
+      filePath = __dirname + "/../../" + fileName + ".js";
       fileList.push(filePath);
       userCode += "\n\n" + "let answer = solution(";
-      if (input !== undefined) {
-        for (let i = 1; i < input.length + 1; i++) {
+      if (testCaseInput !== undefined) {
+        for (let i = 1; i < testCaseInput.length + 1; i++) {
           if (i !== 1) {
             userCode += ",";
           }
           userCode += `process.argv[${i + 1}]`;
-          fileList.push(input[i - 1]);
+          fileList.push(testCaseInput[i - 1]);
         }
       }
       userCode += ")\n\tconsole.log('##########')\n\tconsole.log(answer)";
-      console.log(userCode);
     }
+    console.log(userCode);
 
     fs.writeFileSync(filePath, `${userCode}`);
 
@@ -171,6 +206,7 @@ export const startGrade = async function (req: any, res: any) {
       maxBuffer: 1000,
       /* timeout 3s */
       timeout: 3000,
+      // uid: 1001
     });
     const resultText = codeResult.stdout.toString();
     const errText = codeResult.stderr.toString();
@@ -188,31 +224,89 @@ export const startGrade = async function (req: any, res: any) {
 
     if (errText.length > 0 || errText === null) {
       return res.json({
-        isSuccess: false,
-        code: 2000,
-        message: "코드 실행 실패",
+        solvedId: solvedId,
+        result: "fail",
+        resultCode: 2000,
+        msg: "채점 실패",
       });
     } else {
-      if (answerText == output) {
+      if (answerText == testCaseOutput) {
         return res.json({
-          problemId: problemId,
-          solutionText: solutionText,
-          answerText: answerText,
-          isSuccess: true,
-          code: 1000,
-          message: "정답 맞추기 성공",
+          solvedId: solvedId,
+          result: "success",
+          userPrint: solutionText,
+          userAnswer: answerText,
+          resultCode: 1000,
+          msg: "정답",
         });
       } else {
         return res.json({
-          problemId: problemId,
-          solutionText: solutionText,
-          answerText: answerText,
-          isSuccess: true,
-          code: 1000,
-          message: "정답 맞추기 실패",
+          solvedId: req.body.data.solvedId,
+          result: "fail",
+          userPrint: solutionText,
+          userAnswer: answerText,
+          resultCode: 1001,
+          msg: "오답",
         });
       }
     }
+  } catch (err) {
+    console.log(err);
+    console.log(`Api - grade problem error\n: ${JSON.stringify(err)}`);
+
+    return res.json({
+      solvedId: req.body.data.solvedId,
+      result: "fail",
+      resultCode: 2000,
+      msg: "채점 실패",
+    });
+  }
+};
+
+export const startDocker = async function (req: any, res: any) {
+  try {
+    let {
+      solvedId,
+      problemId,
+      userCode,
+      language,
+      testCaseInput,
+      testCaseOutput,
+    } = req.body.data;
+
+    problemId = problemId || "undefined";
+
+    const fileName = Math.floor(Math.random() * 100000000);
+    let filePath = __dirname + "/../../" + fileName + ".py";
+    console.log(__dirname);
+    userCode = `print('${fileName}')`;
+
+    // const CMD1 = `cd src/controllers/demo &&
+    //               docker build -t demo .`;
+    // const CMD2 = `docker run --rm demo`
+    // const CMD3 = `docker image prune -a -f`
+
+    // execSync(CMD1);
+    // let result = execSync(CMD2);
+    // execSync(CMD3);
+
+    fs.writeFileSync(filePath, `${userCode}`);
+
+    const CMD4 = `docker run --rm -v $(pwd)/${fileName}.py:/home/test.py demo`;
+    let result: any = execSync(CMD4);
+
+    fs.unlinkSync(filePath);
+
+    let resultText = result.toString();
+
+    console.log(resultText);
+
+    return res.json({
+      result: resultText,
+      isSuccess: true,
+      code: 2000,
+      message: "채점 성공",
+    });
   } catch (err) {
     console.log(err);
     console.log(`Api - grade problem error\n: ${JSON.stringify(err)}`);

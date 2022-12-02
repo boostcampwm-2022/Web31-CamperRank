@@ -1,12 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import { Banner, List } from "../components/Home";
-import { MainHeader } from "../components/MainHeader";
-import { Footer } from "../components/Footer";
+import {Banner, List} from "../components/Home";
+import {MainHeader} from "../components/MainHeader";
+import {Footer} from "../components/Footer";
+import {useUserState} from "../hooks/useUserState";
 
 const MainWrapper = styled.div`
   width: 100%;
   height: 120rem;
+  min-width: 80rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -37,6 +39,7 @@ const FooterWrapper = styled.div`
 `;
 
 const Main = () => {
+  useUserState();
   return (
     <MainWrapper>
       <HeaderWrapper>
@@ -49,7 +52,7 @@ const Main = () => {
         <List></List>
       </ListWrapper>
       <FooterWrapper>
-        <Footer />
+        <Footer/>
       </FooterWrapper>
     </MainWrapper>
   );

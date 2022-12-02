@@ -7,7 +7,7 @@ import methodOverride from "method-override";
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost",
+  origin: "*",
   credentials: true,
 };
 
@@ -22,7 +22,7 @@ app.use(methodOverride());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
-app.use("/", gradeRouter);
+app.use("/grade-server", gradeRouter);
 
 app.listen("4000", () => {
   console.log(`

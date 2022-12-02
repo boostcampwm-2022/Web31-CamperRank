@@ -1,29 +1,31 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 export const MainHeaderContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
-  padding: 0 96px;
-  height: 160px;
+  min-width: 80rem;
+  padding: 0 6rem;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   nav {
-    margin-right: 172px;
+    margin-right: 11rem;
+
     ul {
       justify-content: space-between;
       align-items: center;
 
       li {
         display: inline;
-        margin-left: 96px;
+        margin-left: 6rem;
 
         a {
           text-decoration: none;
           font-weight: 600;
-          font-size: 24px;
+          font-size: 1.5rem;
           color: #000000;
         }
       }
@@ -33,7 +35,7 @@ export const MainHeaderContainer = styled.div`
 
 export const AnchorLogo = styled(Link)`
   font-weight: 700;
-  font-size: 32px;  
+  font-size: 2rem;
   cursor: pointer;
   text-decoration: none;
 `;
@@ -44,16 +46,21 @@ export const GreenMark = styled.mark`
 `;
 
 export const MenuContainer = styled.div`
-  margin-bottom: 112px;
+  margin-bottom: 7rem;
+
   button {
     cursor: pointer;
-    font-family: Noto Sans KR, serif;
+    font-family: Noto Sans KR, sans-serif;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 0.7rem;
     border: none;
     background: none;
-    &:nth-child(1) {
+  }
+
+  a:nth-child(1) {
+    button{
       border-right: solid 1px silver;
     }
   }
 `;
+
