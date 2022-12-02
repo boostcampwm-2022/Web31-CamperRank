@@ -70,7 +70,7 @@ const PageButtonsWrapper = styled.div`
 `;
 
 const ProblemWrapper = styled.div`
-  width: 47%;
+  width: 50%;
   min-width: 15%;
   height: auto;
   padding: 1rem;
