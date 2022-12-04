@@ -54,15 +54,16 @@ export class ProblemController {
     status: HttpStatus.OK,
     type: SimpleProblemDto,
   })
-  async findAllQuestions(
+  async findProblems(
     @Query('loginId') loginId: string,
     @Query('skip', new DefaultValuePipe(0))
     skip: number,
     @Query('take', new DefaultValuePipe(1000))
     take: number,
   ) {
-    const simpleProblemDtoList = await this.problemService.findAllWithPaging({
+    const simpleProblemDtoList = await this.problemService.findAllProblems({
       loginId,
+      isRandom: false,
       skip,
       take,
     });
@@ -85,8 +86,9 @@ export class ProblemController {
     type: SimpleProblemDto,
   })
   async findRandomProblem(@Query('loginId') loginId: string) {
-    const simpleProblemDto = await this.problemService.findRandomProblem({
+    const simpleProblemDto = await this.problemService.findAllProblems({
       loginId,
+      isRandom: true,
     });
 
     return {
@@ -113,8 +115,9 @@ export class ProblemController {
     )
     problemId: number,
   ) {
-    console.log(2);
-    const simpleProblemDto = await this.problemService.findProblem(problemId);
+    const simpleProblemDto = await this.problemService.findOneProblem(
+      problemId,
+    );
 
     return {
       statusCode:
