@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {useParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
-import { ProblemType } from "@types";
+import {ProblemType} from "@types";
 
 const ContentWrapper = styled.div`
   border: 3px double #CBCBCB;
@@ -45,13 +45,16 @@ const ProblemDummy = `
 </div>
 `;
 
-const ProblemContent = ({ problem }: ProblemType) => {
-  if (!problem) return;
-  const { level, description } = problem;
+const ProblemContent = ({problem}: ProblemType) => {
+  if (!problem) {
+    return null;
+  }
+  const {level, description} = problem;
   return (
     <>
       <Level>LV. {level}</Level>
-      <ContentWrapper dangerouslySetInnerHTML={{ __html: description ? description.slice(1, description.length - 1) : "" }} />
+      <ContentWrapper
+        dangerouslySetInnerHTML={{__html: description ? description.slice(1, description.length - 1) : ""}}/>
     </>
   );
 };

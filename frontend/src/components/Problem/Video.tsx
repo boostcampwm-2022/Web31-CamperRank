@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import {io} from "socket.io-client";
+import io from "socket.io-client";
+import SimplePeer from "simple-peer";
 
 const VideoContainer = styled.div`
   margin-top: 1rem;
@@ -33,23 +34,47 @@ const Constraints = {
     height: {
       exact: 720
     }
-  },
-  audio: true
+  }
 }
 
 export const Video = () => {
   const [userList, addUser] = useState([]);
+  const [myStream, setMyStream] = useState<MediaStream | undefined>();
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    const socket = io(import.meta.env.VITE_SOCKET_SERVER_URL);
-    socket.emit("hello", {data: "hello, socket.io"});
-  }, []);
+  const [yourID, setYourID] = useState("");
+  const [users, setUsers] = useState({});
+  const [receivingCall, setReceivingCall] = useState(false);
+  const [caller, setCaller] = useState("");
+  const [callerSignal, setCallerSignal] = useState<string | SimplePeer.SignalData>("");
+  const [callAccepted, setCallAccepted] = useState(false);
+
+  const partnerVideo = useRef<HTMLVideoElement>(null);
+  const socket = useRef<any>(null);
 
   useEffect(() => {
+
+    socket.current = io(import.meta.env.VITE_SOCKET_SERVER_URL);
+
     const openMediaDevices = async (constraints: MediaStreamConstraints) => {
       return await navigator.mediaDevices.getUserMedia(constraints).then((mediaStream) => {
-        videoRef.current!.srcObject = mediaStream;
+        if (videoRef.current) {
+          videoRef.current!.srcObject = mediaStream;
+        }
+        setMyStream(mediaStream);
+
+        socket.current.on("yourID", (id: string) => {
+          setYourID(id);
+        });
+        socket.current.on("allUsers", (users: object) => {
+          setUsers(users);
+        });
+
+        socket.current.on("hey", (data: any) => {
+          setReceivingCall(true);
+          setCaller(data.from);
+          setCallerSignal(data.signal);
+        });
       });
     };
 
@@ -62,9 +87,84 @@ export const Video = () => {
     }
   }, []);
 
+  function callPeer(id: string) {
+    const peer = new SimplePeer({
+      initiator: true,
+      trickle: false,
+      config: {
+
+        iceServers: [
+          {
+            urls: "stun:numb.viagenie.ca",
+            username: "sultan1640@gmail.com",
+            credential: "98376683"
+          },
+          {
+            urls: "turn:numb.viagenie.ca",
+            username: "sultan1640@gmail.com",
+            credential: "98376683"
+          }
+        ]
+      },
+      stream: myStream,
+    });
+
+    peer.on("signal", data => {
+      socket.current.emit("callUser", {userToCall: id, signalData: data, from: yourID})
+    })
+
+    peer.on("stream", stream => {
+      if (partnerVideo.current) {
+        partnerVideo.current.srcObject = stream;
+      }
+    });
+
+    socket.current.on("callAccepted", (signal: string | SimplePeer.SignalData) => {
+      setCallAccepted(true);
+      peer.signal(signal);
+    })
+
+  }
+
+  function acceptCall() {
+    setCallAccepted(true);
+    const peer = new SimplePeer({
+      initiator: false,
+      trickle: false,
+      stream: myStream,
+    });
+    peer.on("signal", data => {
+      socket.current.emit("acceptCall", {signal: data, to: caller})
+    })
+
+    peer.on("stream", stream => {
+      partnerVideo.current!.srcObject = stream;
+    });
+
+    peer.signal(callerSignal);
+  }
+
+  let PartnerVideo;
+  if (callAccepted) {
+    PartnerVideo = (
+      <UserVideoContainer playsInline ref={partnerVideo} autoPlay/>
+    );
+  }
+
+  let incomingCall;
+  if (receivingCall) {
+    incomingCall = (
+      <div>
+        <h1>{caller} is calling you</h1>
+        <button onClick={acceptCall}>Accept</button>
+      </div>
+    )
+  }
+
   return (
     <VideoContainer>
-      <UserVideoContainer ref={videoRef} muted autoPlay playsInline/>
+      {/*{PartnerVideo};*/}
+      <UserVideoContainer ref={videoRef} autoPlay playsInline/>
       {userList.map((user, idx) => (
         <UserVideoContainer autoPlay playsInline key={idx}/>
       ))}
