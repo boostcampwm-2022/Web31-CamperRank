@@ -525,9 +525,123 @@ export class AppController {
 
     const simpleProblemDto12 = await this.problemService.create(
       new CreateProblemDto(
-        'problem1',
+        'problem12',
         1,
         JSON.stringify(`<div><div>문제 내용</div><div>답은 111</div></div>`),
+      ),
+    );
+
+    const simpleProblemDto13 = await this.problemService.create(
+      new CreateProblemDto(
+        'problem13',
+        1,
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 111</div></div>`),
+      ),
+    );
+
+    const simpleProblemDto14 = await this.problemService.create(
+      new CreateProblemDto(
+        'problem14',
+        1,
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 111</div></div>`),
+      ),
+    );
+
+    const simpleProblemDto15 = await this.problemService.create(
+      new CreateProblemDto(
+        'problem15',
+        1,
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 111</div></div>`),
+      ),
+    );
+
+    const simpleProblemDto16 = await this.problemService.create(
+      new CreateProblemDto(
+        'problem16',
+        1,
+        JSON.stringify(`<div><div>문제 내용</div><div>답은 111</div></div>`),
+      ),
+    );
+
+    // 케이스
+    await this.testCaseService.create(
+      new CreateTestCaseDto(
+        simpleProblemDto12.problemId,
+        1,
+        JSON.stringify(['123']),
+        JSON.stringify(222),
+      ),
+    );
+
+    await this.testCaseService.create(
+      new CreateTestCaseDto(
+        simpleProblemDto12.problemId,
+        2,
+        JSON.stringify(['123 456']),
+        JSON.stringify(222),
+      ),
+    );
+
+    await this.testCaseService.create(
+      new CreateTestCaseDto(
+        simpleProblemDto12.problemId,
+        3,
+        JSON.stringify(['123 456 789']),
+        JSON.stringify(222),
+      ),
+    );
+
+    await this.testCaseService.create(
+      new CreateTestCaseDto(
+        simpleProblemDto13.problemId,
+        1,
+        JSON.stringify([[1, 2], [3, 4], 5]),
+        JSON.stringify(15),
+      ),
+    );
+
+    await this.testCaseService.create(
+      new CreateTestCaseDto(
+        simpleProblemDto13.problemId,
+        2,
+        JSON.stringify([[6, 7], [8, 9], 10]),
+        JSON.stringify(40),
+      ),
+    );
+
+    await this.testCaseService.create(
+      new CreateTestCaseDto(
+        simpleProblemDto13.problemId,
+        3,
+        JSON.stringify([[10, 11, 12], [13, 14], 15]),
+        JSON.stringify(75),
+      ),
+    );
+
+    await this.testCaseService.create(
+      new CreateTestCaseDto(
+        simpleProblemDto14.problemId,
+        1,
+        JSON.stringify([[1, 2], [3, 4], 5]),
+        JSON.stringify([3, 7, 5]),
+      ),
+    );
+
+    await this.testCaseService.create(
+      new CreateTestCaseDto(
+        simpleProblemDto14.problemId,
+        2,
+        JSON.stringify([[6, 7], [8, 9], 10]),
+        JSON.stringify([13, 17, 10]),
+      ),
+    );
+
+    await this.testCaseService.create(
+      new CreateTestCaseDto(
+        simpleProblemDto14.problemId,
+        3,
+        JSON.stringify([[10, 11, 12], [13, 14], 15]),
+        JSON.stringify([33, 27, 15]),
       ),
     );
 
