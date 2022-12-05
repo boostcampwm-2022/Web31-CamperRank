@@ -91,7 +91,7 @@ export const Video = () => {
         return;
       }
       const call = myPeer.call(userId, myStream);
-      call.on("stream", (userVideoStream) => {
+      call.on("stream", () => {
         setPeers({
           ...peers,
           ...{
@@ -166,6 +166,13 @@ export const Video = () => {
       peerVideosRef.current[idx].srcObject = call.remoteStream;
     });
   }, [peers]);
+
+  useEffect(() => {
+    return () => {
+      myPeer.destroy();
+      socket.disconnect();
+    };
+  }, []);
 
   return (
     <VideoContainer>
