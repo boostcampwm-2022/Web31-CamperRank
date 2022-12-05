@@ -14,27 +14,15 @@ const io = new Server(httpServer, {
   cookie: true,
 });
 
-const users: any = {};
-
 io.on('connection', (socket) => {
-  if (!users[socket.id]) {
-    users[socket.id] = socket.id;
-  }
-  socket.emit('yourID', socket.id, users);
-  socket.broadcast.emit('allUsers', users);
-  socket.on('disconnect', () => {
-    delete users[socket.id];
-  });
+  socket.on('join-room', (roomId, userId) => {
+    console.log(roomId);
+    socket.join(roomId);
+    socket.to(roomId).emit('user-connected', userId);
 
-  socket.on('callUser', (data) => {
-    io.to(data.userToCall).emit('hey', {
-      signal: data.signalData,
-      from: data.from,
+    socket.on('disconnect', () => {
+      socket.to(roomId).emit('user-disconnected', userId);
     });
-  });
-
-  socket.on('acceptCall', (data) => {
-    io.to(data.to).emit('callAccepted', data.signal);
   });
 });
 

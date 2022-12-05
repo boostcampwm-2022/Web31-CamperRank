@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
-import * as SimplePeer from "simple-peer";
-import * as process from "process";
-global.process = process;
+import { Peer } from "peerjs";
+import { useParams } from "react-router-dom";
 
 const VideoContainer = styled.div`
   margin-top: 1rem;
@@ -40,25 +39,38 @@ const Constraints = {
 };
 
 export const Video = () => {
-  const [userList, setUserList] = useState([]);
   const [myStream, setMyStream] = useState<MediaStream | undefined>();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { roomNumber } = useParams();
 
-  const [yourID, setYourID] = useState("");
-  const [users, setUsers] = useState({});
-  const [receivingCall, setReceivingCall] = useState(false);
-  const [caller, setCaller] = useState("");
-  const [callerSignal, setCallerSignal] = useState<
-    string | SimplePeer.SignalData
-  >("");
-  const [callAccepted, setCallAccepted] = useState(false);
+  const myPeer = useMemo(() => new Peer(), []);
+  const peers: any = useMemo(() => {
+    return {};
+  }, []);
+  const socket = useMemo(() => io(import.meta.env.VITE_SOCKET_SERVER_URL), []);
 
-  const partnerVideo = useRef<HTMLVideoElement>(null);
-  const socket = useRef<any>(null);
+  // function connectToNewUser(userId, stream) {
+  //   const call = myPeer.call(userId, stream);
+  //   const video = document.createElement("video");
+  //   call.on("stream", (userVideoStream) => {
+  //     addVideoStream(video, userVideoStream);
+  //   });
+  //   call.on("close", () => {
+  //     video.remove();
+  //   });
+  //
+  //   peers[userId] = call;
+  // }
+
+  // function addVideoStream(video, stream) {
+  //   video.srcObject = stream;
+  //   video.addEventListener("loadedmetadata", () => {
+  //     video.play();
+  //   });
+  //   videoGrid.append(video);
+  // }
 
   useEffect(() => {
-    socket.current = io(import.meta.env.VITE_SOCKET_SERVER_URL);
-
     const openMediaDevices = async (constraints: MediaStreamConstraints) => {
       return await navigator.mediaDevices
         .getUserMedia(constraints)
@@ -68,28 +80,16 @@ export const Video = () => {
           }
           setMyStream(mediaStream);
 
-          socket.current.on("yourID", (id: string, users: any) => {
-            console.log(1);
-            setYourID(id);
-            for (let socketID in users) {
-              if (id === socketID) {
-                continue;
-              }
-              callPeer(socketID);
-            }
-            setUsers(users);
-          });
-          socket.current.on("allUsers", (newUsers: any) => {
-            console.log(2);
-            setUsers(users);
+          myPeer.on("call", (call) => {
+            call.answer(mediaStream);
+            // const video = document.createElement("video");
+            call.on("stream", (userVideoStream) => {
+              // addVideoStream(video, userVideoStream);
+            });
           });
 
-          socket.current.on("hey", (data: any) => {
-            console.log(3);
-            setReceivingCall(true);
-            setCaller(data.from);
-            setCallerSignal(data.signal);
-            acceptCall();
+          socket.on("user-connected", (userId) => {
+            // connectToNewUser(userId, mediaStream);
           });
         });
     };
@@ -103,88 +103,19 @@ export const Video = () => {
     }
   }, []);
 
-  function callPeer(id: string) {
-    const peer = new SimplePeer(/*{
-      initiator: true,
-      trickle: false,
-      config: {
-        iceServers: [
-          {
-            urls: "stun:numb.viagenie.ca",
-            username: "sultan1640@gmail.com",
-            credential: "98376683",
-          },
-          {
-            urls: "turn:numb.viagenie.ca",
-            username: "sultan1640@gmail.com",
-            credential: "98376683",
-          },
-        ],
-      },
-      stream: myStream,
-    }*/);
-
-    peer.on("signal", (data) => {
-      socket.current.emit("callUser", {
-        userToCall: id,
-        signalData: data,
-        from: yourID,
-      });
+  useEffect(() => {
+    socket.on("user-disconnected", (userId) => {
+      if (peers[userId]) peers[userId].close();
     });
 
-    peer.on("stream", (stream) => {
-      if (partnerVideo.current) {
-        partnerVideo.current.srcObject = stream;
-      }
+    myPeer.on("open", (id) => {
+      console.log("voice chat on!");
+      socket.emit("join-room", roomNumber, id);
     });
-
-    socket.current.on(
-      "callAccepted",
-      (signal: string | SimplePeer.SignalData) => {
-        setCallAccepted(true);
-        peer.signal(signal);
-      }
-    );
-  }
-
-  function acceptCall() {
-    setCallAccepted(true);
-    const peer = new SimplePeer({
-      initiator: false,
-      trickle: false,
-      stream: myStream,
-    });
-    peer.on("signal", (data) => {
-      socket.current.emit("acceptCall", { signal: data, to: caller });
-    });
-
-    peer.on("stream", (stream) => {
-      partnerVideo.current!.srcObject = stream;
-    });
-
-    peer.signal(callerSignal);
-  }
-
-  let PartnerVideo;
-  if (callAccepted) {
-    PartnerVideo = (
-      <UserVideoContainer playsInline ref={partnerVideo} autoPlay />
-    );
-  }
-
-  let incomingCall;
-  if (receivingCall) {
-    incomingCall = (
-      <div>
-        <h1>{caller} is calling you</h1>
-        <button onClick={acceptCall}>Accept</button>
-      </div>
-    );
-  }
+  }, []);
 
   return (
     <VideoContainer>
-      {PartnerVideo}
       <UserVideoContainer ref={videoRef} autoPlay playsInline />
       {/*{userList.map((user, idx) => (*/}
       {/*  <UserVideoContainer autoPlay playsInline key={idx} />*/}
