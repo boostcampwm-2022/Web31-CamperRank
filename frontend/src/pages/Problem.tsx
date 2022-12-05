@@ -269,9 +269,10 @@ function solution(param) {
     if (editorRef.current) {
       const view = new EditorView({state, parent: editorRef.current});
       setEView(view);
-      if (view.state.doc.length) return;
-      let transaction = view.state.update({changes: {from: 0, to: view.state.doc.length, insert: defaultCode}})
-      view.dispatch(transaction)
+      if(code.text === '') {
+        let transaction = view.state.update({changes: {from: 0, to: view.state.doc.length, insert: defaultCode}})
+        view.dispatch(transaction)
+      }
     }
     return () => {
       provider && provider.destroy();

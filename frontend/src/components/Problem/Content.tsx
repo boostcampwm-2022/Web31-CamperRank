@@ -46,7 +46,7 @@ const ProblemDummy = `
 `;
 
 const ProblemContent = ({ problem }: ProblemType) => {
-  if (!problem) return;
+  if (!problem) return <></>;
   const { level, description } = problem;
   return (
     <>
