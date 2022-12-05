@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { SimpleRankDto } from './dto/simple-rank.dto';
-import { UserRepository } from '../users/user.repository';
-import { SolvedRepository } from '../solved/solved.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Solved } from '../solved/entities/solved.entity';
+import { Repository } from 'typeorm';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class RankService {
   constructor(
-    private readonly userRepository: UserRepository,
-    private readonly solvedRepository: SolvedRepository,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    @InjectRepository(Solved)
+    private readonly solvedRepository: Repository<Solved>,
   ) {}
 
   async getUserRanks(skip: number, take: number) {
@@ -15,9 +19,7 @@ export class RankService {
       .createQueryBuilder('solved')
       .select('solved.user.id as userId')
       .addSelect('COUNT(DISTINCT(solved.problem.id)) AS solvedCount')
-      // .addSelect('COUNT(*) AS solvedCount')
       .groupBy('solved.user.id')
-      // .distinctOn(['solved.problem.id'])
       .skip(skip && take ? skip : undefined)
       .take(skip && take ? skip : undefined)
       .getRawMany();

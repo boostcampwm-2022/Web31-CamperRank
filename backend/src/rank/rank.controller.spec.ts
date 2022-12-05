@@ -1,8 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RankController } from './rank.controller';
 import { RankService } from './rank.service';
-import { UserRepository } from '../users/user.repository';
-import { SolvedRepository } from '../solved/solved.repository';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { MockUserRepository } from '../mock/user.mock';
+import { MockSolvedRepository } from '../mock/solved.mock';
+import { Solved } from '../solved/entities/solved.entity';
+import { User } from '../users/entities/user.entity';
 
 describe('RankController', () => {
   let rankController: RankController;
@@ -11,7 +14,17 @@ describe('RankController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RankController],
-      providers: [RankService, UserRepository, SolvedRepository],
+      providers: [
+        RankService,
+        {
+          provide: getRepositoryToken(User),
+          useValue: MockUserRepository(),
+        },
+        {
+          provide: getRepositoryToken(Solved),
+          useValue: MockSolvedRepository(),
+        },
+      ],
     }).compile();
 
     rankController = module.get<RankController>(RankController);

@@ -3,18 +3,22 @@ import { CreateProblemDto } from './dto/create-problem.dto';
 import { UpdateProblemDto } from './dto/update-problem.dto';
 import { Problem } from './entities/problem.entity';
 import { SimpleProblemDto } from './dto/simple-problem.dto';
-import { ProblemRepository } from './problem.repository';
-import { findAllWithPaging } from './dto/findAllWithPaging.interface';
-import { SolvedRepository } from '../solved/solved.repository';
-import { UserRepository } from '../users/user.repository';
+import { IFindProblemOptions } from './dto/findAllWithPaging.interface';
 import { isFalsy } from '../utils/boolUtils';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Solved } from '../solved/entities/solved.entity';
+import { Repository } from 'typeorm';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class ProblemService {
   constructor(
-    private readonly problemRepository: ProblemRepository,
-    private readonly solvedRepository: SolvedRepository,
-    private readonly userRepository: UserRepository,
+    @InjectRepository(Problem)
+    private readonly problemRepository: Repository<Problem>,
+    @InjectRepository(Solved)
+    private readonly solvedRepository: Repository<Solved>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async create(createProblemDto: CreateProblemDto) {
@@ -30,13 +34,19 @@ export class ProblemService {
   }
 
   // TODO: 쿼리를 한 번만 보내서 찾는 방법에 대한 고민이 필요하다.
-  async findAllWithPaging({ loginId, skip, take }: findAllWithPaging) {
+  async findAllProblems({
+    loginId,
+    isRandom,
+    skip,
+    take,
+  }: IFindProblemOptions) {
     let problemList;
 
     if (isFalsy(loginId)) {
       problemList = await this.problemRepository
         .createQueryBuilder('problem')
         .select('*')
+        .orderBy(isRandom ? 'RAND()' : '')
         .skip(skip)
         .take(take)
         .getRawMany();
@@ -56,6 +66,7 @@ export class ProblemService {
         .addSelect(
           `IF(problem.id IN (${problemIdByLoginIdQuery.getQuery()}), '1', '0') AS isSolved`,
         )
+        .orderBy(isRandom ? 'RAND()' : '')
         .skip(skip)
         .take(take)
         .getRawMany();
@@ -66,47 +77,7 @@ export class ProblemService {
     });
   }
 
-  async findRandomProblem({ loginId }: findAllWithPaging) {
-    let problemList;
-    const skip = 0;
-    const take = 6;
-
-    if (isFalsy(loginId)) {
-      problemList = await this.problemRepository
-        .createQueryBuilder('problem')
-        .select('*')
-        .orderBy('RAND()')
-        .skip(skip)
-        .take(take)
-        .getRawMany();
-    } else {
-      const foundUser = await this.userRepository.findOneBy({
-        loginId: loginId,
-      });
-
-      const problemIdByLoginIdQuery = this.solvedRepository
-        .createQueryBuilder('solved')
-        .select('solved.problem.id as problemId')
-        .where(`solved.userId = ${foundUser.id}`);
-
-      problemList = await this.problemRepository
-        .createQueryBuilder('problem')
-        .select('*')
-        .addSelect(
-          `IF(problem.id IN (${problemIdByLoginIdQuery.getQuery()}), '1', '0') AS isSolved`,
-        )
-        .orderBy('RAND()')
-        .skip(skip)
-        .take(take)
-        .getRawMany();
-    }
-
-    return problemList.map((value: Problem) => {
-      return new SimpleProblemDto(value);
-    });
-  }
-
-  async findProblem(problemId: number) {
+  async findOneProblem(problemId: number) {
     const foundProblem = await this.problemRepository.findOneBy({
       id: problemId,
     });

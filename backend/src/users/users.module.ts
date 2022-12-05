@@ -1,16 +1,12 @@
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { TypeOrmExModule } from '../typeorm/typeorm-ex.module';
-import { UserRepository } from './user.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
 
 @Module({
-  imports: [
-    // TypeOrmModule.forFeature([User]),
-    TypeOrmExModule.forCustomRepository([UserRepository]),
-  ],
+  imports: [TypeOrmModule.forFeature([User])],
   controllers: [UsersController],
-  // users 안에서 사용하기 위한 provider
   providers: [UsersService],
   exports: [UsersService],
 })

@@ -1,6 +1,6 @@
 import express from 'express';
 import * as http from 'http';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 
 const app = express();
 const socketServerPort = 3333;
@@ -16,7 +16,14 @@ const io = new Server(httpServer, {
 
 io.on('connection', (socket) => {
   socket.on('join-room', (roomId, userId) => {
-    console.log(roomId);
+    if (
+      io.sockets.adapter.rooms.get(roomId) &&
+      io.sockets.adapter.rooms.get(roomId)!.size >= 3
+    ) {
+      socket.emit('full');
+      return;
+    }
+
     socket.join(roomId);
     socket.to(roomId).emit('user-connected', userId);
 
