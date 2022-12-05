@@ -3,15 +3,18 @@ import { CreateTestCaseDto } from './dto/create-test-case.dto';
 import { UpdateTestCaseDto } from './dto/update-test-case.dto';
 import { TestCase } from './entities/test-case.entity';
 import { SimpleTestCaseDto } from './dto/simple-testCase.dto';
-import { TestCaseRepository } from './test-case.repository';
-import { ProblemRepository } from '../problem/problem.repository';
 import { FindTestCaseOption } from './dto/findTestCaseOption.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Problem } from '../problem/entities/problem.entity';
 
 @Injectable()
 export class TestCaseService {
   constructor(
-    private readonly testCaseRepository: TestCaseRepository,
-    private readonly problemRepository: ProblemRepository,
+    @InjectRepository(TestCase)
+    private readonly testCaseRepository: Repository<TestCase>,
+    @InjectRepository(Problem)
+    private readonly problemRepository: Repository<Problem>,
   ) {}
 
   async create(createTestCaseDto: CreateTestCaseDto) {

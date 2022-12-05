@@ -5,10 +5,12 @@ import { UsersService } from './users/users.service';
 import { ProblemService } from './problem/problem.service';
 import { SolvedService } from './solved/solved.service';
 import { TestCaseService } from './test-case/test-case.service';
-import { UserRepository } from './users/user.repository';
-import { ProblemRepository } from './problem/problem.repository';
-import { SolvedRepository } from './solved/solved.repository';
-import { TestCaseRepository } from './test-case/test-case.repository';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { MockUserRepository } from './mock/user.mock';
+import { User } from './users/entities/user.entity';
+import { Solved } from './solved/entities/solved.entity';
+import { Problem } from './problem/entities/problem.entity';
+import { TestCase } from './test-case/entities/test-case.entity';
 
 describe('AppController', () => {
   let app: TestingModule;
@@ -22,10 +24,16 @@ describe('AppController', () => {
         ProblemService,
         SolvedService,
         TestCaseService,
-        UserRepository,
-        ProblemRepository,
-        SolvedRepository,
-        TestCaseRepository,
+        { provide: getRepositoryToken(User), useValue: MockUserRepository() },
+        { provide: getRepositoryToken(Solved), useValue: MockUserRepository() },
+        {
+          provide: getRepositoryToken(Problem),
+          useValue: MockUserRepository(),
+        },
+        {
+          provide: getRepositoryToken(TestCase),
+          useValue: MockUserRepository(),
+        },
       ],
     }).compile();
   });

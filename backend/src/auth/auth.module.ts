@@ -11,6 +11,7 @@ import { User } from '../users/entities/user.entity';
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
   imports: [
+    TypeOrmModule.forFeature([User]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: 'Secret1234',
@@ -18,8 +19,6 @@ import { User } from '../users/entities/user.entity';
         expiresIn: 86400,
       },
     }),
-    TypeOrmModule.forFeature([User]),
-    // TypeOrmExModule.forCustomRepository([UserRepository]),
   ],
 
   // 다른곳에서도 jwt 인증을 사용하기 위해 export
