@@ -45,11 +45,9 @@ const ProblemDummy = `
 </div>
 `;
 
-const ProblemContent = ({problem}: ProblemType) => {
-  if (!problem) {
-    return null;
-  }
-  const {level, description} = problem;
+const ProblemContent = ({ problem }: ProblemType) => {
+  if (!problem) return <></>;
+  const { level, description } = problem;
   return (
     <>
       <Level>LV. {level}</Level>
