@@ -4,6 +4,8 @@ import {
   DefaultValuePipe,
   Delete,
   Get,
+  HttpCode,
+  HttpException,
   HttpStatus,
   Param,
   ParseIntPipe,
@@ -25,26 +27,25 @@ export class ProblemController {
   constructor(private readonly problemService: ProblemService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: '문제 추가 API',
     description: '문제를 추가한다.',
   })
   @ApiResponse({
     description: '문제 제목, 레벨, 문제 내용을 입력받아 문제를 저장한다.',
-    status: HttpStatus.OK,
+    status: HttpStatus.CREATED,
     type: SimpleProblemDto,
   })
   @UsePipes(ValidationPipe)
   async create(@Body() createProblemDto: CreateProblemDto) {
     const simpleProblemDto = await this.problemService.create(createProblemDto);
 
-    return {
-      statusCode: HttpStatus.OK,
-      ...simpleProblemDto,
-    };
+    return { ...simpleProblemDto };
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '전체 문제 반환 API',
     description: '전체 문제를 반환한다.',
@@ -68,13 +69,11 @@ export class ProblemController {
       take,
     });
 
-    return {
-      statusCode: HttpStatus.OK,
-      ...simpleProblemDtoList,
-    };
+    return { ...simpleProblemDtoList };
   }
 
   @Get('random')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 정보 제공 API',
     description: '문제 정보를 제공한다.',
@@ -86,18 +85,16 @@ export class ProblemController {
     type: SimpleProblemDto,
   })
   async findRandomProblem(@Query('loginId') loginId: string) {
-    const simpleProblemDto = await this.problemService.findAllProblems({
+    const simpleProblemDtoList = await this.problemService.findAllProblems({
       loginId,
       isRandom: true,
     });
 
-    return {
-      statusCode: HttpStatus.OK,
-      ...simpleProblemDto,
-    };
+    return { ...simpleProblemDtoList };
   }
 
   @Get(':problemId')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 정보 제공 API',
     description: '문제 정보를 제공한다.',
@@ -119,14 +116,15 @@ export class ProblemController {
       problemId,
     );
 
-    return {
-      statusCode:
-        simpleProblemDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
-      ...simpleProblemDto,
-    };
+    if (simpleProblemDto !== null) {
+      return { ...simpleProblemDto };
+    } else {
+      throw new HttpException('문제를 찾을 수 없습니다.', HttpStatus.NOT_FOUND);
+    }
   }
 
   @Patch(':problemId')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 정보 수정 API',
     description: '문제 정보를 수정한다.',
@@ -151,14 +149,15 @@ export class ProblemController {
       updateProblemDto,
     );
 
-    return {
-      statusCode:
-        simpleProblemDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
-      ...simpleProblemDto,
-    };
+    if (simpleProblemDto !== null) {
+      return { ...simpleProblemDto };
+    } else {
+      throw new HttpException('문제를 찾을 수 없습니다.', HttpStatus.NOT_FOUND);
+    }
   }
 
   @Delete(':problemId')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 정보 삭제 API',
     description: '문제 정보를 삭제한다.',
@@ -177,10 +176,10 @@ export class ProblemController {
   ) {
     const simpleProblemDto = await this.problemService.remove(problemId);
 
-    return {
-      statusCode:
-        simpleProblemDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
-      ...simpleProblemDto,
-    };
+    if (simpleProblemDto !== null) {
+      return { ...simpleProblemDto };
+    } else {
+      throw new HttpException('문제를 찾을 수 없습니다.', HttpStatus.NOT_FOUND);
+    }
   }
 }

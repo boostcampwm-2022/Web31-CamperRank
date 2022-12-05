@@ -4,6 +4,8 @@ import {
   DefaultValuePipe,
   Delete,
   Get,
+  HttpCode,
+  HttpException,
   HttpStatus,
   Param,
   ParseIntPipe,
@@ -32,6 +34,7 @@ export class SolvedController {
   ) {}
 
   @Post('test-case')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 답안 제출 기록 생성 API',
     description: '문제 답안 제출 기록을 생성한다.',
@@ -44,9 +47,19 @@ export class SolvedController {
   })
   @UsePipes(ValidationPipe)
   async nonCreateJustTest(@Body() createSolvedDto: CreateSolvedDto) {
-    const gradeSolvedDtoList = await this.solvedService.createSolvedToTest(
+    const gradeSolvedDtoList = await this.solvedService.createToGrade({
       createSolvedDto,
-    );
+      skip: 0,
+      take: 3,
+      saveFlag: false,
+    });
+
+    if (gradeSolvedDtoList === null) {
+      throw new HttpException(
+        '사용자 또는 문제를 찾을 수 없습니다.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
 
     const gradeResultList = await Promise.all(
       gradeSolvedDtoList.map((value) => {
@@ -59,13 +72,11 @@ export class SolvedController {
       }),
     );
 
-    return {
-      statusCode: HttpStatus.OK,
-      ...gradeResultList,
-    };
+    return { ...gradeResultList };
   }
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: '문제 답안 제출 기록 생성 API',
     description: '문제 답안 제출 기록을 생성한다.',
@@ -73,14 +84,24 @@ export class SolvedController {
   @ApiResponse({
     description:
       '문제 식별 아이디, 사용자 식별 아이디, 문제 코드, 정답 결과를 담아 저장한다.',
-    status: HttpStatus.OK,
+    status: HttpStatus.CREATED,
     type: SimpleSolvedDto,
   })
   @UsePipes(ValidationPipe)
   async createSolvedRecord(@Body() createSolvedDto: CreateSolvedDto) {
-    const gradeSolvedDtoList = await this.solvedService.createToGrade(
+    const gradeSolvedDtoList = await this.solvedService.createToGrade({
       createSolvedDto,
-    );
+      skip: 0,
+      take: 1000,
+      saveFlag: true,
+    });
+
+    if (gradeSolvedDtoList === null) {
+      throw new HttpException(
+        '사용자 또는 문제를 찾을 수 없습니다.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
 
     const gradeResultList = await Promise.all(
       gradeSolvedDtoList.map((value) => {
@@ -110,7 +131,6 @@ export class SolvedController {
     );
 
     return {
-      statusCode: HttpStatus.OK,
       solvedId: gradeResultList[0].solvedId,
       solvedResult: solvedResult,
       ...gradeResultDTO,
@@ -118,6 +138,7 @@ export class SolvedController {
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 답안 제출 기록 조회 API',
     description: '문제 답안 제출 기록을 조회한다.',
@@ -136,9 +157,10 @@ export class SolvedController {
     @Query('take', new DefaultValuePipe(1000)) take: number,
   ) {
     if (isFalsy(problemId) && isFalsy(loginId)) {
-      return {
-        statusCode: HttpStatus.BAD_REQUEST,
-      };
+      throw new HttpException(
+        '사용자 또는 문제를 찾을 수 없습니다.',
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     const simpleSolvedDtoList = await this.solvedService.findSolvedByOption({
@@ -148,13 +170,11 @@ export class SolvedController {
       take,
     });
 
-    return {
-      statusCode: HttpStatus.OK,
-      ...simpleSolvedDtoList,
-    };
+    return { ...simpleSolvedDtoList };
   }
 
   @Patch(':solvedId')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 답안 제출 기록 수정 API',
     description: '답안 제출 이후에 채점이 완료되면 상태를 변경한다.',
@@ -178,14 +198,18 @@ export class SolvedController {
       updateSolvedDto,
     );
 
-    return {
-      statusCode:
-        simpleSolvedDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
-      ...simpleSolvedDto,
-    };
+    if (simpleSolvedDto !== null) {
+      return { ...simpleSolvedDto };
+    } else {
+      throw new HttpException(
+        '문제 풀이 기록을 찾을 수 없습니다.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   @Delete(':solvedId')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 답안 제출 기록 삭제 API',
     description: '문제 답안 제출 기록을 삭제한다.',
@@ -204,10 +228,13 @@ export class SolvedController {
   ) {
     const simpleSolvedDto = await this.solvedService.remove(solvedId);
 
-    return {
-      statusCode:
-        simpleSolvedDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
-      ...simpleSolvedDto,
-    };
+    if (simpleSolvedDto !== null) {
+      return { ...simpleSolvedDto };
+    } else {
+      throw new HttpException(
+        '문제 풀이 기록을 찾을 수 없습니다.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }

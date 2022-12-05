@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, Min } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class CreateTestCaseDto {
   @ApiProperty({ description: '문제 식별 아이디' })
@@ -7,7 +7,6 @@ export class CreateTestCaseDto {
   problemId: number;
 
   @ApiProperty({ description: '테스트 케이스 번호' })
-  @Min(1)
   @IsNotEmpty()
   caseNumber: number;
 

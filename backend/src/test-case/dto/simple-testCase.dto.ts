@@ -25,7 +25,7 @@ export class SimpleTestCaseDto {
 
   constructor(testCase: TestCase) {
     this.testCaseId = testCase.id;
-    this.problemId = testCase.problem.id;
+    this.problemId = testCase.problem?.id;
     this.caseNumber = testCase.caseNumber;
     this.testInput = testCase.testInput;
     this.testOutput = testCase.testOutput;

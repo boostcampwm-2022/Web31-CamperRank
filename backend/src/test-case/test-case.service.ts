@@ -3,7 +3,7 @@ import { CreateTestCaseDto } from './dto/create-test-case.dto';
 import { UpdateTestCaseDto } from './dto/update-test-case.dto';
 import { TestCase } from './entities/test-case.entity';
 import { SimpleTestCaseDto } from './dto/simple-testCase.dto';
-import { FindTestCaseOption } from './dto/findTestCaseOption.interface';
+import { IFindTestCaseOption } from './dto/findTestCaseOption.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Problem } from '../problem/entities/problem.entity';
@@ -18,25 +18,36 @@ export class TestCaseService {
   ) {}
 
   async create(createTestCaseDto: CreateTestCaseDto) {
-    const foundTestCase = await this.testCaseRepository.findOneBy({
-      problem: {
-        id: createTestCaseDto.problemId,
+    const foundTestCases = await this.testCaseRepository.find({
+      where: {
+        problem: {
+          id: createTestCaseDto.problemId,
+        },
+        caseNumber: createTestCaseDto.caseNumber,
       },
-      caseNumber: createTestCaseDto.caseNumber,
     });
 
-    if (foundTestCase) {
+    if (foundTestCases.length > 0) {
+      return null;
+    }
+
+    const foundProblems = await this.problemRepository.find({
+      where: {
+        id: createTestCaseDto.problemId,
+      },
+    });
+
+    if (foundProblems.length !== 1) {
       return null;
     }
 
     const testCase = TestCase.createTestCase({
-      problem: await this.problemRepository.findOneBy({
-        id: createTestCaseDto.problemId,
-      }),
+      problem: foundProblems[0],
       caseNumber: createTestCaseDto.caseNumber,
       testInput: createTestCaseDto.testInput,
       testOutput: createTestCaseDto.testOutput,
     });
+
     const savedTestCase = await this.testCaseRepository.save(testCase);
     return new SimpleTestCaseDto(savedTestCase);
   }
@@ -46,8 +57,8 @@ export class TestCaseService {
     problemId,
     skip,
     take,
-  }: FindTestCaseOption) {
-    const testCase = await this.testCaseRepository.find({
+  }: IFindTestCaseOption) {
+    const foundTestCases = await this.testCaseRepository.find({
       where: {
         id: testCaseId,
         problem: {
@@ -58,9 +69,13 @@ export class TestCaseService {
       take,
     });
 
-    return testCase.map((value: TestCase) => {
-      return new SimpleTestCaseDto(value);
-    });
+    if (foundTestCases.length > 0) {
+      return foundTestCases.map((value: TestCase) => {
+        return new SimpleTestCaseDto(value);
+      });
+    } else {
+      return null;
+    }
   }
 
   async update(testCaseId: number, updateTestCaseDto: UpdateTestCaseDto) {
@@ -68,7 +83,7 @@ export class TestCaseService {
       id: testCaseId,
     });
 
-    if (foundTestCase === null || foundTestCase === undefined) {
+    if (foundTestCase === null) {
       return null;
     }
 
@@ -78,6 +93,7 @@ export class TestCaseService {
       updateTestCaseDto.testInput || foundTestCase.testInput;
     foundTestCase.testOutput =
       updateTestCaseDto.testOutput || foundTestCase.testOutput;
+
     const updatedTestCase = await this.testCaseRepository.save(foundTestCase);
     return new SimpleTestCaseDto(updatedTestCase);
   }
@@ -87,12 +103,14 @@ export class TestCaseService {
       id: testCaseId,
     });
 
-    if (foundTestCase === null || foundTestCase === undefined) {
+    if (foundTestCase !== null) {
+      const deletedTestCase = await this.testCaseRepository.remove(
+        foundTestCase,
+      );
+
+      return new SimpleTestCaseDto(deletedTestCase);
+    } else {
       return null;
     }
-
-    const deletedTestCase = await this.testCaseRepository.remove(foundTestCase);
-
-    return new SimpleTestCaseDto(deletedTestCase);
   }
 }

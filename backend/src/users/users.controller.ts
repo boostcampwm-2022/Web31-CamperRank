@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpException,
   HttpStatus,
   Post,
   Query,
@@ -20,20 +22,25 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '유저 생성 API', description: '유저를 생성한다.' })
   @ApiResponse({ description: '유저를 생성한다.', type: SimpleUserDto })
   @UsePipes(ValidationPipe)
-  async create(@Body() createUserDto: CreateUserDto) {
+  async signupUser(@Body() createUserDto: CreateUserDto) {
     const simpleUserDto = await this.usersService.create(createUserDto);
 
-    return {
-      statusCode:
-        simpleUserDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
-      ...simpleUserDto,
-    };
+    if (simpleUserDto !== null) {
+      return { ...simpleUserDto };
+    } else {
+      throw new HttpException(
+        '회원가입을 진행할 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '유저 검색 API', description: '유저를 검색한다.' })
   @ApiResponse({
     description:
@@ -43,19 +50,20 @@ export class UsersController {
   })
   async findUser(@Query('loginId') loginId: string) {
     if (isFalsy(loginId)) {
-      return {
-        statusCode: HttpStatus.BAD_REQUEST,
-      };
+      throw new HttpException('잘못된 요청입니다.', HttpStatus.BAD_REQUEST);
     }
 
-    const simpleUserDto = await this.usersService.findUserByLoginId({
+    const simpleUserDto = await this.usersService.findOneUser({
       loginId: loginId,
     });
 
-    return {
-      statusCode:
-        simpleUserDto !== null ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
-      ...simpleUserDto,
-    };
+    if (simpleUserDto !== null) {
+      return { ...simpleUserDto };
+    } else {
+      throw new HttpException(
+        '사용자를 찾을 수 없습니다.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }
