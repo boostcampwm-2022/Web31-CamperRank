@@ -851,8 +851,20 @@ export class AppController {
       new CreateTestCaseDto(12, 2, JSON.stringify([234]), JSON.stringify(111)),
     );
 
-    const simpleTestCaseDto36 = await this.testCaseService.create(
+    const dummyToRemove1 = await this.testCaseService.create(
       new CreateTestCaseDto(12, 3, JSON.stringify([345]), JSON.stringify(111)),
+    );
+    const dummyToRemove2 = await this.testCaseService.create(
+      new CreateTestCaseDto(12, 4, JSON.stringify([345]), JSON.stringify(111)),
+    );
+    const dummyToRemove3 = await this.testCaseService.create(
+      new CreateTestCaseDto(12, 5, JSON.stringify([345]), JSON.stringify(111)),
+    );
+    const dummyToRemove4 = await this.testCaseService.create(
+      new CreateTestCaseDto(12, 6, JSON.stringify([345]), JSON.stringify(111)),
+    );
+    const dummyToRemove5 = await this.testCaseService.create(
+      new CreateTestCaseDto(12, 7, JSON.stringify([345]), JSON.stringify(111)),
     );
 
     const simpleSolvedDto1 = await this.solvedService.create(

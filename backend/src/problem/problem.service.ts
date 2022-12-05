@@ -90,7 +90,7 @@ export class ProblemService {
       id: problemId,
     });
 
-    if (foundProblem === null || foundProblem === undefined) {
+    if (isFalsy(foundProblem)) {
       return null;
     }
 
@@ -109,7 +109,7 @@ export class ProblemService {
       id: problemId,
     });
 
-    if (foundProblem === null || foundProblem === undefined) {
+    if (isFalsy(foundProblem)) {
       return null;
     }
 

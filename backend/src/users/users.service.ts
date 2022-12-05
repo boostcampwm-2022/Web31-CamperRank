@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { SimpleUserDto } from './dto/simple-user.dto';
-import { FindUserOption } from './dto/findUser.option';
+import { IFindUserOption } from './dto/find-option-user.interface';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -14,10 +14,13 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const foundUser = await this.usersRepository.findOneBy({
-      loginId: createUserDto.loginId,
+    const foundUsers = await this.usersRepository.find({
+      where: {
+        loginId: createUserDto.loginId,
+      },
     });
-    if (foundUser) {
+
+    if (foundUsers.length > 0) {
       return null;
     }
 
@@ -31,18 +34,14 @@ export class UsersService {
     return new SimpleUserDto(savedUser);
   }
 
-  async findUserByLoginId({ loginId }) {
-    const user = await this.usersRepository.findOneBy({
-      loginId: loginId,
+  async findOneUser({ userId, loginId }: IFindUserOption) {
+    const foundUsers = await this.usersRepository.find({
+      where: {
+        id: userId,
+        loginId: loginId,
+      },
     });
-    return user !== null ? new SimpleUserDto(user) : null;
-  }
 
-  async findUser({ userId, loginId }: FindUserOption) {
-    const user = await this.usersRepository.findOneBy({
-      id: userId,
-      loginId: loginId,
-    });
-    return user !== null ? new SimpleUserDto(user) : null;
+    return foundUsers.length === 1 ? new SimpleUserDto(foundUsers[0]) : null;
   }
 }

@@ -1,6 +1,6 @@
-export interface FindTestCaseOption {
-  testCaseId: number;
-  problemId: number;
-  skip: number;
-  take: number;
+export interface IFindTestCaseOption {
+  testCaseId?: number;
+  problemId?: number;
+  skip?: number;
+  take?: number;
 }

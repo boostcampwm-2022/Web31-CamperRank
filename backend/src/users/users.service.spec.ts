@@ -70,7 +70,7 @@ describe('UsersService', () => {
       .spyOn(userRepository, 'findOneBy')
       .mockResolvedValue(user);
 
-    const simpleUserDto = await userService.findUser({ userId: 1 });
+    const simpleUserDto = await userService.findOneUser({ userId: 1 });
 
     expect(userRepositoryFindOneBySpy).toBeCalledWith({ id: 1 });
     expect(simpleUserDto).toEqual(new SimpleUserDto(user));

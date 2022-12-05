@@ -2,6 +2,7 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
+  HttpCode,
   HttpStatus,
   Query,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ export class RankController {
   constructor(private readonly rankService: RankService) {}
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '유저 랭킹 API',
     description: '유저들을 랭킹 순으로 반환한다.',
@@ -32,9 +34,7 @@ export class RankController {
   ) {
     const simpleRankDtoList = await this.rankService.getUserRanks(skip, take);
 
-    return {
-      statusCode: HttpStatus.OK,
-      ...simpleRankDtoList,
-    };
+    // TODO: simpleRankDtoList의 크기가 0일 때 status 어떻게 보낼지 결정
+    return { ...simpleRankDtoList };
   }
 }
