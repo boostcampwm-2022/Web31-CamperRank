@@ -8,7 +8,7 @@ import React, {
 import styled from "styled-components";
 import io from "socket.io-client";
 import { Peer } from "peerjs";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const VideoContainer = styled.div`
   margin-top: 1rem;
@@ -52,6 +52,7 @@ export const Video = () => {
   const [myID, setMyID] = useState("");
   const [peers, setPeers] = useState<any>({});
   const peerVideosRef = useRef<Array<HTMLVideoElement>>([]);
+  const navigate = useNavigate();
 
   const myPeer = useMemo(() => new Peer(), []);
   const socket = useMemo(() => io(import.meta.env.VITE_SOCKET_SERVER_URL), []);
@@ -152,13 +153,14 @@ export const Video = () => {
   }, [disconnectCallback]);
 
   useEffect(() => {
-    if (!myPeer) return;
+    console.log(myPeer);
     myPeer.on("open", (id) => {
       setMyID(id);
+      console.log(roomNumber);
       socket.emit("join-room", roomNumber, id);
       console.log(`myID: ${id}`);
     });
-  }, [myPeer]);
+  }, []);
 
   useEffect(() => {
     Object.values(peers).forEach((call, idx) => {
@@ -168,10 +170,22 @@ export const Video = () => {
   }, [peers]);
 
   useEffect(() => {
+    socket.on("full", () => {
+      alert("방이 꽉 찼습니다.");
+      navigate("/");
+    });
+  }, []);
+
+  useEffect(() => {
     return () => {
-      myStream?.getTracks().forEach((ele) => ele.stop());
       myPeer.destroy();
       socket.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      myStream?.getTracks().forEach((ele) => ele.stop());
     };
   }, [myStream]);
 
