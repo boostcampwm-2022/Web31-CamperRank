@@ -14,9 +14,15 @@ const io = new Server(httpServer, {
   cookie: true,
 });
 
-io.on('connection', (socket: Socket) => {
-  socket.on('hello', (data) => {
-    console.log(data);
+io.on('connection', (socket) => {
+  socket.on('join-room', (roomId, userId) => {
+    console.log(roomId);
+    socket.join(roomId);
+    socket.to(roomId).emit('user-connected', userId);
+
+    socket.on('disconnect', () => {
+      socket.to(roomId).emit('user-disconnected', userId);
+    });
   });
 });
 
