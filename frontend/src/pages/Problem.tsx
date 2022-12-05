@@ -269,8 +269,16 @@ function solution(param) {
     if (editorRef.current) {
       const view = new EditorView({state, parent: editorRef.current});
       setEView(view);
-      if(code.text === '') {
+      console.log('code', code.text);
+      if(version === 'single') {
         let transaction = view.state.update({changes: {from: 0, to: view.state.doc.length, insert: defaultCode}})
+        view.dispatch(transaction)
+      }
+      else {
+        let transaction;
+        console.log(code.text);
+        if (code.text == '') transaction = view.state.update({changes: {from: 0, to: view.state.doc.length, insert: defaultCode}})
+        else transaction = view.state.update({changes: {from: 0, to: 0, insert: ''}})
         view.dispatch(transaction)
       }
     }
