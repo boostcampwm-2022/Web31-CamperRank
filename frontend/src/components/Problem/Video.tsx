@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
 import { Peer } from "peerjs";
@@ -51,91 +57,108 @@ export const Video = () => {
   const socket = useMemo(() => io(import.meta.env.VITE_SOCKET_SERVER_URL), []);
 
   useEffect(() => {
-    const openMediaDevices = async (constraints: MediaStreamConstraints) => {
-      return await navigator.mediaDevices
-        .getUserMedia(constraints)
-        .then((mediaStream) => {
-          if (videoRef.current) {
-            videoRef.current!.srcObject = mediaStream;
-          }
-          setMyStream(mediaStream);
+    navigator.mediaDevices.getUserMedia(Constraints).then((mediaStream) => {
+      setMyStream(mediaStream);
+    });
+  }, []);
 
-          myPeer.on("call", (call) => {
-            call.answer(mediaStream);
-            //추가
-            call.on("stream", (userVideoStream) => {
-              setPeers({
-                ...peers,
-                ...{
-                  [call.peer]: call,
-                },
-              });
-            });
-          });
-
-          socket.on("user-connected", (userId) => {
-            //추가
-            const call = myPeer.call(userId, mediaStream);
-            // const newIDX = Object.keys(peers).length;
-            // const newVideoRef = peerVideosRef.current[newIDX];
-            call.on("stream", (userVideoStream) => {
-              setPeers({
-                ...peers,
-                ...{
-                  [userId]: call,
-                },
-              });
-            });
-            call.on("close", () => {
-              //삭제
-              // // @ts-ignore
-              // peerVideosRef.current = Object.values(peers).filter(
-              //   // @ts-ignore
-              //   (call) => call.peer !== userId
-              // );
-            });
-          });
+  const callCallback = useCallback(
+    (call: any) => {
+      console.log(`callCallback`);
+      console.log(`callerID: ${call.peer}`);
+      call.answer(myStream);
+      call.on("stream", () => {
+        setPeers({
+          ...peers,
+          ...{
+            [call.peer]: call,
+          },
         });
-    };
+      });
+      call.on("close", () => {
+        console.log("call close rcv");
+        console.log(`closeID: ${call.peer}`);
+      });
+    },
+    [myStream, peers]
+  );
 
-    try {
-      const stream = openMediaDevices(Constraints);
-    } catch (error) {
-      console.error("Error accessing media devices.", error);
-    }
-
-    return () => {
-      if (videoRef.current) {
-        videoRef.current.pause();
-        if (videoRef.current.srcObject) {
-          if ("getTracks" in videoRef.current.srcObject) {
-            const tracks = videoRef.current.srcObject.getTracks();
-            tracks.forEach(function (track) {
-              track.stop();
-            });
-          }
-          videoRef.current.srcObject = null;
-        }
+  const connectCallback = useCallback(
+    (userId: string) => {
+      console.log(`connectCallback`);
+      console.log(`newUserID: ${userId}`);
+      if (!myStream) {
+        return;
       }
-      socket.disconnect();
-    };
-  }, [videoRef]);
+      const call = myPeer.call(userId, myStream);
+      call.on("stream", (userVideoStream) => {
+        setPeers({
+          ...peers,
+          ...{
+            [userId]: call,
+          },
+        });
+      });
 
-  useEffect(() => {
-    socket.on("user-disconnected", (userId) => {
-      if (!peers.hasOwnProperty(userId)) {
+      call.on("close", () => {
+        console.log("call close rcv");
+        console.log(`closeID: ${userId}`);
+      });
+    },
+    [myStream, peers]
+  );
+
+  const disconnectCallback = useCallback(
+    (userId: string) => {
+      console.log("disconnectCallback");
+      console.log(`disconnID: ${userId}`);
+      if (!peers[userId]) {
         return;
       }
       peers[userId].close();
-      delete peers[userId];
-      setPeers(peers);
-    });
+      const temp = { ...peers };
+      delete temp[userId];
+      setPeers(temp);
+    },
+    [peers]
+  );
 
+  useEffect(() => {
+    if (!myStream) {
+      return;
+    }
+    if (videoRef.current) {
+      videoRef.current!.srcObject = myStream;
+    }
+  }, [myStream]);
+
+  useEffect(() => {
+    if (!myStream) {
+      return;
+    }
+    myPeer.on("call", callCallback);
+    socket.on("user-connected", connectCallback);
+    return () => {
+      myPeer.off("call", callCallback);
+      socket.off("user-connected", connectCallback);
+    };
+  }, [myStream, callCallback]); //내부도 해제해야 하는지 확인 필요
+
+  useEffect(() => {
+    socket.on("user-disconnected", disconnectCallback);
+    return () => {
+      socket.off("user-disconnected", disconnectCallback);
+    };
+  }, [disconnectCallback]);
+
+  useEffect(() => {
+    if (!myPeer) return;
     myPeer.on("open", (id) => {
       setMyID(id);
       socket.emit("join-room", roomNumber, id);
+      console.log(`myID: ${id}`);
     });
-  }, []);
+  }, [myPeer]);
 
   useEffect(() => {
     Object.values(peers).forEach((call, idx) => {
