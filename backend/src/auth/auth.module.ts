@@ -4,13 +4,15 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../users/entities/user.entity';
+import { TypeOrmExModule } from '../typeorm/typeorm-ex.module';
+import { UserRepository } from '../users/user.repository';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
   imports: [
+    // TypeOrmModule.forFeature([User]),
+    TypeOrmExModule.forCustomRepository([UserRepository]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: 'Secret1234',
@@ -18,8 +20,6 @@ import { User } from '../users/entities/user.entity';
         expiresIn: 86400,
       },
     }),
-    TypeOrmModule.forFeature([User]),
-    // TypeOrmExModule.forCustomRepository([UserRepository]),
   ],
 
   // 다른곳에서도 jwt 인증을 사용하기 위해 export

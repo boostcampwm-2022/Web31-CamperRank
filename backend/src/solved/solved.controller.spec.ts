@@ -5,7 +5,8 @@ import { SolvedRepository } from './solved.repository';
 import { UserRepository } from '../users/user.repository';
 import { ProblemRepository } from '../problem/problem.repository';
 import { TestCaseRepository } from '../test-case/test-case.repository';
-import { HttpService } from '@nestjs/axios';
+import { HttpModule, HttpService } from '@nestjs/axios';
+import { of } from 'rxjs';
 
 describe('SolvedController', () => {
   let solvedController: SolvedController;
@@ -13,10 +14,18 @@ describe('SolvedController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       controllers: [SolvedController],
       providers: [
         SolvedService,
-        HttpService,
+        {
+          provide: HttpService,
+          useValue: {
+            post: jest.fn(() => of({})),
+            get: jest.fn(() => of({})),
+          },
+        },
+        // HttpService,
         SolvedRepository,
         UserRepository,
         ProblemRepository,
