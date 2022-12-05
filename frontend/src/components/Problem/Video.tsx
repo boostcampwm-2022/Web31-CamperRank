@@ -169,10 +169,11 @@ export const Video = () => {
 
   useEffect(() => {
     return () => {
+      myStream?.getTracks().forEach((ele) => ele.stop());
       myPeer.destroy();
       socket.disconnect();
     };
-  }, []);
+  }, [myStream]);
 
   return (
     <VideoContainer>
@@ -190,17 +191,5 @@ export const Video = () => {
         />
       ))}
     </VideoContainer>
-  );
-};
-
-export interface UserVideoType {
-  key: number;
-}
-
-export const UserVideo = ({ key: idx }: UserVideoType) => {
-  return (
-    <UserVideoContainer>
-      <div>123</div>
-    </UserVideoContainer>
   );
 };
