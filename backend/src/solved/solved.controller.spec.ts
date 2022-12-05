@@ -1,12 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SolvedController } from './solved.controller';
 import { SolvedService } from './solved.service';
-import { SolvedRepository } from './solved.repository';
-import { UserRepository } from '../users/user.repository';
-import { ProblemRepository } from '../problem/problem.repository';
-import { TestCaseRepository } from '../test-case/test-case.repository';
 import { HttpModule, HttpService } from '@nestjs/axios';
 import { of } from 'rxjs';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Solved } from './entities/solved.entity';
+import { MockSolvedRepository } from '../mock/solved.mock';
+import { Problem } from '../problem/entities/problem.entity';
+import { TestCase } from '../test-case/entities/test-case.entity';
+import { User } from '../users/entities/user.entity';
+import { MockProblemRepository } from '../mock/problem.mock';
+import { MockTestCaseRepository } from '../mock/test-case.mock';
+import { MockUserRepository } from '../mock/user.mock';
 
 describe('SolvedController', () => {
   let solvedController: SolvedController;
@@ -25,11 +30,22 @@ describe('SolvedController', () => {
             get: jest.fn(() => of({})),
           },
         },
-        // HttpService,
-        SolvedRepository,
-        UserRepository,
-        ProblemRepository,
-        TestCaseRepository,
+        {
+          provide: getRepositoryToken(Solved),
+          useValue: MockSolvedRepository(),
+        },
+        {
+          provide: getRepositoryToken(User),
+          useValue: MockUserRepository(),
+        },
+        {
+          provide: getRepositoryToken(Problem),
+          useValue: MockProblemRepository(),
+        },
+        {
+          provide: getRepositoryToken(TestCase),
+          useValue: MockTestCaseRepository(),
+        },
       ],
     }).compile();
 

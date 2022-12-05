@@ -3,20 +3,25 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { SimpleUserDto } from './dto/simple-user.dto';
-import { UserRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { MockUserRepository } from '../mock/user.mock';
+import { MockRepository } from '../mock/common.mock';
 
 describe('UsersService', () => {
   let userService: UsersService;
-  let userRepository: UserRepository;
+  let userRepository: MockRepository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService, UserRepository],
+      providers: [
+        UsersService,
+        { provide: getRepositoryToken(User), useValue: MockUserRepository() },
+      ],
     }).compile();
 
     userService = module.get<UsersService>(UsersService);
-    userRepository = module.get<UserRepository>(UserRepository);
+    userRepository = module.get<MockRepository<User>>(getRepositoryToken(User));
   });
 
   it('should be defined', () => {

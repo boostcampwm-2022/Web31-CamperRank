@@ -3,18 +3,22 @@ import { CreateProblemDto } from './dto/create-problem.dto';
 import { UpdateProblemDto } from './dto/update-problem.dto';
 import { Problem } from './entities/problem.entity';
 import { SimpleProblemDto } from './dto/simple-problem.dto';
-import { ProblemRepository } from './problem.repository';
 import { IFindProblemOptions } from './dto/findAllWithPaging.interface';
-import { SolvedRepository } from '../solved/solved.repository';
-import { UserRepository } from '../users/user.repository';
 import { isFalsy } from '../utils/boolUtils';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Solved } from '../solved/entities/solved.entity';
+import { Repository } from 'typeorm';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class ProblemService {
   constructor(
-    private readonly problemRepository: ProblemRepository,
-    private readonly solvedRepository: SolvedRepository,
-    private readonly userRepository: UserRepository,
+    @InjectRepository(Problem)
+    private readonly problemRepository: Repository<Problem>,
+    @InjectRepository(Solved)
+    private readonly solvedRepository: Repository<Solved>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async create(createProblemDto: CreateProblemDto) {
@@ -67,7 +71,6 @@ export class ProblemService {
         .take(take)
         .getRawMany();
     }
-    // console.log(problemList);
 
     return problemList.map((value: any) => {
       return new SimpleProblemDto(value);

@@ -6,19 +6,24 @@ import { SimpleSolvedDto } from './dto/simple-solved.dto';
 import { isFalsy } from '../utils/boolUtils';
 import { SolvedResult } from './entities/SolvedResult.enum';
 import { GradeSolvedDto } from './dto/grade-solved.dto';
-import { SolvedRepository } from './solved.repository';
-import { UserRepository } from '../users/user.repository';
-import { TestCaseRepository } from '../test-case/test-case.repository';
-import { ProblemRepository } from '../problem/problem.repository';
 import { FindSolvedByOpt } from './dto/findSolvedByOpt.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Problem } from '../problem/entities/problem.entity';
+import { Repository } from 'typeorm';
+import { TestCase } from '../test-case/entities/test-case.entity';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class SolvedService {
   constructor(
-    private readonly solvedRepository: SolvedRepository,
-    private readonly problemRepository: ProblemRepository,
-    private readonly userRepository: UserRepository,
-    private readonly testCaseRepository: TestCaseRepository,
+    @InjectRepository(Solved)
+    private readonly solvedRepository: Repository<Solved>,
+    @InjectRepository(Problem)
+    private readonly problemRepository: Repository<Problem>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    @InjectRepository(TestCase)
+    private readonly testCaseRepository: Repository<TestCase>,
   ) {}
 
   async create(createSolvedDto: CreateSolvedDto) {
