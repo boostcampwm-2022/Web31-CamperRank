@@ -3,14 +3,13 @@ import gradeRouter from "./routes/grade.route";
 import cors from "cors";
 import compression from "compression";
 import methodOverride from "method-override";
-import * as http from "http";
 
 const app = express();
 
-const corsOptions = {
-  origin: "*",
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: "*",
+//   credentials: true,
+// };
 
 app.use(cors());
 
@@ -32,4 +31,12 @@ app.use("/grade-server", gradeRouter);
 // };
 //
 // https.createServer(httpsOptions, app).listen(4000);
-http.createServer(app).listen(4000);
+// http.createServer(app).listen(4000);
+
+app.listen("4000", () => {
+  console.log(`
+  ################################################
+  🛡️  Server listening on port: 4000🛡️
+  ################################################
+`);
+});
