@@ -51,6 +51,7 @@ text-align: center;
 & + & {
   margin-top: 3px;
 }
+z-index: 2;
 `
 
 const Text = styled.div`
@@ -62,8 +63,8 @@ left: 6rem;
 `
 
 type ConstraintsType = {
-  audio: boolean,
-  video: boolean | Object,
+  audio?: boolean,
+  video?: boolean | Object,
 }
 
 const videoSize = {
@@ -86,8 +87,8 @@ export const Video = () => {
   const { roomNumber } = useParams();
   const [myID, setMyID] = useState("");
   const [peers, setPeers] = useState<any>({});
-  const [videoOn, setVideoOn] = useState(true);
-  const [micOn, setMicOn] = useState(true);
+  const [videoOn, setVideoOn] = useState(false);
+  const [micOn, setMicOn] = useState(false);
   const [text, setText] = useState('');
   const peerVideosRef = useRef<Array<HTMLVideoElement>>([]);
   const navigate = useNavigate();
@@ -239,40 +240,37 @@ export const Video = () => {
   }
   
   const handleCameraButton = () => {
-    let updateConstraints = {
-      ...Constraints,
-    }
+    let updateConstraints: ConstraintsType = {
+      audio: micOn,
+    };
     if (!videoOn) updateConstraints.video = videoSize;
     else updateConstraints.video = false;
     setTimeoutText(`카메라 ${!videoOn ? 'ON' : 'OFF'}`)
+    setVideoOn(!videoOn);
     navigator.mediaDevices.getUserMedia(updateConstraints).then((mediaStream) => {
-      setVideoOn(!videoOn);
       setMyStream(mediaStream);
-    });
+    }).catch(err => setMyStream(undefined));
   }
 
   const handleMicButton = () => {
-    let updateConstraints = {
-      ...Constraints,
-    }
+    let updateConstraints: ConstraintsType = {};
+    updateConstraints.video = videoOn ? videoSize : false;
     updateConstraints.audio = !micOn;
     setTimeoutText(`마이크 ${!micOn ? 'ON' : 'OFF'}`)
+    setMicOn(!micOn);
     navigator.mediaDevices.getUserMedia(updateConstraints).then((mediaStream) => {
-      setMicOn(!micOn);
       setMyStream(mediaStream);
-    });
+    }).catch(err => setMyStream(undefined));
   }
 
   return (
     <VideoContainer>
       <DivWrapper>
         <UserVideoContainer ref={videoRef} autoPlay muted playsInline />
-        {myStream && (
           <ButtonContainer>
             <ControllButton onClick={handleMicButton}>{micOn ? '🔊' : '🔇'}</ControllButton>
             <ControllButton onClick={handleCameraButton}>{!videoOn ? '🔴' : '⬛️'}</ControllButton>
           </ButtonContainer>
-        )}
         <Text>{text}</Text>
       </DivWrapper>
       {Object.entries(peers).map((user, idx) => (
