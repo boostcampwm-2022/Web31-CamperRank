@@ -51,10 +51,7 @@ const ProblemList = () => {
     fetch(fetchURL)
     .then(res => res.json())
     .then(res => {
-      if (res.statusCode === 200) {
-        delete res.statusCode;
-        setList(Object.values(res));
-      }
+      setList(Object.values(res));
     })
   }, [user]);
   
