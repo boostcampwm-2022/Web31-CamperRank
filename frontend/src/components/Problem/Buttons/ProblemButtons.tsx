@@ -87,8 +87,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     })
       .then((res) => res.json())
       .then((response) => {
-        if (Object.keys(response).length == 1) throw new Error();
-        if (response.statusCode !== 200) throw new Error();
+        if (Object.keys(response).length == 0) throw new Error();
         setGrading({
           status: 'complete',
           result:response,
@@ -119,8 +118,6 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     })
       .then((res) => res.json())
       .then((response) => {
-        console.log(response);
-        if (response.statusCode !== 200) throw new Error();
         setGrading({
           status: 'complete',
           result: response,

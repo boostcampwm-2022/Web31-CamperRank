@@ -36,13 +36,6 @@ const ProblemListWrapper = styled.div`
   width: 95%;
 `;
 
-const problem = {
-  level: 1,
-  title: "A + B = ?",
-  description: "Lv1, Python, Javascript, Success Rate: 95.12%",
-  id: 1
-};
-
 const List = () => {
   const [user] = useRecoilState(userState);
   const [problems, setProblems] = useState<ProblemInfo[]>([]);
@@ -52,10 +45,7 @@ const List = () => {
     fetch(fetchURL)
     .then(res => res.json())
     .then(res => {
-      if (res.statusCode === 200) {
-        delete res.statusCode;
-        setProblems(Object.values(res));
-      }
+      setProblems(Object.values(res));
     })
   }, [user]);
   return (

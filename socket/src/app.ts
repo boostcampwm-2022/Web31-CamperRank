@@ -31,6 +31,11 @@ io.on('connection', (socket) => {
       socket.to(roomId).emit('user-disconnected', userId);
     });
   });
+
+  socket.on('change-webrtc', (roomId, userId) => {
+    console.log(roomId, userId);
+    socket.to(roomId).emit('change-webrtc', userId);
+  });
 });
 
 app.use(express.urlencoded({ extended: true }));

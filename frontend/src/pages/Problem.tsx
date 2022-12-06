@@ -233,7 +233,6 @@ function solution(param) {
     fetch(`${URL}/problem/${id}`)
       .then((res) => res.json())
       .then((res) => {
-        if (res.statusCode !== 200) throw new Error();
         const {level, title, description} = res;
         setProblem({level, title, description});
       })

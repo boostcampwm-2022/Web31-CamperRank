@@ -100,7 +100,6 @@ const Result = () => {
     if (!grading.result) return;
     if (grading.kind === "테스트") {
       let resArr = Object.entries(grading.result);
-      resArr = resArr.slice(0, resArr.length - 1);
       setCases(resArr);
       console.log(resArr, grading.result);
       let cnt = 0;
