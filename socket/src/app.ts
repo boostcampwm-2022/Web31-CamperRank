@@ -15,14 +15,19 @@ const io = new Server(httpServer, {
 });
 
 io.on('connection', (socket) => {
+  console.log("user joined");
   socket.on('join-room', (roomId, userId) => {
     if (
       io.sockets.adapter.rooms.get(roomId) &&
       io.sockets.adapter.rooms.get(roomId)!.size >= 3
     ) {
+      console.log('userId', userId);
       socket.emit('full');
       return;
     }
+
+    console.log('userId', userId);
+    console.log('roomId', roomId);
 
     socket.join(roomId);
     socket.to(roomId).emit('user-connected', userId);
@@ -33,7 +38,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('change-webrtc', (roomId, userId) => {
-    console.log(roomId, userId);
+    console.log('userId', userId);
+    console.log('roomId', roomId);
     socket.to(roomId).emit('change-webrtc', userId);
   });
 });
@@ -41,3 +47,11 @@ io.on('connection', (socket) => {
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
+
+// app.listen('3333', () => {
+//   console.log(`
+//   ################################################
+//   🛡️  Server listening on port: 3333🛡️
+//   ################################################
+// `);
+// });

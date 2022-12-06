@@ -7,8 +7,9 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
-import { Peer } from "peerjs";
-import { useNavigate, useParams } from "react-router-dom";
+import {Peer} from "peerjs";
+import {useNavigate, useParams} from "react-router-dom";
+import * as path from "path";
 
 const VideoContainer = styled.div`
   margin-top: 1rem;
@@ -33,7 +34,7 @@ const UserVideoContainer = styled.video`
 `;
 
 const DivWrapper = styled.div`
-position: relative;
+  position: relative;
 `
 
 const ButtonContainer = styled.div`
@@ -43,23 +44,25 @@ const ButtonContainer = styled.div`
 `
 
 const ControllButton = styled.div`
-cursor: pointer;
-width: 100%;
-display: block;
-font-size: 1rem;
-text-align: center;
-& + & {
-  margin-top: 3px;
-}
-z-index: 2;
+  cursor: pointer;
+  width: 100%;
+  display: block;
+  font-size: 1rem;
+  text-align: center;
+
+  & + & {
+    margin-top: 3px;
+  }
+
+  z-index: 2;
 `
 
 const Text = styled.div`
-font-size: 0.8rem;
-color: #777777;
-position: absolute;
-bottom: -1rem;
-left: 6rem;
+  font-size: 0.8rem;
+  color: #777777;
+  position: absolute;
+  bottom: -1rem;
+  left: 6rem;
 `
 
 type ConstraintsType = {
@@ -76,7 +79,7 @@ const videoSize = {
   },
 }
 
-const Constraints : ConstraintsType= {
+const Constraints: ConstraintsType = {
   video: videoSize,
   audio: true,
 };
@@ -84,7 +87,7 @@ const Constraints : ConstraintsType= {
 export const Video = () => {
   const [myStream, setMyStream] = useState<MediaStream | undefined>();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { roomNumber } = useParams();
+  const {roomNumber} = useParams();
   const [myID, setMyID] = useState("");
   const [peers, setPeers] = useState<any>({});
   const [videoOn, setVideoOn] = useState(false);
@@ -94,7 +97,9 @@ export const Video = () => {
   const navigate = useNavigate();
 
   const myPeer = useMemo(() => new Peer(), []);
-  const socket = useMemo(() => io(import.meta.env.VITE_SOCKET_SERVER_URL), []);
+  const socket = useMemo(() => io(import.meta.env.VITE_SOCKET_SERVER_URL, {
+    secure: true
+  }), []);
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia(Constraints).then((mediaStream) => {
@@ -103,7 +108,7 @@ export const Video = () => {
       setMyStream(mediaStream);
     });
   }, []);
-  
+
   //새로 접속한 피어 여기로
   const callCallback = useCallback(
     (call: any) => {
@@ -163,7 +168,7 @@ export const Video = () => {
         return;
       }
       peers[userId].close();
-      const temp = { ...peers };
+      const temp = {...peers};
       delete temp[userId];
       setPeers(temp);
     },
@@ -239,7 +244,7 @@ export const Video = () => {
     setText(text);
     setTimeout(() => setText(''), 1500);
   }
-  
+
   const handleCameraButton = () => {
     let updateConstraints: ConstraintsType = {
       audio: micOn,
@@ -254,7 +259,7 @@ export const Video = () => {
       })
       .catch(err => setMyStream(undefined))
       .finally(() => socket.emit('change-webrtc', roomNumber, myID));
-    }
+  }
 
   const handleMicButton = () => {
     let updateConstraints: ConstraintsType = {};
@@ -273,11 +278,11 @@ export const Video = () => {
   return (
     <VideoContainer>
       <DivWrapper>
-        <UserVideoContainer ref={videoRef} autoPlay muted playsInline />
-          <ButtonContainer>
-            <ControllButton onClick={handleMicButton}>{micOn ? '🔊' : '🔇'}</ControllButton>
-            <ControllButton onClick={handleCameraButton}>{!videoOn ? '🔴' : '⬛️'}</ControllButton>
-          </ButtonContainer>
+        <UserVideoContainer ref={videoRef} autoPlay muted playsInline/>
+        <ButtonContainer>
+          <ControllButton onClick={handleMicButton}>{micOn ? '🔊' : '🔇'}</ControllButton>
+          <ControllButton onClick={handleCameraButton}>{!videoOn ? '🔴' : '⬛️'}</ControllButton>
+        </ButtonContainer>
         <Text>{text}</Text>
       </DivWrapper>
       {Object.entries(peers).map((user, idx) => (
