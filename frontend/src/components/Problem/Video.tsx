@@ -25,7 +25,6 @@ const UserVideoContainer = styled.video`
   max-width: 16rem;
   max-height: 9rem;
   border: 3px inset;
-  margin-right: 2rem;
   box-sizing: border-box;
 
   :last-child {
@@ -33,15 +32,52 @@ const UserVideoContainer = styled.video`
   }
 `;
 
-const Constraints = {
-  video: {
-    width: {
-      ideal: 1280,
-    },
-    height: {
-      ideal: 720,
-    },
+const DivWrapper = styled.div`
+position: relative;
+`
+
+const ButtonContainer = styled.div`
+  position: absolute;
+  left: 0.6rem;
+  bottom: 0.9rem;
+`
+
+const ControllButton = styled.div`
+cursor: pointer;
+width: 100%;
+display: block;
+font-size: 1rem;
+text-align: center;
+& + & {
+  margin-top: 3px;
+}
+z-index: 2;
+`
+
+const Text = styled.div`
+font-size: 0.8rem;
+color: #777777;
+position: absolute;
+bottom: -1rem;
+left: 6rem;
+`
+
+type ConstraintsType = {
+  audio?: boolean,
+  video?: boolean | Object,
+}
+
+const videoSize = {
+  width: {
+    ideal: 1280,
   },
+  height: {
+    ideal: 720,
+  },
+}
+
+const Constraints : ConstraintsType= {
+  video: videoSize,
   audio: true,
 };
 
@@ -51,6 +87,9 @@ export const Video = () => {
   const { roomNumber } = useParams();
   const [myID, setMyID] = useState("");
   const [peers, setPeers] = useState<any>({});
+  const [videoOn, setVideoOn] = useState(false);
+  const [micOn, setMicOn] = useState(false);
+  const [text, setText] = useState('');
   const peerVideosRef = useRef<Array<HTMLVideoElement>>([]);
   const navigate = useNavigate();
 
@@ -59,16 +98,20 @@ export const Video = () => {
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia(Constraints).then((mediaStream) => {
+      setVideoOn(true);
+      setMicOn(true);
       setMyStream(mediaStream);
     });
   }, []);
-
+  
+  //새로 접속한 피어 여기로
   const callCallback = useCallback(
     (call: any) => {
       console.log(`callCallback`);
       console.log(`callerID: ${call.peer}`);
-      call.answer(myStream);
+      call.answer(myStream); //송신자에게 stream 전달
       call.on("stream", () => {
+        console.log('stream', call.peer);
         setPeers({
           ...peers,
           ...{
@@ -84,6 +127,7 @@ export const Video = () => {
     [myStream, peers]
   );
 
+  //기존 접속한 peer 여기로
   const connectCallback = useCallback(
     (userId: string) => {
       console.log(`connectCallback`);
@@ -91,8 +135,10 @@ export const Video = () => {
       if (!myStream) {
         return;
       }
+      console.log('myStream CALL')
       const call = myPeer.call(userId, myStream);
       call.on("stream", () => {
+        console.log('get stream');
         setPeers({
           ...peers,
           ...{
@@ -139,6 +185,7 @@ export const Video = () => {
     }
     myPeer.on("call", callCallback);
     socket.on("user-connected", connectCallback);
+    socket.on("change-webrtc", connectCallback);
     return () => {
       myPeer.off("call", callCallback);
       socket.off("user-connected", connectCallback);
@@ -153,15 +200,14 @@ export const Video = () => {
   }, [disconnectCallback]);
 
   useEffect(() => {
-    console.log(myPeer);
     myPeer.on("open", (id) => {
       setMyID(id);
-      console.log(roomNumber);
+      console.log('roomnumber, id', roomNumber, id);
       socket.emit("join-room", roomNumber, id);
-      console.log(`myID: ${id}`);
     });
   }, []);
 
+  //video remoteStream
   useEffect(() => {
     Object.values(peers).forEach((call, idx) => {
       // @ts-ignore
@@ -189,9 +235,51 @@ export const Video = () => {
     };
   }, [myStream]);
 
+  const setTimeoutText = (text: string) => {
+    setText(text);
+    setTimeout(() => setText(''), 1500);
+  }
+  
+  const handleCameraButton = () => {
+    let updateConstraints: ConstraintsType = {
+      audio: micOn,
+    };
+    if (!videoOn) updateConstraints.video = videoSize;
+    else updateConstraints.video = false;
+    setTimeoutText(`카메라 ${!videoOn ? 'ON' : 'OFF'}`)
+    setVideoOn(!videoOn);
+    navigator.mediaDevices.getUserMedia(updateConstraints)
+      .then((mediaStream) => {
+        setMyStream(mediaStream);
+      })
+      .catch(err => setMyStream(undefined))
+      .finally(() => socket.emit('change-webrtc', roomNumber, myID));
+    }
+
+  const handleMicButton = () => {
+    let updateConstraints: ConstraintsType = {};
+    updateConstraints.video = videoOn ? videoSize : false;
+    updateConstraints.audio = !micOn;
+    setTimeoutText(`마이크 ${!micOn ? 'ON' : 'OFF'}`)
+    setMicOn(!micOn);
+    navigator.mediaDevices.getUserMedia(updateConstraints)
+      .then((mediaStream) => {
+        setMyStream(mediaStream);
+      })
+      .catch(err => setMyStream(undefined))
+      .finally(() => socket.emit('change-webrtc', roomNumber, myID));
+  }
+
   return (
     <VideoContainer>
-      <UserVideoContainer ref={videoRef} autoPlay muted playsInline />
+      <DivWrapper>
+        <UserVideoContainer ref={videoRef} autoPlay muted playsInline />
+          <ButtonContainer>
+            <ControllButton onClick={handleMicButton}>{micOn ? '🔊' : '🔇'}</ControllButton>
+            <ControllButton onClick={handleCameraButton}>{!videoOn ? '🔴' : '⬛️'}</ControllButton>
+          </ButtonContainer>
+        <Text>{text}</Text>
+      </DivWrapper>
       {Object.entries(peers).map((user, idx) => (
         <UserVideoContainer
           autoPlay

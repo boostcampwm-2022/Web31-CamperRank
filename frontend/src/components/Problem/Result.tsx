@@ -102,8 +102,19 @@ const Result = () => {
       let resArr = Object.entries(grading.result);
       resArr = resArr.slice(0, resArr.length - 1);
       setCases(resArr);
-      const results = resArr.filter((elem) => elem[1].resultCode === 1000);
-      setNumber(results.length);
+      console.log(resArr, grading.result);
+      let cnt = 0;
+      let index = 0;
+      while(true) {
+        if (grading.result[index]) {
+          const obj = grading.result[index];
+          const {resultCode} = obj;
+          if (resultCode === 1000) cnt++;
+          index++;
+        }
+        else break;
+      }
+      setNumber(cnt);
     } else {
       if (grading.kind === "제출") {
         const { solvedResult } = grading.result;

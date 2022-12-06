@@ -48,7 +48,6 @@ const List = () => {
   const [problems, setProblems] = useState<ProblemInfo[]>([]);
   useEffect(() => {
     const {ID} = user;
-    console.log(ID);
     const fetchURL = ID ? `${URL}/problem/random?loginId=${ID}` : `${URL}/problem/random`;
     fetch(fetchURL)
     .then(res => res.json())
