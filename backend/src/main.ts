@@ -9,11 +9,7 @@ async function bootstrap() {
     cert: fs.readFileSync(process.env.HTTPS_PUBLIC_CERTIFICATE),
   };
 
-  const app = await NestFactory.create(AppModule, { httpsOptions });
-  const isDevMode = process.env.NODE_ENV === 'development';
-  if (isDevMode) {
-    app.enableCors();
-  }
+  const app = await NestFactory.create(AppModule, { httpsOptions, cors: true });
 
   app.setGlobalPrefix('api');
   const swaggerDocumentBuilder = new DocumentBuilder()
