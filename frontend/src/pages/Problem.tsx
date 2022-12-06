@@ -8,6 +8,8 @@ import {ProblemInfo} from "@types";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {editorState, gradingState, userState} from "../recoils";
 import {Video} from "../components/Problem/Video";
+import editorColors from "../utils/editorColors";
+import LanguageSelector from "../components/Problem/LanguageSelector";
 
 import * as Y from 'yjs'
 // @ts-ignore
@@ -22,17 +24,6 @@ import {indentWithTab} from "@codemirror/commands"
 
 import * as random from 'lib0/random'
 import {useUserState} from "../hooks/useUserState";
-
-const usercolors = [
-  {color: '#30bced', light: '#30bced33'},
-  {color: '#6eeb83', light: '#6eeb8333'},
-  {color: '#ffbc42', light: '#ffbc4233'},
-  {color: '#ecd444', light: '#ecd44433'},
-  {color: '#ee6352', light: '#ee635233'},
-  {color: '#9ac2c9', light: '#9ac2c933'},
-  {color: '#8acb88', light: '#8acb8833'},
-  {color: '#1be7ff', light: '#1be7ff33'}
-]
 
 const Wrapper = styled.div`
   width: 100%;
@@ -192,7 +183,7 @@ const Problem = () => {
     ]
   }, []);
   const undoManager = useMemo(() => new Y.UndoManager(ytext), []);
-  const userColor = useMemo(() => usercolors[random.uint32() % usercolors.length], []);
+  const userColor = useMemo(() => editorColors[random.uint32() % editorColors.length], []);
   const defaultCode = `/*
  함수 내부에 실행 코드를 작성하세요
 */
@@ -370,6 +361,7 @@ function solution(param) {
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
           <EditorWrapper ref={editorRef}>
+            <LanguageSelector/>
           </EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>

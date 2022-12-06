@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { FilterButton } from "../../../assets/icons";
+import { SelectButton } from "../../../assets/icons";
 import Modal from "./Modal";
 import { FilterType } from "@types";
 import { useRecoilState } from "recoil";
@@ -40,7 +40,7 @@ const Filter = ({ content }: FilterType) => {
     <FilterWrapper>
       {name === "상태" ? solved : level}
       <ModalButton
-        src={FilterButton}
+        src={SelectButton}
         onClick={() => setOpen(!open)}
       ></ModalButton>
       {open && (
