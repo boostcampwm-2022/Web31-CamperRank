@@ -4,8 +4,13 @@ import { editorState } from "../../recoils";
 import {useRecoilState} from "recoil";
 import { SelectButton } from "../../assets/icons";
 
+type SelectorProp = {
+  onClickModalElement: (str: string) => void;
+}
+
 type ModalProp = {
   onClickElement: (str: string) => void;
+  onClickModalElement: (str: string) => void;
 }
 
 const SelectorWrapper = styled.div`
@@ -60,8 +65,11 @@ const ModalElement = styled.div`
   }
 `;
 
-const Modal = ({onClickElement}: ModalProp) => {
-  const handleClickElement = (str: string) => onClickElement(str);
+const Modal = ({onClickElement, onClickModalElement}: ModalProp) => {
+  const handleClickElement = (str: string) => {
+    //onClickModalElement(str);
+    onClickElement(str);
+  }
   return (
     <>
     <ModalWrapper>
@@ -72,7 +80,7 @@ const Modal = ({onClickElement}: ModalProp) => {
   );
 };
 
-const LanguageSelector = () => {
+const LanguageSelector = ({onClickModalElement}: SelectorProp) => {
   const [editor, setEditor] = useRecoilState(editorState);
   const [open, setOpen] = useState(false);
   const selectorRef = useRef<HTMLDivElement>(null);
@@ -85,7 +93,9 @@ const LanguageSelector = () => {
   
   const handleClickWrapper = () => setOpen(!open);
   
-  const handleModalElement = (language: string) => setEditor({...editor, language})
+  const handleModalElement = (language: string) => {
+    setEditor({...editor, language})
+  };
   
   useEffect(() => {
     window.addEventListener("click", handleClickOutside);
@@ -98,7 +108,7 @@ const LanguageSelector = () => {
     <SelectorWrapper ref={selectorRef} onClick={handleClickWrapper}>
       {language ? language : 'Language'}
       <ModalButton src={SelectButton} />
-      {open && <Modal onClickElement={handleModalElement}/>}
+      {open && <Modal onClickElement={handleModalElement} onClickModalElement={onClickModalElement}/>}
     </SelectorWrapper>
   );
 }

@@ -10,6 +10,7 @@ import {editorState, gradingState, userState} from "../recoils";
 import {Video} from "../components/Problem/Video";
 import editorColors from "../utils/editorColors";
 import LanguageSelector from "../components/Problem/LanguageSelector";
+import defaultCodes from "../utils/defaultCode";
 
 import * as Y from 'yjs'
 // @ts-ignore
@@ -184,6 +185,8 @@ const Problem = () => {
   }, []);
   const undoManager = useMemo(() => new Y.UndoManager(ytext), []);
   const userColor = useMemo(() => editorColors[random.uint32() % editorColors.length], []);
+  const language = useMemo(() => code.language, [code]);
+  
   const defaultCode = `/*
  함수 내부에 실행 코드를 작성하세요
 */
@@ -197,6 +200,10 @@ function solution(param) {
 }`;
 
   useEffect(() => {
+    console.log('code', code);
+  },[code]);
+
+  useEffect(() => {
     if (!isMultiVersion || !!roomNumber) {
       return;
     }
@@ -207,6 +214,15 @@ function solution(param) {
   const clearEditor = () => {
     if (eView) {
       let transaction = eView.state.update({changes: {from: 0, to: eView.state.doc.length, insert: defaultCode}})
+      eView.dispatch(transaction)
+    }
+  }
+
+  const handleChangeEditorLanguage = (language: string) => {
+    if (eView) {
+      let insertCode;
+      if (language === '' || language === 'JavaScript' || language === 'Python') insertCode = defaultCodes[language];
+      let transaction = eView.state.update({changes: {from: 0, to: eView.state.doc.length, insert: insertCode}})
       eView.dispatch(transaction)
     }
   }
@@ -260,7 +276,7 @@ function solution(param) {
       const view = new EditorView({state, parent: editorRef.current});
       setEView(view);
       if(version === 'single') {
-        let transaction = view.state.update({changes: {from: 0, to: view.state.doc.length, insert: defaultCode}})
+        let transaction = view.state.update({changes: {from: 0, to: view.state.doc.length, insert: defaultCodes['']}})
         view.dispatch(transaction)
       }
       else {
@@ -361,7 +377,7 @@ function solution(param) {
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
           <EditorWrapper ref={editorRef}>
-            {eView && <LanguageSelector/>}
+            {eView && <LanguageSelector onClickModalElement={handleChangeEditorLanguage}/>}
           </EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>
