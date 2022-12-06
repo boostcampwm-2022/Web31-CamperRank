@@ -4,6 +4,10 @@ import { editorState } from "../../recoils";
 import {useRecoilState} from "recoil";
 import { SelectButton } from "../../assets/icons";
 
+type ModalProp = {
+  onClickElement: (str: string) => void;
+}
+
 const SelectorWrapper = styled.div`
   position: absolute;
   top: 1.2rem;
@@ -56,12 +60,15 @@ const ModalElement = styled.div`
   }
 `;
 
-const Modal = () => {
+const Modal = ({onClickElement}: ModalProp) => {
+  const handleClickElement = (str: string) => onClickElement(str);
   return (
+    <>
     <ModalWrapper>
-      <ModalElement>JavaScript</ModalElement>
-      <ModalElement>Python</ModalElement>
+      <ModalElement onClick={() => handleClickElement('JavaScript')}>JavaScript</ModalElement>
+      <ModalElement onClick={() => handleClickElement('Python')}>Python</ModalElement>
     </ModalWrapper>
+    </>
   );
 };
 
@@ -69,12 +76,16 @@ const LanguageSelector = () => {
   const [editor, setEditor] = useRecoilState(editorState);
   const [open, setOpen] = useState(false);
   const selectorRef = useRef<HTMLDivElement>(null);
+  const {language} = editor;
   const handleClickOutside = ({ target }: any) => {
     if (!selectorRef.current || !selectorRef.current.contains(target)) {
       setOpen(false);
     }
   };
+  
   const handleClickWrapper = () => setOpen(!open);
+  
+  const handleModalElement = (language: string) => setEditor({...editor, language})
   
   useEffect(() => {
     window.addEventListener("click", handleClickOutside);
@@ -83,15 +94,11 @@ const LanguageSelector = () => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log(editor);
-  }, [editor])
-
   return (
     <SelectorWrapper ref={selectorRef} onClick={handleClickWrapper}>
-      JavaScript
+      {language ? language : 'Language'}
       <ModalButton src={SelectButton} />
-      {open && <Modal />}
+      {open && <Modal onClickElement={handleModalElement}/>}
     </SelectorWrapper>
   );
 }
