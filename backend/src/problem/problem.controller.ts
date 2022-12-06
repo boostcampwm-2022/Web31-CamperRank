@@ -88,6 +88,8 @@ export class ProblemController {
     const simpleProblemDtoList = await this.problemService.findAllProblems({
       loginId,
       isRandom: true,
+      skip: 0,
+      take: 6,
     });
 
     return { ...simpleProblemDtoList };
