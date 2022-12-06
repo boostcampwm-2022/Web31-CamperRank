@@ -68,9 +68,27 @@ const Modal = () => {
 const LanguageSelector = () => {
   const [editor, setEditor] = useRecoilState(editorState);
   const [open, setOpen] = useState(false);
+  const selectorRef = useRef<HTMLDivElement>(null);
+  const handleClickOutside = ({ target }: any) => {
+    if (!selectorRef.current || !selectorRef.current.contains(target)) {
+      setOpen(false);
+    }
+  };
+  const handleClickWrapper = () => setOpen(!open);
+  
+  useEffect(() => {
+    window.addEventListener("click", handleClickOutside);
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(editor);
+  }, [editor])
 
   return (
-    <SelectorWrapper onClick={() => setOpen(!open)}>
+    <SelectorWrapper ref={selectorRef} onClick={handleClickWrapper}>
       JavaScript
       <ModalButton src={SelectButton} />
       {open && <Modal />}

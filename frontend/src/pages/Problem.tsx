@@ -361,7 +361,7 @@ function solution(param) {
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
           <EditorWrapper ref={editorRef}>
-            <LanguageSelector/>
+            {eView && <LanguageSelector/>}
           </EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>
