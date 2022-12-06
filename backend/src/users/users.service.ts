@@ -6,6 +6,7 @@ import { SimpleUserDto } from './dto/simple-user.dto';
 import { IFindUserOption } from './dto/find-option-user.interface';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { isFalsy } from '../utils/boolUtils';
 
 @Injectable()
 export class UsersService {
@@ -14,13 +15,11 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const foundUsers = await this.usersRepository.find({
-      where: {
-        loginId: createUserDto.loginId,
-      },
+    const foundUsers = await this.usersRepository.findOneBy({
+      loginId: createUserDto.loginId,
     });
 
-    if (foundUsers.length > 0) {
+    if (foundUsers === null) {
       return null;
     }
 
@@ -35,13 +34,15 @@ export class UsersService {
   }
 
   async findOneUser({ userId, loginId }: IFindUserOption) {
-    const foundUsers = await this.usersRepository.find({
-      where: {
-        id: userId,
-        loginId: loginId,
-      },
+    if (isFalsy(userId) && isFalsy(loginId)) {
+      return null;
+    }
+
+    const foundUsers = await this.usersRepository.findOneBy({
+      id: userId,
+      loginId: loginId,
     });
 
-    return foundUsers.length === 1 ? new SimpleUserDto(foundUsers[0]) : null;
+    return foundUsers !== null ? new SimpleUserDto(foundUsers) : null;
   }
 }
