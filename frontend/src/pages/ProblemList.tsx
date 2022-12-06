@@ -62,7 +62,10 @@ const ProblemList = () => {
     const { solved, level, search } = filter;
     let filtered = [...list];
     if (level && level !== "문제 레벨") filtered = filtered.filter((elem) => elem.level === +level.slice(-1));
-    if (search && search !== "") filtered = filtered.filter((elem) => elem.title.includes(search));
+    if (search && search !== "") filtered = filtered.filter((elem) => {
+      if (elem.title) return elem.title.includes(search);
+      else return false;
+    });
     if (solved && solved !== '푼 상태') filtered = filtered.filter((elem) => {
       return solved === '푼 문제'? elem.isSolved === true : elem.isSolved === false;
     });

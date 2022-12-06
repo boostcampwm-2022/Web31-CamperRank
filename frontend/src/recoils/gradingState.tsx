@@ -1,15 +1,15 @@
 import { atom } from "recoil";
 
 type TestCase = {
-  testCaseNumber: string;
+  testCaseNumber?: string;
   userPrint?: string;
-  resultCode: number;
+  resultCode?: number;
   userAnswer?: string;
 }
 
 type Result = {
   [key: number] : TestCase;
-  statusCode: number;
+  statusCode?: number;
   solvedId?: number;
   solvedResult?: string;
 };
