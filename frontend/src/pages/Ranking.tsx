@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useUserState } from '../hooks/useUserState';
 import { MyInfo } from '../components/Ranking/MyInfo';
+import { RankDiv } from '../components/Ranking/Rank';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -72,7 +73,10 @@ export const Ranking = () => {
       <HeaderWrapper>
         <MainHeader></MainHeader>
       </HeaderWrapper>
-      <ContentWrapper>{isLoggedIn && <MyInfo />}</ContentWrapper>
+      <ContentWrapper>
+        {isLoggedIn && <MyInfo />}
+        <RankDiv />
+      </ContentWrapper>
       <FooterWrapper>
         <Footer />
       </FooterWrapper>
