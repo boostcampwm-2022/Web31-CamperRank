@@ -24,14 +24,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/grade-server", gradeRouter);
 
-// const httpsOptions = {
-//   ca: fs.readFileSync(process.env.HTTPS_FULLCHAIN || ""),
-//   key: fs.readFileSync(process.env.HTTPS_PRIVATE_KEY || ""),
-//   cert: fs.readFileSync(process.env.HTTPS_PUBLIC_CERTIFICATE || ""),
-// };
-//
-// https.createServer(httpsOptions, app).listen(4000);
-// http.createServer(app).listen(4000);
 
 app.listen("4000", () => {
   console.log(`

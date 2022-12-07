@@ -19,7 +19,7 @@ export class UsersService {
       loginId: createUserDto.loginId,
     });
 
-    if (foundUsers === null) {
+    if (foundUsers !== null) {
       return null;
     }
 
