@@ -1,38 +1,31 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { PageButtons, ProblemButtons } from '../components/Problem/Buttons';
-import { ProblemHeader } from '../components/ProblemHeader';
-import { ProblemContent, Result } from '../components/Problem';
-import { ProblemInfo } from '@types';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { editorState, gradingState, userState } from '../recoils';
-import { Video } from '../components/Problem/Video';
+import React, {useState, useRef, useEffect, useMemo} from "react";
+import {useParams, useNavigate} from "react-router-dom";
+import styled from "styled-components";
+import {PageButtons, ProblemButtons} from "../components/Problem/Buttons";
+import {ProblemHeader} from "../components/ProblemHeader";
+import {ProblemContent, Result} from "../components/Problem";
+import {ProblemInfo} from "@types";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {editorState, gradingState, userState} from "../recoils";
+import {Video} from "../components/Problem/Video";
+import editorColors from "../utils/editorColors";
+import LanguageSelector from "../components/Problem/LanguageSelector";
+import defaultCodes from "../utils/defaultCode";
 
-import * as Y from 'yjs';
+import * as Y from 'yjs'
 // @ts-ignore
-import { yCollab } from 'y-codemirror.next';
-import { WebrtcProvider } from 'y-webrtc';
+import {yCollab} from 'y-codemirror.next'
+import {WebrtcProvider} from 'y-webrtc'
 
-import { EditorView, basicSetup } from 'codemirror';
-import { EditorState } from '@codemirror/state';
-import { javascript } from '@codemirror/lang-javascript';
-import { keymap } from '@codemirror/view';
-import { indentWithTab } from '@codemirror/commands';
+import {EditorView, basicSetup} from "codemirror";
+import {EditorState, Compartment} from "@codemirror/state";
+import {javascript} from '@codemirror/lang-javascript';
+import {python} from '@codemirror/lang-python';
+import {keymap} from '@codemirror/view'
+import {indentWithTab} from "@codemirror/commands"
 
-import * as random from 'lib0/random';
-import { useUserState } from '../hooks/useUserState';
-
-const usercolors = [
-  { color: '#30bced', light: '#30bced33' },
-  { color: '#6eeb83', light: '#6eeb8333' },
-  { color: '#ffbc42', light: '#ffbc4233' },
-  { color: '#ecd444', light: '#ecd44433' },
-  { color: '#ee6352', light: '#ee635233' },
-  { color: '#9ac2c9', light: '#9ac2c933' },
-  { color: '#8acb88', light: '#8acb8833' },
-  { color: '#1be7ff', light: '#1be7ff33' },
-];
+import * as random from 'lib0/random'
+import {useUserState} from "../hooks/useUserState";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -58,9 +51,9 @@ const MainWrapper = styled.div`
   max-height: calc(100vh - 5rem);
   width: 100%;
   flex-grow: 1;
-  border: 2px groove #dadada;
+  border: 2px groove #DADADA;
   display: flex;
-  background: #eef5f0;
+  background: #EEF5F0;
 `;
 
 const PageButtonsWrapper = styled.div`
@@ -123,14 +116,13 @@ const EditorWrapper = styled.div`
     outline: none;
   }
 
-  .cm-activeLine,
-  .cm-activeLineGutter {
+  .cm-activeLine, .cm-activeLineGutter {
     background: none;
   }
 
   .cm-editor {
-    border: 2px double #cbcbcb;
-    background: #f5fdf8;
+    border: 2px double #CBCBCB;
+    background: #F5FDF8;
     border-radius: 5px;
     min-height: 95%;
   }
@@ -153,14 +145,14 @@ const ColSizeController = styled.div`
   height: 100%;
   width: 1%;
   cursor: col-resize;
-  background: #dce2de;
+  background: #DCE2DE;
 `;
 
 const RowSizeController = styled.div`
   width: 100%;
   height: 1vw;
   cursor: row-resize;
-  background: #dce2de;
+  background: #DCE2DE;
 `;
 
 const URL = import.meta.env.VITE_SERVER_URL;
@@ -176,9 +168,9 @@ const Problem = () => {
   const [eState, setEState] = useState<EditorState>();
   const [eView, setEView] = useState<EditorView>();
   const [problem, setProblem] = useState<ProblemInfo>();
-  const { id, version } = useParams();
-  const [isMultiVersion] = useState(version === 'multi');
-  const { roomNumber } = isMultiVersion ? useParams() : { roomNumber: null };
+  const {id, version} = useParams();
+  const [isMultiVersion] = useState(version === "multi");
+  const {roomNumber} = isMultiVersion ? useParams() : {roomNumber: null};
 
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
@@ -188,17 +180,16 @@ const Problem = () => {
   const [provider, ytext] = useMemo(() => {
     return [
       // @ts-ignore
-      isMultiVersion
-        ? new WebrtcProvider(roomNumber, ydoc, { signaling: [webRTCURL] })
-        : null,
-      ydoc.getText('codemirror'),
-    ];
+      isMultiVersion ? new WebrtcProvider(roomNumber, ydoc, {signaling: [webRTCURL]}) : null
+      , ydoc.getText('codemirror')
+    ]
   }, []);
   const undoManager = useMemo(() => new Y.UndoManager(ytext), []);
-  const userColor = useMemo(
-    () => usercolors[random.uint32() % usercolors.length],
-    [],
-  );
+  const userColor = useMemo(() => editorColors[random.uint32() % editorColors.length], []);
+  const [code, setCode] = useRecoilState(editorState);
+  const [language, setLanguage] = useState(code.language);
+  const [text, setText] = useState(code.text);
+
   const defaultCode = `/*
  함수 내부에 실행 코드를 작성하세요
 */
@@ -212,21 +203,48 @@ function solution(param) {
 }`;
 
   useEffect(() => {
+    setCode({...code, text});
+  },[text]);
+
+  useEffect(() => {
+    setLanguage(code.language);
+  }, [code]);
+
+  // useEffect(() => {
+  //   let langObj;
+  //   if (language === 'JavaScript') langObj = new LanguageSupport(javascriptLanguage);
+  //   else langObj = new LanguageSupport(pythonLanguage);
+  //   if (eView) {
+  //     eView.dispatch({
+  //       effects: languageCompartment.reconfigure(langObj)
+  //     })
+  //   }
+  // }, [language])
+
+
+  useEffect(() => {
     if (!isMultiVersion || !!roomNumber) {
       return;
     }
-    alert('올바르지 않은 URL 입니다.');
-    navigate('/');
+    alert("올바르지 않은 URL 입니다.");
+    navigate("/");
   }, [isMultiVersion, roomNumber]);
 
   const clearEditor = () => {
     if (eView) {
-      const transaction = eView.state.update({
-        changes: { from: 0, to: eView.state.doc.length, insert: defaultCode },
-      });
-      eView.dispatch(transaction);
+      let transaction = eView.state.update({changes: {from: 0, to: eView.state.doc.length, insert: defaultCode}})
+      eView.dispatch(transaction)
     }
-  };
+  }
+
+  const handleChangeEditorLanguage = (language: string) => {
+    if (eView) {
+      let insertCode;
+      if (language === '' || language === 'JavaScript' || language === 'Python') insertCode = defaultCodes[language];
+      let transaction = eView.state.update({changes: {from: 0, to: eView.state.doc.length, insert: insertCode}})
+      eView.dispatch(transaction)
+    }
+  }
 
   useUserState();
 
@@ -241,63 +259,52 @@ function solution(param) {
     fetch(`${URL}/problem/${id}`)
       .then((res) => res.json())
       .then((res) => {
-        const { level, title, description } = res;
-        setProblem({ level, title, description });
+        const {level, title, description} = res;
+        setProblem({level, title, description});
       })
       .catch(() => {
-        alert('문제를 불러올 수 없습니다');
-        navigate('/problems');
+        alert("문제를 불러올 수 없습니다");
+        navigate("/problems");
       });
   }, [id]);
 
   useEffect(() => {
-    provider &&
-      provider.awareness.setLocalStateField('user', {
-        name: 'Anonymous ' + Math.floor(Math.random() * 100),
-        color: userColor.color,
-        colorLight: userColor.light,
-      });
+    provider && provider.awareness.setLocalStateField('user', {
+      name: 'Anonymous ' + Math.floor(Math.random() * 100),
+      color: userColor.color,
+      colorLight: userColor.light
+    });
+
+    let language = new Compartment;
 
     const extensions = [
       basicSetup,
-      javascript(),
+      python(),
       keymap.of([indentWithTab]),
       EditorView.updateListener.of(function (e) {
-        setCode({ ...code, text: e.state.doc.toString() });
-      }),
+        setText(e.state.doc.toString());
+      })
     ];
-    provider &&
-      extensions.push(yCollab(ytext, provider.awareness, { undoManager }));
+    provider && extensions.push(yCollab(ytext, provider.awareness, {undoManager}));
 
     const state = EditorState.create({
       doc: ytext.toString(),
-      extensions,
+      extensions
     });
     setEState(state);
 
     if (editorRef.current) {
-      const view = new EditorView({ state, parent: editorRef.current });
+      const view = new EditorView({state, parent: editorRef.current});
       setEView(view);
-      if (version === 'single') {
-        const transaction = view.state.update({
-          changes: { from: 0, to: view.state.doc.length, insert: defaultCode },
-        });
-        view.dispatch(transaction);
-      } else {
+      if(version === 'single') {
+        let transaction = view.state.update({changes: {from: 0, to: view.state.doc.length, insert: defaultCodes['']}})
+        view.dispatch(transaction)
+      }
+      else {
         let transaction;
-        if (code.text == '')
-          transaction = view.state.update({
-            changes: {
-              from: 0,
-              to: view.state.doc.length,
-              insert: defaultCode,
-            },
-          });
-        else
-          transaction = view.state.update({
-            changes: { from: 0, to: 0, insert: '' },
-          });
-        view.dispatch(transaction);
+        if (code.text == '') transaction = view.state.update({changes: {from: 0, to: view.state.doc.length, insert: defaultCode}})
+        else transaction = view.state.update({changes: {from: 0, to: 0, insert: ''}})
+        view.dispatch(transaction)
       }
     }
     return () => {
@@ -306,59 +313,38 @@ function solution(param) {
   }, []);
 
   useEffect(() => {
-    window.addEventListener('resize', handleSize);
+    window.addEventListener("resize", handleSize);
     return () => {
-      window.removeEventListener('resize', handleSize);
+      window.removeEventListener("resize", handleSize);
     };
   }, []);
 
   useEffect(() => {
     setGrade({
       status: 'ready',
-    });
+    })
   }, []);
 
   const handleSize = () => {
-    const PX = +REM.replace('px', '');
-    if (editorRef.current)
-      editorRef.current.style.maxWidth = `${Math.max(
-        80 * PX * 0.485,
-        window.innerWidth * 0.485,
-      )}px`;
-    if (problemRef.current)
-      problemRef.current.style.width = `${Math.max(
-        80 * PX * 0.47,
-        window.innerWidth * 0.47,
-      )}px`;
-  };
+    const PX = +REM.replace("px", "");
+    if (editorRef.current) editorRef.current.style.maxWidth = `${Math.max(80 * PX * 0.485, window.innerWidth * 0.485)}px`;
+    if (problemRef.current) problemRef.current.style.width = `${Math.max(80 * PX * 0.47, window.innerWidth * 0.47)}px`;
+  }
   const resizeProblemWrapper = (x: number) => {
     if (problemRef.current != null && editorRef.current != null) {
       const problemRefWidth = +problemRef.current.style.width.replace('px', '');
-      const editorRefWidth = +editorRef.current.style.maxWidth.replace(
-        'px',
-        '',
-      );
-      const PX = +REM.replace('px', '');
-      if (x > 0.175 * window.innerWidth)
-        problemRef.current.style.width = `${Math.max(
-          80 * PX * 0.15,
-          x - window.innerWidth * 0.032,
-        )}px`;
-      const editorWidth = Math.max(
-        80 * PX * 0.95 - problemRefWidth,
-        window.innerWidth * 0.96 - problemRefWidth,
-      );
+      const editorRefWidth = +editorRef.current.style.maxWidth.replace('px', '');
+      const PX = +REM.replace("px", "");
+      if (x > 0.175 * window.innerWidth) problemRef.current.style.width = `${Math.max(80 * PX * 0.15, x - window.innerWidth * 0.032)}px`;
+      const editorWidth = Math.max(80 * PX * 0.95 - problemRefWidth, window.innerWidth* 0.96 - problemRefWidth);
       editorRef.current.style.width = `${editorWidth}px`;
       editorRef.current.style.maxWidth = `${editorWidth}px`;
-      editorRef.current.style.minWidth = `${Math.max(
-        80 * PX * 0.25,
-        window.innerWidth * 0.25,
-      )}px`;
+      editorRef.current.style.minWidth = `${Math.max(80 * PX * 0.25, window.innerWidth * 0.25)}px`;
     }
   };
   const resizeEditorWrapper = (y: number) => {
     if (editorRef.current != null) {
-      const PX = +REM.replace('px', '');
+      let PX = +REM.replace("px", "");
       editorRef.current.style.height = `${
         y - PX * 4 - window.innerWidth * 0.008
       }px`;
@@ -377,31 +363,27 @@ function solution(param) {
     onMouseLeave: () => {
       setMoveColResize(false);
       setMoveRowResize(false);
-    },
+    }
   };
 
   const handleColSizeController = {
     onMouseDown: () => {
       setMoveColResize(true);
-    },
+    }
   };
 
   const handleRowSizeController = {
     onMouseDown: () => {
       setMoveRowResize(true);
-    },
+    }
   };
 
   return (
-    <Wrapper {...mainEventHandler}>
+    <Wrapper {...mainEventHandler} >
       <HeaderWrapper>
         <ProblemHeader
-          URL={
-            roomNumber
-              ? `/problem/${version}/${id}/${roomNumber}`
-              : `/problem/${version}/${id}`
-          }
-          problemName={problem?.title ? problem.title : ''}
+          URL={!!roomNumber ? `/problem/${version}/${id}/${roomNumber}` : `/problem/${version}/${id}`}
+          problemName={problem?.title ? problem.title : ""}
           type={0}
         />
       </HeaderWrapper>
@@ -410,18 +392,20 @@ function solution(param) {
           <PageButtons></PageButtons>
         </PageButtonsWrapper>
         <ProblemWrapper ref={problemRef}>
-          {version === 'multi' && <Video />}
+          {version === "multi" && <Video/>}
           {problem && <ProblemContent problem={problem}></ProblemContent>}
         </ProblemWrapper>
         <ColSizeController {...handleColSizeController}></ColSizeController>
         <SolvingWrapper>
-          <EditorWrapper ref={editorRef}></EditorWrapper>
+          <EditorWrapper ref={editorRef}>
+            {eView && <LanguageSelector onClickModalElement={handleChangeEditorLanguage}/>}
+          </EditorWrapper>
           <RowSizeController {...handleRowSizeController}></RowSizeController>
           <ResultWrapper>
             <Result></Result>
           </ResultWrapper>
           <ButtonsWrapper>
-            <ProblemButtons onClickClearBtn={clearEditor} />
+            <ProblemButtons onClickClearBtn={clearEditor}/>
           </ButtonsWrapper>
         </SolvingWrapper>
       </MainWrapper>

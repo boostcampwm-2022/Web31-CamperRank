@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
@@ -21,7 +22,6 @@ const ytext = ydoc.getText('codemirror');
 provider.awareness.setLocalStateField('user', {
   name: 'Anonymous ' + Math.floor(Math.random() * 100),
 });
-
 const state = EditorState.create({
   doc: ytext.toString(),
   extensions: [
