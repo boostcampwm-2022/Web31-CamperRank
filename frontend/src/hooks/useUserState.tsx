@@ -62,6 +62,7 @@ export const useUserState = () => {
   }, []);
 
   return {
+    user,
     loginHandler,
     logoutHandler,
   };

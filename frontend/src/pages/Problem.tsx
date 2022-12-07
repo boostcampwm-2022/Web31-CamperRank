@@ -5,8 +5,8 @@ import { PageButtons, ProblemButtons } from '../components/Problem/Buttons';
 import { ProblemHeader } from '../components/ProblemHeader';
 import { ProblemContent, Result } from '../components/Problem';
 import { ProblemInfo } from '@types';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { editorState, gradingState, userState } from '../recoils';
+import { useRecoilState } from 'recoil';
+import { editorState, gradingState } from '../recoils';
 import { Video } from '../components/Problem/Video';
 import editorColors from '../utils/editorColors';
 import LanguageSelector from '../components/Problem/LanguageSelector';
@@ -176,7 +176,15 @@ const langs = {
 // };
 
 const Problem = () => {
-  const user = useRecoilValue(userState);
+  const navigate = useNavigate();
+  const { user } = useUserState();
+  useEffect(() => {
+    if (user.isLoggedIn) {
+      return;
+    }
+    navigate('/signin');
+  }, [user, user.isLoggedIn]);
+
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
   const [grade, setGrade] = useRecoilState(gradingState);
@@ -189,18 +197,21 @@ const Problem = () => {
 
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
 
   const ydoc = useMemo(() => new Y.Doc(), []);
   const [provider, ytext] = useMemo(() => {
     return [
       isMultiVersion
         ? // @ts-ignore
-          new WebrtcProvider(roomNumber, ydoc, { signaling: [webRTCURL] })
+          new WebrtcProvider(roomNumber, ydoc, {
+            signaling: [webRTCURL],
+            maxConns: 3,
+          })
         : null,
       ydoc.getText('codemirror'),
     ];
   }, []);
+
   const undoManager = useMemo(() => new Y.UndoManager(ytext), []);
   const userColor = useMemo(
     () => editorColors[random.uint32() % editorColors.length],
@@ -257,15 +268,6 @@ function solution(param) {
       eView.dispatch(transaction);
     }
   };
-
-  useUserState();
-
-  useEffect(() => {
-    if (user.isLoggedIn) {
-      return;
-    }
-    navigate('/signin');
-  }, [user, user.isLoggedIn]);
 
   useEffect(() => {
     fetch(`${URL}/problem/${id}`)
