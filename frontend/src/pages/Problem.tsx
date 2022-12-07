@@ -227,7 +227,6 @@ function solution(param) {
   }, [text]);
 
   useEffect(() => {
-    console.log(code);
     setLanguage(code.language);
   }, [code]);
 
@@ -246,15 +245,6 @@ function solution(param) {
     alert('올바르지 않은 URL 입니다.');
     navigate('/');
   }, [isMultiVersion, roomNumber]);
-
-  const clearEditor = () => {
-    if (eView) {
-      const transaction = eView.state.update({
-        changes: { from: 0, to: eView.state.doc.length, insert: defaultCode },
-      });
-      eView.dispatch(transaction);
-    }
-  };
 
   const handleChangeEditorLanguage = (language: string) => {
     if (eView) {
@@ -481,7 +471,7 @@ function solution(param) {
             <Result></Result>
           </ResultWrapper>
           <ButtonsWrapper>
-            <ProblemButtons onClickClearBtn={clearEditor} />
+            <ProblemButtons onClickClearBtn={handleChangeEditorLanguage} />
           </ButtonsWrapper>
         </SolvingWrapper>
       </MainWrapper>

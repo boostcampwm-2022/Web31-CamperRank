@@ -57,15 +57,16 @@ const Button = ({ disabled, name, callback }: ButtonProp) => {
 const ProblemButtons = ({
   onClickClearBtn,
 }: {
-  onClickClearBtn: () => void;
+  onClickClearBtn: (str: string) => void;
 }) => {
   const buttonNames = ['초기화', '코드테스트', '제출'];
   const [content] = useRecoilState(editorState);
   const [user] = useRecoilState(userState);
   const [grading, setGrading] = useRecoilState(gradingState);
+  const [code] = useRecoilState(editorState);
   const [working, setWorking] = useState(false);
   const reset = useCallback(() => {
-    if (confirm('코드를 초기화하시겠습니까?')) onClickClearBtn();
+    if (confirm('코드를 초기화하시겠습니까?')) onClickClearBtn(code.language);
     setGrading({
       status: 'ready',
     });
@@ -79,7 +80,7 @@ const ProblemButtons = ({
     return {
       userCode,
       language: language,
-      problemId: id,
+      problemId: +id,
       loginId: user.ID,
     };
   };
@@ -100,6 +101,7 @@ const ProblemButtons = ({
     })
       .then((res) => res.json())
       .then((response) => {
+        if (response.error) throw new Error();
         if (Object.keys(response).length == 0) throw new Error();
         setGrading({
           status: 'complete',
