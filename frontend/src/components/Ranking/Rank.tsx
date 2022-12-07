@@ -13,7 +13,7 @@ const RankWrapper = styled.div`
   margin-bottom: auto;
 `;
 
-export const Ranking = () => {
+export const RankDiv = () => {
   //fetch 쏴서 받고, 내 닉네임과 일치하는 것 찾아서 MyInfo로 props 전달 필요
 
   return <RankWrapper></RankWrapper>;
