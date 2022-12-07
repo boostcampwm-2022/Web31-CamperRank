@@ -7,9 +7,8 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
-import {Peer} from "peerjs";
-import {useNavigate, useParams} from "react-router-dom";
-import * as path from "path";
+import { Peer } from "peerjs";
+import { useNavigate, useParams } from "react-router-dom";
 
 const VideoContainer = styled.div`
   margin-top: 1rem;
@@ -35,13 +34,13 @@ const UserVideoContainer = styled.video`
 
 const DivWrapper = styled.div`
   position: relative;
-`
+`;
 
 const ButtonContainer = styled.div`
   position: absolute;
   left: 0.6rem;
   bottom: 0.9rem;
-`
+`;
 
 const ControllButton = styled.div`
   cursor: pointer;
@@ -55,7 +54,7 @@ const ControllButton = styled.div`
   }
 
   z-index: 2;
-`
+`;
 
 //pointer-events:none;
 const Text = styled.div`
@@ -69,9 +68,9 @@ const Text = styled.div`
 `
 
 type ConstraintsType = {
-  audio?: boolean,
-  video?: boolean | Object,
-}
+  audio?: boolean;
+  video?: boolean | Object;
+};
 
 const videoSize = {
   width: {
@@ -80,7 +79,7 @@ const videoSize = {
   height: {
     ideal: 720,
   },
-}
+};
 
 const Constraints: ConstraintsType = {
   video: videoSize,
@@ -90,7 +89,7 @@ const Constraints: ConstraintsType = {
 export const Video = () => {
   const [myStream, setMyStream] = useState<MediaStream | undefined>();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const {roomNumber} = useParams();
+  const { roomNumber } = useParams();
   const [myID, setMyID] = useState("");
   const [peers, setPeers] = useState<any>({});
   const [videoOn, setVideoOn] = useState(false);
@@ -101,9 +100,13 @@ export const Video = () => {
   const navigate = useNavigate();
 
   const myPeer = useMemo(() => new Peer(), []);
-  const socket = useMemo(() => io(import.meta.env.VITE_SOCKET_SERVER_URL, {
-    secure: true
-  }), []);
+  const socket = useMemo(
+    () =>
+      io(import.meta.env.VITE_SOCKET_SERVER_URL, {
+        secure: process.env.NODE_ENV !== "development",
+      }),
+    []
+  );
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia(Constraints).then((mediaStream) => {
@@ -169,7 +172,7 @@ export const Video = () => {
         return;
       }
       peers[userId].close();
-      const temp = {...peers};
+      const temp = { ...peers };
       delete temp[userId];
       setPeers(temp);
     },
@@ -208,7 +211,7 @@ export const Video = () => {
   useEffect(() => {
     myPeer.on("open", (id) => {
       setMyID(id);
-      console.log('roomnumber, id', roomNumber, id);
+      console.log("roomnumber, id", roomNumber, id);
       socket.emit("join-room", roomNumber, id);
     });
   }, []);
@@ -243,8 +246,8 @@ export const Video = () => {
 
   const setTimeoutText = (text: string) => {
     setText(text);
-    setTimeout(() => setText(''), 1500);
-  }
+    setTimeout(() => setText(""), 1500);
+  };
 
   const sendStream = (updateConstraints: ConstraintsType) => {
     navigator.mediaDevices.getUserMedia(updateConstraints)
@@ -291,21 +294,13 @@ export const Video = () => {
     let updateConstraints: ConstraintsType = {};
     updateConstraints.video = videoOn ? videoSize : false;
     updateConstraints.audio = !micOn;
-    setTimeoutText(`마이크 ${!micOn ? 'ON' : 'OFF'}`)
+    setTimeoutText(`마이크 ${!micOn ? "ON" : "OFF"}`);
     setMicOn(!micOn);
     sendStream(updateConstraints);
   }
 
   return (
     <VideoContainer>
-      <DivWrapper>
-        <UserVideoContainer ref={videoRef} autoPlay muted playsInline/>
-        <ButtonContainer>
-          <ControllButton onClick={handleMicButton}>{micOn ? '🔊' : '🔇'}</ControllButton>
-          <ControllButton onClick={handleCameraButton}>{!videoOn ? '🔴' : '⬛️'}</ControllButton>
-        </ButtonContainer>
-        <Text>{text}</Text>
-      </DivWrapper>
       {Object.entries(peers).map((user, idx) => (
         <UserVideoContainer
           autoPlay
@@ -318,6 +313,18 @@ export const Video = () => {
           key={idx}
         />
       ))}
+      <DivWrapper>
+        <UserVideoContainer ref={videoRef} autoPlay muted playsInline />
+        <ButtonContainer>
+          <ControllButton onClick={handleMicButton}>
+            {micOn ? "🔊" : "🔇"}
+          </ControllButton>
+          <ControllButton onClick={handleCameraButton}>
+            {!videoOn ? "🔴" : "⬛️"}
+          </ControllButton>
+        </ButtonContainer>
+        <Text>{text}</Text>
+      </DivWrapper>
     </VideoContainer>
   );
 };

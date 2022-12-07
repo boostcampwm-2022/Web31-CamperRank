@@ -14,20 +14,26 @@ const io = new Server(httpServer, {
   cookie: true,
 });
 
+function logging(msg: string, param?: string) {
+  if (!param) {
+    console.log(`[${new Date().toLocaleString()}]  ${msg}`);
+    return;
+  }
+  console.log(`[${new Date().toLocaleString()}]  ${msg}: ${param}`);
+}
+
 io.on('connection', (socket) => {
-  console.log('user joined');
+  logging('user joined server');
   socket.on('join-room', (roomId, userId) => {
-    if (
-      io.sockets.adapter.rooms.get(roomId) &&
-      io.sockets.adapter.rooms.get(roomId)!.size >= 3
-    ) {
-      console.log('userId', userId);
+    const room = io.sockets.adapter.rooms.get(roomId);
+    if (room && room.size >= 3) {
+      logging('room is full, out userId: ', userId);
       socket.emit('full');
       return;
     }
 
-    console.log('userId', userId);
-    console.log('roomId', roomId);
+    logging('join userId: ', userId);
+    logging('roomId: ', roomId);
 
     socket.join(roomId);
     socket.to(roomId).emit('user-connected', userId);
@@ -37,21 +43,13 @@ io.on('connection', (socket) => {
     });
   });
 
-  // socket.on('change-webrtc', (roomId, userId) => {
-  //   console.log('userId', userId);
-  //   console.log('roomId', roomId);
-  //   socket.to(roomId).emit('change-webrtc', userId);
-  // });
+  socket.on('change-webrtc', (roomId, userId) => {
+    logging('change userId: ', userId);
+    logging('roomId: ', roomId);
+    socket.to(roomId).emit('change-webrtc', userId);
+  });
 });
 
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
-
-// app.listen('3333', () => {
-//   console.log(`
-//   ################################################
-//   🛡️  Server listening on port: 3333🛡️
-//   ################################################
-// `);
-// });
