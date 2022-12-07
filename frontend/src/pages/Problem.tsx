@@ -226,7 +226,11 @@ const Problem = () => {
   const [text, setText] = useState(code.text);
 
   useEffect(() => {
-    setCode({ ...code, text });
+    let language;
+    if (text === defaultCodes['Python']) language = 'Python';
+    else if (text === defaultCodes['JavaScript']) language = 'JavaScript';
+    if (language) setCode({ ...code, language, text });
+    else setCode({ ...code, text });
   }, [text]);
 
   useEffect(() => {
