@@ -282,18 +282,6 @@ export const Video = () => {
 
   return (
     <VideoContainer>
-      <DivWrapper>
-        <UserVideoContainer ref={videoRef} autoPlay muted playsInline />
-        <ButtonContainer>
-          <ControllButton onClick={handleMicButton}>
-            {micOn ? "🔊" : "🔇"}
-          </ControllButton>
-          <ControllButton onClick={handleCameraButton}>
-            {!videoOn ? "🔴" : "⬛️"}
-          </ControllButton>
-        </ButtonContainer>
-        <Text>{text}</Text>
-      </DivWrapper>
       {Object.entries(peers).map((user, idx) => (
         <UserVideoContainer
           autoPlay
@@ -306,6 +294,18 @@ export const Video = () => {
           key={idx}
         />
       ))}
+      <DivWrapper>
+        <UserVideoContainer ref={videoRef} autoPlay muted playsInline />
+        <ButtonContainer>
+          <ControllButton onClick={handleMicButton}>
+            {micOn ? "🔊" : "🔇"}
+          </ControllButton>
+          <ControllButton onClick={handleCameraButton}>
+            {!videoOn ? "🔴" : "⬛️"}
+          </ControllButton>
+        </ButtonContainer>
+        <Text>{text}</Text>
+      </DivWrapper>
     </VideoContainer>
   );
 };
