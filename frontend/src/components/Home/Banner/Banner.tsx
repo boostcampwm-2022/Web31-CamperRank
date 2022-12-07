@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import styled, { css } from "styled-components";
-import BannerContent from "./BannerContent";
-import BannerController from "./BannerController";
-import BannerInfo from "../../../utils/BannerInfo";
+import React, { useState, useEffect } from 'react';
+import styled, { css } from 'styled-components';
+import BannerContent from './BannerContent';
+import BannerController from './BannerController';
+import BannerInfo from '../../../utils/BannerInfo';
 
 type BannerType = {
   page: number;
@@ -24,14 +24,14 @@ const Banner = () => {
   const [page, setPage] = useState(0);
   const [width, setWidth] = useState(window.innerWidth);
   useEffect(() => {
-    const rem = (parseFloat(getComputedStyle(document.documentElement).fontSize));
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
     if (width < 80 * rem) setWidth(80 * rem);
-  }, [width])
+  }, [width]);
   const handleResize = () => setWidth(window.innerWidth);
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
   const handleButtonClick = (num: number) => setPage(num);

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import Problem from "./Problem";
-import { userState } from "../../../recoils";
-import {useRecoilState} from "recoil";
-import { ProblemInfo } from "@types";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import Problem from './Problem';
+import { userState } from '../../../recoils';
+import { useRecoilState } from 'recoil';
+import { ProblemInfo } from '@types';
 
 const URL = import.meta.env.VITE_SERVER_URL;
 
@@ -40,13 +40,15 @@ const List = () => {
   const [user] = useRecoilState(userState);
   const [problems, setProblems] = useState<ProblemInfo[]>([]);
   useEffect(() => {
-    const {ID} = user;
-    const fetchURL = ID ? `${URL}/problem/random?loginId=${ID}` : `${URL}/problem/random`;
+    const { ID } = user;
+    const fetchURL = ID
+      ? `${URL}/problem/random?loginId=${ID}`
+      : `${URL}/problem/random`;
     fetch(fetchURL)
-    .then(res => res.json())
-    .then(res => {
-      setProblems(Object.values(res));
-    })
+      .then((res) => res.json())
+      .then((res) => {
+        setProblems(Object.values(res));
+      });
   }, [user]);
   return (
     <ListWrapper>

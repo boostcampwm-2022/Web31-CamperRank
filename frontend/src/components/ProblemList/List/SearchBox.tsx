@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { Delete, RedDelete } from "../../../assets/icons";
-import { useRecoilState } from "recoil";
-import { filterState } from "../../../recoils";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { Delete, RedDelete } from '../../../assets/icons';
+import { useRecoilState } from 'recoil';
+import { filterState } from '../../../recoils';
 
 const SearchWrapper = styled.div`
   width: fit-content;
@@ -47,12 +47,12 @@ const DeleteIcon = styled.img`
 const SearchBox = () => {
   const [filter, setFilter] = useRecoilState(filterState);
   const clickEvent = {
-    solved: () => setFilter({ ...filter, solved: "푼 상태" }),
-    level: () => setFilter({ ...filter, level: "문제 레벨" }),
-    search: () => setFilter({ ...filter, search: "" }),
+    solved: () => setFilter({ ...filter, solved: '푼 상태' }),
+    level: () => setFilter({ ...filter, level: '문제 레벨' }),
+    search: () => setFilter({ ...filter, search: '' }),
   };
   const handleImgClick = (kind: string) => {
-    if (kind == "solved" || kind == "level" || kind == "search")
+    if (kind == 'solved' || kind == 'level' || kind == 'search')
       clickEvent[kind]();
   };
   return (
@@ -61,9 +61,9 @@ const SearchBox = () => {
       {Object.entries(filter).map((elem, idx) => {
         const [kind, value] = elem;
         if (
-          (kind === "solved" && value === "푼 상태") ||
-          (kind === "level" && value === "문제 레벨") ||
-          value === ""
+          (kind === 'solved' && value === '푼 상태') ||
+          (kind === 'level' && value === '문제 레벨') ||
+          value === ''
         )
           return;
         return (

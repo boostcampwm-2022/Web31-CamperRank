@@ -1,4 +1,4 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
 interface Filter {
   solved?: string;
@@ -7,10 +7,10 @@ interface Filter {
 }
 
 export const filterState = atom<Filter>({
-  key: "filterState",
+  key: 'filterState',
   default: {
-    solved: "푼 상태",
-    level: "문제 레벨",
-    search: "",
+    solved: '푼 상태',
+    level: '문제 레벨',
+    search: '',
   },
 });

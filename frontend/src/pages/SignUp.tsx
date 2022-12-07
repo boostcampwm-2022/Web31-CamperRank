@@ -1,8 +1,8 @@
-import { MainHeader } from "../components/MainHeader";
-import { Footer } from "../components/Footer";
-import React from "react";
-import styled from "styled-components";
-import { InputForm } from "../components/SignUp/InputForm";
+import { MainHeader } from '../components/MainHeader';
+import { Footer } from '../components/Footer';
+import React from 'react';
+import styled from 'styled-components';
+import { InputForm } from '../components/SignUp/InputForm';
 
 const MainWrapper = styled.div`
   width: 100%;

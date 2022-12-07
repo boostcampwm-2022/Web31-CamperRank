@@ -1,12 +1,12 @@
-import {MainHeader} from "../components/MainHeader";
-import {Footer} from "../components/Footer";
-import React, {useEffect} from "react";
-import styled from "styled-components";
-import {InputForm} from "../components/SignIn/InputForm";
-import {useRecoilValue} from "recoil";
-import {userState} from "../recoils";
-import {useNavigate} from "react-router-dom";
-import {useUserState} from "../hooks/useUserState";
+import { MainHeader } from '../components/MainHeader';
+import { Footer } from '../components/Footer';
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { InputForm } from '../components/SignIn/InputForm';
+import { useRecoilValue } from 'recoil';
+import { userState } from '../recoils';
+import { useNavigate } from 'react-router-dom';
+import { useUserState } from '../hooks/useUserState';
 
 const MainWrapper = styled.div`
   width: 100%;
@@ -54,10 +54,10 @@ export const SignIn = () => {
         <MainHeader></MainHeader>
       </HeaderWrapper>
       <ContentWrapper>
-        <InputForm/>
+        <InputForm />
       </ContentWrapper>
       <FooterWrapper>
-        <Footer/>
+        <Footer />
       </FooterWrapper>
     </MainWrapper>
   );

@@ -1,7 +1,7 @@
-import React, {useEffect} from "react";
-import styled from "styled-components";
-import {ProblemType} from "@types";
-import {Link} from "react-router-dom";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { ProblemType } from '@types';
+import { Link } from 'react-router-dom';
 import uuid from 'react-uuid';
 
 const ProblemWrapper = styled.div`
@@ -78,8 +78,8 @@ const getRoomNumber = (id: number) => {
   return room;
 };
 
-const Problem = ({problem}: ProblemType) => {
-  const {problemId, title, level} = problem;
+const Problem = ({ problem }: ProblemType) => {
+  const { problemId, title, level } = problem;
   const singleURL = `/problem/single/${problemId}`;
   let multiURL = `/problem/multi/${problemId}/`;
   if (problemId != null) {
@@ -89,7 +89,9 @@ const Problem = ({problem}: ProblemType) => {
   return (
     <ProblemWrapper>
       <Title>{title}</Title>
-      <Description>Lv{level}, Python, Javascript, Success Rate: 95.12%</Description>
+      <Description>
+        Lv{level}, Python, Javascript, Success Rate: 95.12%
+      </Description>
       <ButtonWrapper>
         <Link to={singleURL}>
           <Button>혼자 풀기</Button>
@@ -100,6 +102,6 @@ const Problem = ({problem}: ProblemType) => {
       </ButtonWrapper>
     </ProblemWrapper>
   );
-}
+};
 
 export default Problem;

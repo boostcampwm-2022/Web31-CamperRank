@@ -1,4 +1,4 @@
-declare module "@types" {
+declare module '@types' {
   interface BannerContent {
     text: string;
     image: string;

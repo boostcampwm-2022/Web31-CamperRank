@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import Problem from "./Problem";
-import PageController from "./PageController";
-import { ProblemInfo } from "@types";
-import SearchBox from "./SearchBox";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import Problem from './Problem';
+import PageController from './PageController';
+import { ProblemInfo } from '@types';
+import SearchBox from './SearchBox';
 
 type ListType = {
   list: ProblemInfo[];

@@ -1,7 +1,7 @@
-import BannerText from "./BannerText";
-import BannerImage from "./BannerImage";
-import styled, { css } from "styled-components";
-import { BannerType } from "@types";
+import BannerText from './BannerText';
+import BannerImage from './BannerImage';
+import styled, { css } from 'styled-components';
+import { BannerType } from '@types';
 
 type BannerWrapperProp = {
   color: string;

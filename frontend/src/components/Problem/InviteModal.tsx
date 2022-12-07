@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import {ReactComponent as Copy} from "../../assets/copy-icon.svg";
-import {useCallback, useRef} from "react";
+import styled from 'styled-components';
+import { ReactComponent as Copy } from '../../assets/copy-icon.svg';
+import { useCallback, useRef } from 'react';
 
 interface props {
-  isShowing: boolean
+  isShowing: boolean;
 }
 
 const Wrapper = styled.div`
@@ -57,26 +57,26 @@ const CopyButton = styled.button`
   height: 80%;
   cursor: pointer;
   background: #ffffff;
-  border: 2px solid #33C363;
+  border: 2px solid #33c363;
   box-shadow: 0px 8px 24px rgb(51 195 99 / 50%);
   border-radius: 4px;
   padding-top: 0.25rem;
 
   :active {
-    background: #DBF6E4;
+    background: #dbf6e4;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
   }
-  
+
   :hover {
-    background: #DBF6E4;
+    background: #dbf6e4;
   }
 `;
 
-export const InviteModal = ({isShowing}: props) => {
+export const InviteModal = ({ isShowing }: props) => {
   const url = useRef<HTMLDivElement>(null);
 
-  const handleCopy = useCallback(()=>{
+  const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(url.current!.innerText);
   }, [url.current]);
 
@@ -84,13 +84,11 @@ export const InviteModal = ({isShowing}: props) => {
     <Wrapper>
       <p>초대 URL</p>
       <URLWrapper>
-        <URLContainer ref={url}>
-          {`${window.location.href}`}
-        </URLContainer>
+        <URLContainer ref={url}>{`${window.location.href}`}</URLContainer>
         <CopyButton onClick={handleCopy}>
-          <Copy width={"2rem"}/>
+          <Copy width={'2rem'} />
         </CopyButton>
       </URLWrapper>
     </Wrapper>
   ) : null;
-}
+};

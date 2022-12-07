@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import { useRecoilState } from "recoil";
-import { filterState } from "../../../recoils";
+import React from 'react';
+import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { filterState } from '../../../recoils';
 
 type ModalElements = {
   name: string;
@@ -27,7 +27,7 @@ const ModalElement = styled.div`
 const Modal = ({ onClick, name, elements }: ModalElements) => {
   const [filter, setFilter] = useRecoilState(filterState);
   const handleClickElement = (element: string) => {
-    name === "상태" ? changeStatus(element) : changeLevel(element);
+    name === '상태' ? changeStatus(element) : changeLevel(element);
     onClick();
   };
   const changeLevel = (level: string) => {

@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import {Link} from "react-router-dom";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const MainHeaderContainer = styled.div`
   box-sizing: border-box;
@@ -58,9 +58,8 @@ export const MenuContainer = styled.div`
   }
 
   a:nth-child(1) {
-    button{
+    button {
       border-right: solid 1px silver;
     }
   }
 `;
-

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { SliderLeft, SliderRight } from "../../../assets/icons";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { SliderLeft, SliderRight } from '../../../assets/icons';
 
 type pageType = {
   now: number;
@@ -58,6 +58,7 @@ const PageController = ({ page, onClickPage }: pageProps) => {
     <ControllerWrapper>
       <SliderImage src={SliderLeft} onClick={handleLeftImageClick} />
       <PageWrapper>
+        {/* eslint-disable-next-line prefer-spread */}
         {Array.apply(null, new Array(max)).map((e, idx) =>
           idx + 1 == now ? (
             <NowPage key={idx} onClick={() => handlePageClick(idx + 1)}>
@@ -67,7 +68,7 @@ const PageController = ({ page, onClickPage }: pageProps) => {
             <Page key={idx} onClick={() => handlePageClick(idx + 1)}>
               {idx + 1}
             </Page>
-          )
+          ),
         )}
       </PageWrapper>
       <SliderImage src={SliderRight} onClick={handleRightImageClick} />

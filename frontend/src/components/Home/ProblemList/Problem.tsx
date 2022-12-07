@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import { ProblemType } from "@types";
-import { Link } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components';
+import { ProblemType } from '@types';
+import { Link } from 'react-router-dom';
 
 const ProblemWrapper = styled.div`
   border: 2px solid #888888;
@@ -81,7 +81,9 @@ const Problem = ({ problem }: ProblemType) => {
     <ProblemWrapper>
       <Level>LV. {level}</Level>
       <Name>{title}</Name>
-      <Description>Lv{level}, Python, Javascript, Success Rate: 95.12%</Description>
+      <Description>
+        Lv{level}, Python, Javascript, Success Rate: 95.12%
+      </Description>
       <Link to={problemURL}>
         <Button>문제 풀기</Button>
       </Link>

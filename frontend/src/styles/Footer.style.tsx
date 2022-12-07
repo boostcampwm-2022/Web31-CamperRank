@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const FooterContainer = styled.div`
   box-sizing: border-box;
@@ -17,14 +17,14 @@ export const KeyPhrase = styled.p`
   font-weight: 700;
   font-size: 32px;
   text-align: center;
-  color: #0A142F;
+  color: #0a142f;
 `;
 
 export const MainText = styled.p`
   width: 100%;
   font-weight: 500;
   font-size: 16px;
-  color: #0A142F;
+  color: #0a142f;
   opacity: 0.8;
 `;
 
@@ -38,7 +38,7 @@ export const ButtonContainer = styled.div`
     width: 112px;
     height: 36px;
     box-sizing: border-box;
-    background: #F7F9FB;
+    background: #f7f9fb;
     border: 1px solid #888888;
     border-radius: 20px;
     text-decoration: none;
