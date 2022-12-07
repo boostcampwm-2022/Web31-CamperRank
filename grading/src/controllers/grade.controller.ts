@@ -90,7 +90,7 @@ export const gradingController = async (req: any, res: any) => {
       testCaseNumber,
       testCaseInput,
       testCaseOutput,
-    } = req.body.data;
+    } = req.body;
 
     const fileName = uuid();
     const plClassifier = PLClassifier(language);
@@ -154,7 +154,7 @@ export const startGrade = async function (req: any, res: any) {
       language,
       testCaseInput,
       testCaseOutput,
-    } = req.body.data;
+    } = req.body;
     let filePath = "";
     let codeStyle = "";
     let fileList = [];
@@ -269,7 +269,7 @@ export const startDocker = async function (req: any, res: any) {
       language,
       testCaseInput,
       testCaseOutput,
-    } = req.body.data;
+    } = req.body;
 
     problemId = problemId || "undefined";
 

@@ -98,7 +98,6 @@ export class SolvedService {
     solved.result = solvedResult;
 
     const updatedSolved = await this.solvedRepository.save(solved);
-    // console.log(updatedSolved);
     return new SimpleSolvedDto(updatedSolved);
   }
 
