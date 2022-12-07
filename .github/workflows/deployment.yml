@@ -18,7 +18,7 @@ jobs:
           ref: dev
 
       - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -27,6 +27,8 @@ jobs:
           script: |
             cd /home/code/Web31-CamperRank
             git pull origin dev
+            npm install pm2 -g
+            npm install yarn -g
             pm2 kill
             cd /home/code/Web31-CamperRank/frontend
             yarn install
