@@ -19,8 +19,8 @@ import { WebrtcProvider } from 'y-webrtc';
 
 import { EditorView, basicSetup } from 'codemirror';
 import { EditorState, Compartment } from '@codemirror/state';
-import { javascript } from '@codemirror/lang-javascript';
-import { python } from '@codemirror/lang-python';
+import { javascript, javascriptLanguage } from '@codemirror/lang-javascript';
+import { python, pythonLanguage } from '@codemirror/lang-python';
 import { keymap } from '@codemirror/view';
 import { indentWithTab } from '@codemirror/commands';
 
@@ -161,6 +161,12 @@ const URL = import.meta.env.VITE_SERVER_URL;
 const REM = getComputedStyle(document.documentElement).fontSize;
 const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 
+const languageCompartment = new Compartment();
+const langs = {
+  JavaScript: javascript(),
+  Python: python(),
+};
+
 const Problem = () => {
   const user = useRecoilValue(userState);
   const [moveColResize, setMoveColResize] = useState(false);
@@ -216,16 +222,13 @@ function solution(param) {
     setLanguage(code.language);
   }, [code]);
 
-  // useEffect(() => {
-  //   let langObj;
-  //   if (language === 'JavaScript') langObj = new LanguageSupport(javascriptLanguage);
-  //   else langObj = new LanguageSupport(pythonLanguage);
-  //   if (eView) {
-  //     eView.dispatch({
-  //       effects: languageCompartment.reconfigure(langObj)
-  //     })
-  //   }
-  // }, [language])
+  useEffect(() => {
+    if (eView && (language === 'JavaScript' || language === 'Python')) {
+      eView.dispatch({
+        effects: languageCompartment.reconfigure(langs[language]),
+      });
+    }
+  }, [language]);
 
   useEffect(() => {
     if (!isMultiVersion || !!roomNumber) {
@@ -279,6 +282,7 @@ function solution(param) {
   }, [id]);
 
   useEffect(() => {
+    if (eView) return;
     provider &&
       provider.awareness.setLocalStateField('user', {
         name: 'Anonymous ' + Math.floor(Math.random() * 100),
@@ -286,12 +290,12 @@ function solution(param) {
         colorLight: userColor.light,
       });
 
-    const language = new Compartment();
+    const languageExtension = languageCompartment.of(langs['JavaScript']);
 
     const extensions = [
       basicSetup,
-      python(),
       keymap.of([indentWithTab]),
+      languageExtension,
       EditorView.updateListener.of(function (e) {
         setText(e.state.doc.toString());
       }),
@@ -337,7 +341,7 @@ function solution(param) {
     return () => {
       provider && provider.destroy();
     };
-  }, []);
+  }, [language]);
 
   useEffect(() => {
     window.addEventListener('resize', handleSize);

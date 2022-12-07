@@ -11,6 +11,7 @@ const ContentWrapper = styled.div`
   padding: 1.5rem;
   background: #f5fdf8;
   height: fit-content;
+  min-height: 75%;
 `;
 
 const Level = styled.div`
