@@ -109,14 +109,13 @@ export const Video = () => {
     });
   }, []);
 
-  //새로 접속한 피어 여기로
+  //call 받은 피어
   const callCallback = useCallback(
     (call: any) => {
       console.log(`callCallback`);
       console.log(`callerID: ${call.peer}`);
       call.answer(myStream); //송신자에게 stream 전달
       call.on("stream", () => {
-        console.log('stream', call.peer);
         setPeers({
           ...peers,
           ...{
@@ -140,10 +139,8 @@ export const Video = () => {
       if (!myStream) {
         return;
       }
-      console.log('myStream CALL')
       const call = myPeer.call(userId, myStream);
       call.on("stream", () => {
-        console.log('get stream');
         setPeers({
           ...peers,
           ...{
@@ -190,7 +187,7 @@ export const Video = () => {
     }
     myPeer.on("call", callCallback);
     socket.on("user-connected", connectCallback);
-    socket.on("change-webrtc", connectCallback);
+
     return () => {
       myPeer.off("call", callCallback);
       socket.off("user-connected", connectCallback);
@@ -255,10 +252,18 @@ export const Video = () => {
     setVideoOn(!videoOn);
     navigator.mediaDevices.getUserMedia(updateConstraints)
       .then((mediaStream) => {
+        Object.keys(peers).forEach(elem => {
+          myPeer.call(elem, mediaStream);
+        })
         setMyStream(mediaStream);
       })
-      .catch(err => setMyStream(undefined))
-      .finally(() => socket.emit('change-webrtc', roomNumber, myID));
+      .catch(err => {
+        setMyStream(undefined)
+        if (!myStream) return;
+        Object.keys(peers).forEach(elem => {
+          myPeer.call(elem, myStream);
+        })
+      })
   }
 
   const handleMicButton = () => {
@@ -269,10 +274,19 @@ export const Video = () => {
     setMicOn(!micOn);
     navigator.mediaDevices.getUserMedia(updateConstraints)
       .then((mediaStream) => {
+        Object.keys(peers).forEach(elem => {
+          myPeer.call(elem, mediaStream);
+        })
         setMyStream(mediaStream);
       })
-      .catch(err => setMyStream(undefined))
-      .finally(() => socket.emit('change-webrtc', roomNumber, myID));
+      .catch(err => {
+        
+        setMyStream(undefined)
+        if (!myStream) return;
+        Object.keys(peers).forEach(elem => {
+          myPeer.call(elem, myStream);
+        })
+      })
   }
 
   return (

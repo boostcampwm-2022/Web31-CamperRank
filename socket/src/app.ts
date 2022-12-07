@@ -15,7 +15,7 @@ const io = new Server(httpServer, {
 });
 
 io.on('connection', (socket) => {
-  console.log("user joined");
+  console.log('user joined');
   socket.on('join-room', (roomId, userId) => {
     if (
       io.sockets.adapter.rooms.get(roomId) &&
@@ -37,11 +37,11 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('change-webrtc', (roomId, userId) => {
-    console.log('userId', userId);
-    console.log('roomId', roomId);
-    socket.to(roomId).emit('change-webrtc', userId);
-  });
+  // socket.on('change-webrtc', (roomId, userId) => {
+  //   console.log('userId', userId);
+  //   console.log('roomId', roomId);
+  //   socket.to(roomId).emit('change-webrtc', userId);
+  // });
 });
 
 app.use(express.urlencoded({ extended: true }));
