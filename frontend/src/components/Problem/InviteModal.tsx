@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import { ReactComponent as Copy } from '../../assets/copy-icon.svg';
 import { useCallback, useRef } from 'react';
+import { ReactComponent as Refresh } from '../../assets/icons/Refresh_icon.svg';
+import { useNavigate, useParams } from 'react-router-dom';
+import uuid from 'react-uuid';
 
 interface props {
   isShowing: boolean;
@@ -31,7 +34,8 @@ const URLWrapper = styled.div`
   margin-left: 1rem;
   height: calc(100% - 37px);
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
+  align-items: center;
 `;
 
 const URLContainer = styled.div`
@@ -51,16 +55,16 @@ const URLContainer = styled.div`
   user-select: text;
 `;
 
-const CopyButton = styled.button`
-  margin-right: 2.5rem;
-  width: 5%;
-  height: 80%;
+const ButtonWrapper = styled.button`
+  margin-left: 0.3rem;
+  width: 3%;
+  height: 50%;
   cursor: pointer;
   background: #ffffff;
   border: 2px solid #33c363;
-  box-shadow: 0px 8px 24px rgb(51 195 99 / 50%);
+  box-shadow: 0 8px 24px rgb(51 195 99 / 50%);
   border-radius: 4px;
-  padding-top: 0.25rem;
+  padding: 0;
 
   :active {
     background: #dbf6e4;
@@ -75,19 +79,31 @@ const CopyButton = styled.button`
 
 export const InviteModal = ({ isShowing }: props) => {
   const url = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(url.current!.innerText);
   }, [url.current]);
+
+  const handleChange = useCallback(() => {
+    const newPath = btoa(uuid());
+    localStorage.setItem(`problem${id}`, newPath);
+    navigate(`/problem/multi/${id}/${newPath}`);
+    navigate(0);
+  }, []);
 
   return isShowing ? (
     <Wrapper>
       <p>초대 URL</p>
       <URLWrapper>
         <URLContainer ref={url}>{`${window.location.href}`}</URLContainer>
-        <CopyButton onClick={handleCopy}>
-          <Copy width={'2rem'} />
-        </CopyButton>
+        <ButtonWrapper onClick={handleCopy}>
+          <Copy width={'1rem'} />
+        </ButtonWrapper>
+        <ButtonWrapper onClick={handleChange}>
+          <Refresh />
+        </ButtonWrapper>
       </URLWrapper>
     </Wrapper>
   ) : null;
