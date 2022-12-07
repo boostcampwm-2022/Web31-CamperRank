@@ -56,13 +56,16 @@ const ControllButton = styled.div`
   z-index: 2;
 `;
 
+//pointer-events:none;
 const Text = styled.div`
   font-size: 0.8rem;
   color: #777777;
   position: absolute;
   bottom: -1rem;
-  left: 6rem;
-`;
+  left: 0;
+  text-align: center;
+  width: 100%;
+`
 
 type ConstraintsType = {
   audio?: boolean;
@@ -91,7 +94,8 @@ export const Video = () => {
   const [peers, setPeers] = useState<any>({});
   const [videoOn, setVideoOn] = useState(false);
   const [micOn, setMicOn] = useState(false);
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
+  const [btnWork, setBtnWork] = useState(false);
   const peerVideosRef = useRef<Array<HTMLVideoElement>>([]);
   const navigate = useNavigate();
 
@@ -112,14 +116,13 @@ export const Video = () => {
     });
   }, []);
 
-  //새로 접속한 피어 여기로
+  //call 받은 피어
   const callCallback = useCallback(
     (call: any) => {
       console.log(`callCallback`);
       console.log(`callerID: ${call.peer}`);
       call.answer(myStream); //송신자에게 stream 전달
       call.on("stream", () => {
-        console.log("stream", call.peer);
         setPeers({
           ...peers,
           ...{
@@ -143,10 +146,8 @@ export const Video = () => {
       if (!myStream) {
         return;
       }
-      console.log("myStream CALL");
       const call = myPeer.call(userId, myStream);
       call.on("stream", () => {
-        console.log("get stream");
         setPeers({
           ...peers,
           ...{
@@ -193,7 +194,7 @@ export const Video = () => {
     }
     myPeer.on("call", callCallback);
     socket.on("user-connected", connectCallback);
-    socket.on("change-webrtc", connectCallback);
+
     return () => {
       myPeer.off("call", callCallback);
       socket.off("user-connected", connectCallback);
@@ -248,37 +249,55 @@ export const Video = () => {
     setTimeout(() => setText(""), 1500);
   };
 
-  const handleCameraButton = () => {
-    let updateConstraints: ConstraintsType = {
-      audio: micOn,
-    };
-    if (!videoOn) updateConstraints.video = videoSize;
-    else updateConstraints.video = false;
-    setTimeoutText(`카메라 ${!videoOn ? "ON" : "OFF"}`);
-    setVideoOn(!videoOn);
-    navigator.mediaDevices
-      .getUserMedia(updateConstraints)
-      .then((mediaStream) => {
-        setMyStream(mediaStream);
+  const sendStream = (updateConstraints: ConstraintsType) => {
+    navigator.mediaDevices.getUserMedia(updateConstraints)
+    .then((mediaStream) => {
+      Object.keys(peers).forEach(elem => {
+        myPeer.call(elem, mediaStream);
       })
-      .catch(() => setMyStream(undefined))
-      .finally(() => socket.emit("change-webrtc", roomNumber, myID));
-  };
+      setMyStream(mediaStream);
+    })
+    .catch(err => {
+      setMyStream(undefined)
+      if (!myStream) return;
+      Object.keys(peers).forEach(elem => {
+        myPeer.call(elem, myStream);
+      })
+    })
+    .finally(() => {
+      setTimeout(() => {
+        setBtnWork(false);
+      }, 2000);
+    })
+  }
+
+  const handleCameraButton = () => {
+    if (btnWork) {
+      setTimeoutText('잠시 기다려주세요');
+      return;
+    }
+    setBtnWork(true);
+    let updateConstraints: ConstraintsType = {};
+    updateConstraints.video = !videoOn ? videoSize : false;
+    updateConstraints.audio = micOn;
+    setTimeoutText(`카메라 ${!videoOn ? 'ON' : 'OFF'}`)
+    setVideoOn(!videoOn);
+    sendStream(updateConstraints);
+  }
 
   const handleMicButton = () => {
+    if (btnWork) {
+      setTimeoutText('잠시 기다려주세요');
+      return;
+    }
+    setBtnWork(true);
     let updateConstraints: ConstraintsType = {};
     updateConstraints.video = videoOn ? videoSize : false;
     updateConstraints.audio = !micOn;
     setTimeoutText(`마이크 ${!micOn ? "ON" : "OFF"}`);
     setMicOn(!micOn);
-    navigator.mediaDevices
-      .getUserMedia(updateConstraints)
-      .then((mediaStream) => {
-        setMyStream(mediaStream);
-      })
-      .catch(() => setMyStream(undefined))
-      .finally(() => socket.emit("change-webrtc", roomNumber, myID));
-  };
+    sendStream(updateConstraints);
+  }
 
   return (
     <VideoContainer>
