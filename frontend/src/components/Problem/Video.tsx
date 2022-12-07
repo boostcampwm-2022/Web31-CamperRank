@@ -57,12 +57,15 @@ const ControllButton = styled.div`
   z-index: 2;
 `
 
+//pointer-events:none;
 const Text = styled.div`
   font-size: 0.8rem;
   color: #777777;
   position: absolute;
   bottom: -1rem;
-  left: 6rem;
+  left: 0;
+  text-align: center;
+  width: 100%;
 `
 
 type ConstraintsType = {
@@ -93,6 +96,7 @@ export const Video = () => {
   const [videoOn, setVideoOn] = useState(false);
   const [micOn, setMicOn] = useState(false);
   const [text, setText] = useState('');
+  const [btnWork, setBtnWork] = useState(false);
   const peerVideosRef = useRef<Array<HTMLVideoElement>>([]);
   const navigate = useNavigate();
 
@@ -242,51 +246,54 @@ export const Video = () => {
     setTimeout(() => setText(''), 1500);
   }
 
+  const sendStream = (updateConstraints: ConstraintsType) => {
+    navigator.mediaDevices.getUserMedia(updateConstraints)
+    .then((mediaStream) => {
+      Object.keys(peers).forEach(elem => {
+        myPeer.call(elem, mediaStream);
+      })
+      setMyStream(mediaStream);
+    })
+    .catch(err => {
+      setMyStream(undefined)
+      if (!myStream) return;
+      Object.keys(peers).forEach(elem => {
+        myPeer.call(elem, myStream);
+      })
+    })
+    .finally(() => {
+      setTimeout(() => {
+        setBtnWork(false);
+      }, 2000);
+    })
+  }
+
   const handleCameraButton = () => {
-    let updateConstraints: ConstraintsType = {
-      audio: micOn,
-    };
-    if (!videoOn) updateConstraints.video = videoSize;
-    else updateConstraints.video = false;
+    if (btnWork) {
+      setTimeoutText('잠시 기다려주세요');
+      return;
+    }
+    setBtnWork(true);
+    let updateConstraints: ConstraintsType = {};
+    updateConstraints.video = !videoOn ? videoSize : false;
+    updateConstraints.audio = micOn;
     setTimeoutText(`카메라 ${!videoOn ? 'ON' : 'OFF'}`)
     setVideoOn(!videoOn);
-    navigator.mediaDevices.getUserMedia(updateConstraints)
-      .then((mediaStream) => {
-        Object.keys(peers).forEach(elem => {
-          myPeer.call(elem, mediaStream);
-        })
-        setMyStream(mediaStream);
-      })
-      .catch(err => {
-        setMyStream(undefined)
-        if (!myStream) return;
-        Object.keys(peers).forEach(elem => {
-          myPeer.call(elem, myStream);
-        })
-      })
+    sendStream(updateConstraints);
   }
 
   const handleMicButton = () => {
+    if (btnWork) {
+      setTimeoutText('잠시 기다려주세요');
+      return;
+    }
+    setBtnWork(true);
     let updateConstraints: ConstraintsType = {};
     updateConstraints.video = videoOn ? videoSize : false;
     updateConstraints.audio = !micOn;
     setTimeoutText(`마이크 ${!micOn ? 'ON' : 'OFF'}`)
     setMicOn(!micOn);
-    navigator.mediaDevices.getUserMedia(updateConstraints)
-      .then((mediaStream) => {
-        Object.keys(peers).forEach(elem => {
-          myPeer.call(elem, mediaStream);
-        })
-        setMyStream(mediaStream);
-      })
-      .catch(err => {
-        
-        setMyStream(undefined)
-        if (!myStream) return;
-        Object.keys(peers).forEach(elem => {
-          myPeer.call(elem, myStream);
-        })
-      })
+    sendStream(updateConstraints);
   }
 
   return (
