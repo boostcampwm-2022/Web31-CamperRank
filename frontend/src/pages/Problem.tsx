@@ -178,12 +178,16 @@ const langs = {
 const Problem = () => {
   const navigate = useNavigate();
   const { user } = useUserState();
+  // useEffect(() => {
+  //   console.log('user', user);
+  //   if (user.isLoggedIn) {
+  //     return;
+  //   }
+  //   navigate('/signin');
+  // }, [user, user.isLoggedIn]);
   useEffect(() => {
-    if (user.isLoggedIn) {
-      return;
-    }
-    navigate('/signin');
-  }, [user, user.isLoggedIn]);
+    if (!window.localStorage.getItem('camperID')) navigate('/signin');
+  }, []);
 
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
@@ -221,23 +225,12 @@ const Problem = () => {
   const [language, setLanguage] = useState(code.language);
   const [text, setText] = useState(code.text);
 
-  const defaultCode = `/*
- 함수 내부에 실행 코드를 작성하세요
-*/
-
-function solution(param) {
-
-  let answer;
-  
-  return answer;
-
-}`;
-
   useEffect(() => {
     setCode({ ...code, text });
   }, [text]);
 
   useEffect(() => {
+    if (!eView) return;
     setLanguage(code.language);
   }, [code]);
 
@@ -312,40 +305,42 @@ function solution(param) {
       extensions,
     });
     setEState(state);
-
     if (editorRef.current) {
       const view = new EditorView({ state, parent: editorRef.current });
       setEView(view);
-      if (version === 'single') {
-        const transaction = view.state.update({
-          changes: {
-            from: 0,
-            to: view.state.doc.length,
-            insert: defaultCodes[''],
-          },
-        });
-        view.dispatch(transaction);
-      } else {
-        let transaction;
-        if (code.text == '')
-          transaction = view.state.update({
-            changes: {
-              from: 0,
-              to: view.state.doc.length,
-              insert: defaultCode,
-            },
-          });
-        else
-          transaction = view.state.update({
-            changes: { from: 0, to: 0, insert: '' },
-          });
-        view.dispatch(transaction);
-      }
     }
     return () => {
       provider && provider.destroy();
     };
-  }, [language]);
+  }, []);
+
+  useEffect(() => {
+    if (!eView) return;
+    if (version === 'single') {
+      const transaction = eView.state.update({
+        changes: {
+          from: 0,
+          to: eView.state.doc.length,
+          insert: defaultCodes[''],
+        },
+      });
+      eView.dispatch(transaction);
+    } else {
+      setTimeout(() => {
+        let transaction;
+        if (ytext.toString() == '') {
+          transaction = eView.state.update({
+            changes: {
+              from: 0,
+              to: eView.state.doc.length,
+              insert: defaultCodes[''],
+            },
+          });
+          eView.dispatch(transaction);
+        }
+      }, 3000);
+    }
+  }, [eView]);
 
   useEffect(() => {
     window.addEventListener('resize', handleSize);
@@ -359,7 +354,7 @@ function solution(param) {
       status: 'ready',
     });
     setCode({
-      ...code,
+      text: '',
       language: '',
     });
   }, []);

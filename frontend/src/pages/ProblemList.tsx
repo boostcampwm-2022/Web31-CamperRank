@@ -45,7 +45,6 @@ const ProblemList = () => {
 
   useEffect(() => {
     const { ID } = user;
-    console.log(ID);
     const fetchURL = ID ? `${URL}/problem?loginId=${ID}` : `${URL}/problem`;
     setFilter({ solved: '푼 상태', level: '문제 레벨', search: '' });
     fetch(fetchURL)
