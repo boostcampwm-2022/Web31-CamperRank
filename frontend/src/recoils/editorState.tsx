@@ -9,6 +9,6 @@ export const editorState = atom<Editor>({
   key: "editorState",
   default: {
     text: "",
-    language: "Javascript"
+    language: ""
   },
 });

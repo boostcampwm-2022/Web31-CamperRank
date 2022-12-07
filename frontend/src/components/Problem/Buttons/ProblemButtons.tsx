@@ -65,7 +65,7 @@ const ProblemButtons = ({onClickClearBtn} : {onClickClearBtn: () => void}) => {
     if (!id) return;
     return {
       userCode,
-      language: 'JavaScript',
+      language: language,
       problemId: id,
       loginId: user.ID,
     }
