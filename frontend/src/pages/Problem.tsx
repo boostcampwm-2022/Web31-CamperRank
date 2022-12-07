@@ -18,8 +18,9 @@ import {yCollab} from 'y-codemirror.next'
 import {WebrtcProvider} from 'y-webrtc'
 
 import {EditorView, basicSetup} from "codemirror";
-import {EditorState} from "@codemirror/state";
-import {javascript} from '@codemirror/lang-javascript'
+import {EditorState, Compartment} from "@codemirror/state";
+import {javascript} from '@codemirror/lang-javascript';
+import {python} from '@codemirror/lang-python';
 import {keymap} from '@codemirror/view'
 import {indentWithTab} from "@codemirror/commands"
 
@@ -162,7 +163,6 @@ const Problem = () => {
   const user = useRecoilValue(userState);
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
-  const [code, setCode] = useRecoilState(editorState);
   const [grade, setGrade] = useRecoilState(gradingState);
   const [eState, setEState] = useState<EditorState>();
   const [eView, setEView] = useState<EditorView>();
@@ -185,8 +185,10 @@ const Problem = () => {
   }, []);
   const undoManager = useMemo(() => new Y.UndoManager(ytext), []);
   const userColor = useMemo(() => editorColors[random.uint32() % editorColors.length], []);
-  const language = useMemo(() => code.language, [code]);
-  
+  const [code, setCode] = useRecoilState(editorState);
+  const [language, setLanguage] = useState(code.language);
+  const [text, setText] = useState(code.text);
+
   const defaultCode = `/*
  함수 내부에 실행 코드를 작성하세요
 */
@@ -200,9 +202,25 @@ function solution(param) {
 }`;
 
   useEffect(() => {
-    console.log('code', code);
-  },[code]);
+    setCode({...code, text});
+  },[text]);
 
+  useEffect(() => {
+    setLanguage(code.language);
+  }, [code]);
+
+  // useEffect(() => {
+  //   let langObj;
+  //   if (language === 'JavaScript') langObj = new LanguageSupport(javascriptLanguage);
+  //   else langObj = new LanguageSupport(pythonLanguage);
+  //   if (eView) {
+  //     eView.dispatch({
+  //       effects: languageCompartment.reconfigure(langObj)
+  //     })
+  //   }
+  // }, [language])
+
+  
   useEffect(() => {
     if (!isMultiVersion || !!roomNumber) {
       return;
@@ -256,12 +274,14 @@ function solution(param) {
       colorLight: userColor.light
     });
 
+    let language = new Compartment;
+
     const extensions = [
       basicSetup,
-      javascript(),
+      python(),
       keymap.of([indentWithTab]),
       EditorView.updateListener.of(function (e) {
-        setCode({...code, text: e.state.doc.toString()});
+        setText(e.state.doc.toString());
       })
     ];
     provider && extensions.push(yCollab(ytext, provider.awareness, {undoManager}));

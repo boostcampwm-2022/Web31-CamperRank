@@ -67,7 +67,7 @@ const ModalElement = styled.div`
 
 const Modal = ({onClickElement, onClickModalElement}: ModalProp) => {
   const handleClickElement = (str: string) => {
-    //onClickModalElement(str);
+    onClickModalElement(str);
     onClickElement(str);
   }
   return (

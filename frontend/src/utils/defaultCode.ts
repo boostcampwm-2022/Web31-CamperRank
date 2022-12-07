@@ -15,14 +15,17 @@ function solution(param) {
 */
 
 def solution(param):
+
   answer = 0
+
   return answer
 
 }`,
   '': `/*
+
 언어를 선택하세요
-*/
-  `
+
+*/`
 }
 
 export default defaultCodes;
