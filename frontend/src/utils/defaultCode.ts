@@ -1,5 +1,5 @@
 const defaultCodes = {
-    JavaScript: `/*
+  JavaScript: `/*
 함수 내부에 실행 코드를 작성하세요
 */
 
@@ -25,7 +25,7 @@ def solution(param):
 
 언어를 선택하세요
 
-*/`
-}
+*/`,
+};
 
 export default defaultCodes;
