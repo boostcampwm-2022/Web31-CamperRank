@@ -1,6 +1,6 @@
-// // Based on https://github.com/codemirror/theme-one-dark
-// // Copyright (C) 2018-2021 by Marijn Haverbeke <marijnh@gmail.com> and others
-// // MIT License: https://github.com/codemirror/theme-one-dark/blob/main/LICENSE
+// Based on https://github.com/codemirror/theme-one-dark
+// Copyright (C) 2018-2021 by Marijn Haverbeke <marijnh@gmail.com> and others
+// MIT License: https://github.com/codemirror/theme-one-dark/blob/main/LICENSE
 
 // import { HighlightStyle } from '@codemirror/language';
 // import { tags as t } from '@lezer/highlight';

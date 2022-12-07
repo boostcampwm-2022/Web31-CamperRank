@@ -23,6 +23,8 @@ import { javascript, javascriptLanguage } from '@codemirror/lang-javascript';
 import { python, pythonLanguage } from '@codemirror/lang-python';
 import { keymap } from '@codemirror/view';
 import { indentWithTab } from '@codemirror/commands';
+// import { LanguageSupport, syntaxHighlighting } from '@codemirror/language';
+// import oneDarkHighlightStyle from '../utils/theme';
 
 import * as random from 'lib0/random';
 import { useUserState } from '../hooks/useUserState';
@@ -162,10 +164,16 @@ const REM = getComputedStyle(document.documentElement).fontSize;
 const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 
 const languageCompartment = new Compartment();
+//const highlightThemeCompartment = new Compartment();
+
 const langs = {
   JavaScript: javascript(),
   Python: python(),
 };
+
+// const highlightThemeExtensions = {
+//   dark: syntaxHighlighting(oneDarkHighlightStyle),
+// };
 
 const Problem = () => {
   const user = useRecoilValue(userState);
@@ -219,6 +227,7 @@ function solution(param) {
   }, [text]);
 
   useEffect(() => {
+    console.log(code);
     setLanguage(code.language);
   }, [code]);
 
@@ -291,6 +300,9 @@ function solution(param) {
       });
 
     const languageExtension = languageCompartment.of(langs['JavaScript']);
+    // const highlightThemeExtension = highlightThemeCompartment.of(
+    //   highlightThemeExtensions['dark'],
+    // );
 
     const extensions = [
       basicSetup,
@@ -353,6 +365,10 @@ function solution(param) {
   useEffect(() => {
     setGrade({
       status: 'ready',
+    });
+    setCode({
+      ...code,
+      language: '',
     });
   }, []);
 
