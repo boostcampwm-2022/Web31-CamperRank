@@ -19,10 +19,7 @@ const App = () => {
         {isLoggedIn ? (
           <Route path="/problem/:version/:id" element={<Problem />} />
         ) : (
-          <Route
-            path="/problem/:version/:id"
-            element={<Navigate to="/signin" />}
-          />
+          <Route path="/problem/:version/:id" element={<SignIn />} />
         )}
         {isLoggedIn ? (
           <Route
@@ -32,7 +29,7 @@ const App = () => {
         ) : (
           <Route
             path="/problem/:version/:id/:roomNumber"
-            element={<Navigate to="/signin" />}
+            element={<SignIn />}
           />
         )}
         <Route path="/ranking" element={<Ranking />} />
