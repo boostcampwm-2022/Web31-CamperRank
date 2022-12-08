@@ -197,8 +197,12 @@ const Problem = () => {
   const [problem, setProblem] = useState<ProblemInfo>();
   const { id, version } = useParams();
   const [isMultiVersion] = useState(version === 'multi');
+  const [code, setCode] = useRecoilState(editorState);
+  const [language, setLanguage] = useState(code.language);
+  const [text, setText] = useState(code.text);
+  const [param, setParam] = useState(1);
   const { roomNumber } = isMultiVersion ? useParams() : { roomNumber: null };
-
+  const [defaultCode, setDefaultCode] = useState({ ...defaultCodes });
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
 
@@ -221,14 +225,16 @@ const Problem = () => {
     () => editorColors[random.uint32() % editorColors.length],
     [],
   );
-  const [code, setCode] = useRecoilState(editorState);
-  const [language, setLanguage] = useState(code.language);
-  const [text, setText] = useState(code.text);
 
   useEffect(() => {
     let language;
-    if (text === defaultCodes['Python']) language = 'Python';
-    else if (text === defaultCodes['JavaScript']) language = 'JavaScript';
+    if (text === defaultCode['Python'] || text.includes('def solution'))
+      language = 'Python';
+    else if (
+      text === defaultCode['JavaScript'] ||
+      text.includes('function solution')
+    )
+      language = 'JavaScript';
     if (language) setCode({ ...code, language, text });
     else setCode({ ...code, text });
   }, [text]);
@@ -258,7 +264,7 @@ const Problem = () => {
     if (eView) {
       let insertCode;
       if (language === '' || language === 'JavaScript' || language === 'Python')
-        insertCode = defaultCodes[language];
+        insertCode = defaultCode[language];
       const transaction = eView.state.update({
         changes: { from: 0, to: eView.state.doc.length, insert: insertCode },
       });
@@ -278,6 +284,28 @@ const Problem = () => {
         navigate('/problems');
       });
   }, [id]);
+
+  useEffect(() => {
+    if (!problem) return;
+    fetch(`${URL}/test-case?testCAseId=1&problemId=${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        const testcase = res[0];
+        const { testInput } = testcase;
+        setParam(JSON.parse(testInput).length);
+      });
+  }, [problem]);
+
+  useEffect(() => {
+    const params = [...new Array(param)].map((elem, idx) => `param${idx + 1}`);
+    const paramsStr = param === 1 ? 'param' : params.join(', ');
+    const { JavaScript, Python } = defaultCode;
+    setDefaultCode({
+      ...defaultCode,
+      JavaScript: JavaScript.replace('param', paramsStr),
+      Python: Python.replace('param', paramsStr),
+    });
+  }, [param]);
 
   useEffect(() => {
     if (eView) return;
@@ -325,7 +353,7 @@ const Problem = () => {
         changes: {
           from: 0,
           to: eView.state.doc.length,
-          insert: defaultCodes[''],
+          insert: defaultCode[''],
         },
       });
       eView.dispatch(transaction);
@@ -337,7 +365,7 @@ const Problem = () => {
             changes: {
               from: 0,
               to: eView.state.doc.length,
-              insert: defaultCodes[''],
+              insert: defaultCode[''],
             },
           });
           eView.dispatch(transaction);
