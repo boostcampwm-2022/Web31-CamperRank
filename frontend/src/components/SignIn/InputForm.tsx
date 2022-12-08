@@ -40,6 +40,7 @@ export const InputForm = () => {
             const expirationTime = new Date(
               new Date().getTime() + data.effectiveTime,
             ).toISOString();
+            // console.log(data.accessToken);
             loginHandler(data.accessToken, expirationTime, data.userId);
             !version && navigate(-1);
             return;

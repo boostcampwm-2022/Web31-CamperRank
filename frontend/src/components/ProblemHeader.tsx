@@ -24,7 +24,7 @@ export const ProblemHeader = ({ URL, problemName, type }: propsType) => {
   const [user, setUser] = useRecoilState(userState);
   const { logoutHandler } = useUserState();
   const handleLogoutClick = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
+    (/*e: React.MouseEvent<HTMLButtonElement>*/) => {
       if (!user.isLoggedIn) {
         return;
       }
