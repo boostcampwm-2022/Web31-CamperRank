@@ -53,7 +53,7 @@ export class SolvedController {
 
   checkSolvedResult(gradeResultList: any) {
     const failList = gradeResultList.filter((value) => {
-      return value.resultCode !== 1000;
+      return value?.resultCode && value.resultCode !== 1000;
     });
 
     return failList.length === 0 ? SolvedResult.Success : SolvedResult.Fail;
@@ -91,11 +91,11 @@ export class SolvedController {
       }),
     );
 
+    const solvedResult = this.checkSolvedResult(gradeResultList);
+
     const gradeResultDTO = gradeResultList.map((value) => {
       return new GradeResultSolvedDto(value);
     });
-
-    const solvedResult = this.checkSolvedResult(gradeResultList);
 
     await this.solvedService.updateResult(
       gradeResultList[0].solvedId,
