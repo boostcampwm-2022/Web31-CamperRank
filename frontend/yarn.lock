@@ -1208,7 +1208,7 @@
     "@codemirror/language" "^6.0.0"
     "@lezer/python" "^1.0.0"
 
-"@codemirror/language@^6.0.0":
+"@codemirror/language@^6.0.0", "@codemirror/language@^6.3.1":
   version "6.3.1"
   resolved "https://registry.npmjs.org/@codemirror/language/-/language-6.3.1.tgz"
   integrity sha512-MK+G1QKaGfSEUg9YEFaBkMBI6j1ge4VMBPZv9fDYotw7w695c42x5Ba1mmwBkesYnzYFBfte6Hh9TDcKa6xORQ==

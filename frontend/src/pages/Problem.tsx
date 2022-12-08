@@ -19,10 +19,12 @@ import { WebrtcProvider } from 'y-webrtc';
 
 import { EditorView, basicSetup } from 'codemirror';
 import { EditorState, Compartment } from '@codemirror/state';
-import { javascript } from '@codemirror/lang-javascript';
-import { python } from '@codemirror/lang-python';
+import { javascript, javascriptLanguage } from '@codemirror/lang-javascript';
+import { python, pythonLanguage } from '@codemirror/lang-python';
 import { keymap } from '@codemirror/view';
 import { indentWithTab } from '@codemirror/commands';
+// import { LanguageSupport, syntaxHighlighting } from '@codemirror/language';
+// import oneDarkHighlightStyle from '../utils/theme';
 
 import * as random from 'lib0/random';
 import { useUserState } from '../hooks/useUserState';
@@ -161,15 +163,31 @@ const URL = import.meta.env.VITE_SERVER_URL;
 const REM = getComputedStyle(document.documentElement).fontSize;
 const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 
+const languageCompartment = new Compartment();
+//const highlightThemeCompartment = new Compartment();
+
+const langs = {
+  JavaScript: javascript(),
+  Python: python(),
+};
+
+// const highlightThemeExtensions = {
+//   dark: syntaxHighlighting(oneDarkHighlightStyle),
+// };
+
 const Problem = () => {
   const navigate = useNavigate();
   const { user } = useUserState();
+  // useEffect(() => {
+  //   console.log('user', user);
+  //   if (user.isLoggedIn) {
+  //     return;
+  //   }
+  //   navigate('/signin');
+  // }, [user, user.isLoggedIn]);
   useEffect(() => {
-    if (user.isLoggedIn) {
-      return;
-    }
-    navigate('/signin');
-  }, [user, user.isLoggedIn]);
+    if (!window.localStorage.getItem('camperID')) navigate('/signin');
+  }, []);
 
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
@@ -179,8 +197,12 @@ const Problem = () => {
   const [problem, setProblem] = useState<ProblemInfo>();
   const { id, version } = useParams();
   const [isMultiVersion] = useState(version === 'multi');
+  const [code, setCode] = useRecoilState(editorState);
+  const [language, setLanguage] = useState(code.language);
+  const [text, setText] = useState(code.text);
+  const [param, setParam] = useState(1);
   const { roomNumber } = isMultiVersion ? useParams() : { roomNumber: null };
-
+  const [defaultCode, setDefaultCode] = useState({ ...defaultCodes });
   const problemRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
 
@@ -203,40 +225,32 @@ const Problem = () => {
     () => editorColors[random.uint32() % editorColors.length],
     [],
   );
-  const [code, setCode] = useRecoilState(editorState);
-  const [language, setLanguage] = useState(code.language);
-  const [text, setText] = useState(code.text);
-
-  const defaultCode = `/*
- 함수 내부에 실행 코드를 작성하세요
-*/
-
-function solution(param) {
-
-  let answer;
-  
-  return answer;
-
-}`;
 
   useEffect(() => {
-    setCode({ ...code, text });
+    let language;
+    if (text === defaultCode['Python'] || text.includes('def solution'))
+      language = 'Python';
+    else if (
+      text === defaultCode['JavaScript'] ||
+      text.includes('function solution')
+    )
+      language = 'JavaScript';
+    if (language) setCode({ ...code, language, text });
+    else setCode({ ...code, text });
   }, [text]);
 
   useEffect(() => {
+    if (!eView) return;
     setLanguage(code.language);
   }, [code]);
 
-  // useEffect(() => {
-  //   let langObj;
-  //   if (language === 'JavaScript') langObj = new LanguageSupport(javascriptLanguage);
-  //   else langObj = new LanguageSupport(pythonLanguage);
-  //   if (eView) {
-  //     eView.dispatch({
-  //       effects: languageCompartment.reconfigure(langObj)
-  //     })
-  //   }
-  // }, [language])
+  useEffect(() => {
+    if (eView && (language === 'JavaScript' || language === 'Python')) {
+      eView.dispatch({
+        effects: languageCompartment.reconfigure(langs[language]),
+      });
+    }
+  }, [language]);
 
   useEffect(() => {
     if (!isMultiVersion || !!roomNumber) {
@@ -246,20 +260,11 @@ function solution(param) {
     navigate('/');
   }, [isMultiVersion, roomNumber]);
 
-  const clearEditor = () => {
-    if (eView) {
-      const transaction = eView.state.update({
-        changes: { from: 0, to: eView.state.doc.length, insert: defaultCode },
-      });
-      eView.dispatch(transaction);
-    }
-  };
-
   const handleChangeEditorLanguage = (language: string) => {
     if (eView) {
       let insertCode;
       if (language === '' || language === 'JavaScript' || language === 'Python')
-        insertCode = defaultCodes[language];
+        insertCode = defaultCode[language];
       const transaction = eView.state.update({
         changes: { from: 0, to: eView.state.doc.length, insert: insertCode },
       });
@@ -281,6 +286,29 @@ function solution(param) {
   }, [id]);
 
   useEffect(() => {
+    if (!problem) return;
+    fetch(`${URL}/test-case?testCAseId=1&problemId=${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        const testcase = res[0];
+        const { testInput } = testcase;
+        setParam(JSON.parse(testInput).length);
+      });
+  }, [problem]);
+
+  useEffect(() => {
+    const params = [...new Array(param)].map((elem, idx) => `param${idx + 1}`);
+    const paramsStr = param === 1 ? 'param' : params.join(', ');
+    const { JavaScript, Python } = defaultCode;
+    setDefaultCode({
+      ...defaultCode,
+      JavaScript: JavaScript.replace('param', paramsStr),
+      Python: Python.replace('param', paramsStr),
+    });
+  }, [param]);
+
+  useEffect(() => {
+    if (eView) return;
     provider &&
       provider.awareness.setLocalStateField('user', {
         name: 'Anonymous ' + Math.floor(Math.random() * 100),
@@ -288,12 +316,15 @@ function solution(param) {
         colorLight: userColor.light,
       });
 
-    const language = new Compartment();
+    const languageExtension = languageCompartment.of(langs['JavaScript']);
+    // const highlightThemeExtension = highlightThemeCompartment.of(
+    //   highlightThemeExtensions['dark'],
+    // );
 
     const extensions = [
       basicSetup,
-      python(),
       keymap.of([indentWithTab]),
+      languageExtension,
       EditorView.updateListener.of(function (e) {
         setText(e.state.doc.toString());
       }),
@@ -306,40 +337,42 @@ function solution(param) {
       extensions,
     });
     setEState(state);
-
     if (editorRef.current) {
       const view = new EditorView({ state, parent: editorRef.current });
       setEView(view);
-      if (version === 'single') {
-        const transaction = view.state.update({
-          changes: {
-            from: 0,
-            to: view.state.doc.length,
-            insert: defaultCodes[''],
-          },
-        });
-        view.dispatch(transaction);
-      } else {
-        let transaction;
-        if (code.text == '')
-          transaction = view.state.update({
-            changes: {
-              from: 0,
-              to: view.state.doc.length,
-              insert: defaultCode,
-            },
-          });
-        else
-          transaction = view.state.update({
-            changes: { from: 0, to: 0, insert: '' },
-          });
-        view.dispatch(transaction);
-      }
     }
     return () => {
       provider && provider.destroy();
     };
   }, []);
+
+  useEffect(() => {
+    if (!eView) return;
+    if (version === 'single') {
+      const transaction = eView.state.update({
+        changes: {
+          from: 0,
+          to: eView.state.doc.length,
+          insert: defaultCode[''],
+        },
+      });
+      eView.dispatch(transaction);
+    } else {
+      setTimeout(() => {
+        let transaction;
+        if (ytext.toString() == '') {
+          transaction = eView.state.update({
+            changes: {
+              from: 0,
+              to: eView.state.doc.length,
+              insert: defaultCode[''],
+            },
+          });
+          eView.dispatch(transaction);
+        }
+      }, 3000);
+    }
+  }, [eView]);
 
   useEffect(() => {
     window.addEventListener('resize', handleSize);
@@ -351,6 +384,10 @@ function solution(param) {
   useEffect(() => {
     setGrade({
       status: 'ready',
+    });
+    setCode({
+      text: '',
+      language: '',
     });
   }, []);
 
@@ -463,7 +500,7 @@ function solution(param) {
             <Result></Result>
           </ResultWrapper>
           <ButtonsWrapper>
-            <ProblemButtons onClickClearBtn={clearEditor} />
+            <ProblemButtons onClickClearBtn={handleChangeEditorLanguage} />
           </ButtonsWrapper>
         </SolvingWrapper>
       </MainWrapper>
