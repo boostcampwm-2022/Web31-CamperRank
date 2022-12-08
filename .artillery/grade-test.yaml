@@ -1,0 +1,30 @@
+config:
+  target: "http://localhost:3000/api"
+  phases:
+    - duration: 60
+      arrivalRate: 1
+      name: Warm up
+  #    - duration: 120
+  #      arrivalRate: 5
+  #      name: More Hard
+  #    - duration: 600
+  #      arrivalRate: 100
+  #      name: Extreme
+  payload:
+    path: "./data.csv"
+    fields:
+      - "problemId"
+      - "loginId"
+      - "userCode"
+      - "language"
+scenarios:
+  # We define one scenario:
+  - name: "grade user code"
+    flow:
+      - post:
+          url: "/solved"
+          json:
+            problemId: "{{problemId}}"
+            loginId: "{{loginId}}"
+            userCode: "{{userCode}}"
+            language: "{{language}}"

@@ -38,9 +38,10 @@ describe('UsersService', () => {
     const now = new Date();
     user.createdAt = now;
     user.updatedAt = now;
+
     const userRepositoryFindOneBySpy = jest
       .spyOn(userRepository, 'findOneBy')
-      .mockResolvedValue(undefined);
+      .mockResolvedValue(null);
 
     const userRepositorySaveSpy = jest
       .spyOn(userRepository, 'save')
