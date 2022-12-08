@@ -1,12 +1,6 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import { Peer } from 'peerjs';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -100,20 +94,20 @@ export const Video = () => {
   const peerVideosRef = useRef<Array<HTMLVideoElement>>([]);
   const navigate = useNavigate();
 
-  const myPeer = useMemo(() => new Peer(), []);
-  const socket = useMemo(
-    () =>
-      io(import.meta.env.VITE_SOCKET_SERVER_URL, {
-        secure: process.env.NODE_ENV !== 'development',
-      }),
-    [],
-  );
+  const [myPeer, setMyPeer] = useState<Peer>();
+  const [socket, setSocket] = useState<Socket>();
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia(Constraints).then((mediaStream) => {
       setVideoOn(true);
       setMicOn(true);
       setMyStream(mediaStream);
+      setMyPeer(new Peer());
+      setSocket(
+        io(import.meta.env.VITE_SOCKET_SERVER_URL, {
+          secure: process.env.NODE_ENV !== 'development',
+        }),
+      );
     });
   }, []);
 
@@ -144,7 +138,7 @@ export const Video = () => {
     (userId: string) => {
       console.log(`connectCallback`);
       console.log(`newUserID: ${userId}`);
-      if (!myStream) {
+      if (!myStream || !myPeer) {
         return;
       }
       const call = myPeer.call(userId, myStream);
@@ -162,7 +156,7 @@ export const Video = () => {
         console.log(`closeID: ${userId}`);
       });
     },
-    [myStream, peers],
+    [myStream, peers, myPeer],
   );
 
   const disconnectCallback = useCallback(
@@ -185,12 +179,12 @@ export const Video = () => {
       return;
     }
     if (videoRef.current) {
-      videoRef.current!.srcObject = myStream;
+      videoRef.current.srcObject = myStream;
     }
   }, [myStream]);
 
   useEffect(() => {
-    if (!myStream) {
+    if (!myStream || !myPeer || !socket) {
       return;
     }
     myPeer.on('call', callCallback);
@@ -200,22 +194,26 @@ export const Video = () => {
       myPeer.off('call', callCallback);
       socket.off('user-connected', connectCallback);
     };
-  }, [myStream, callCallback]); //내부도 해제해야 하는지 확인 필요
+  }, [myStream, callCallback, myPeer, socket]); //내부도 해제해야 하는지 확인 필요
 
   useEffect(() => {
+    if (!socket) return;
     socket.on('user-disconnected', disconnectCallback);
     return () => {
       socket.off('user-disconnected', disconnectCallback);
     };
-  }, [disconnectCallback]);
+  }, [disconnectCallback, socket]);
 
   useEffect(() => {
+    if (!myPeer || !socket) {
+      return;
+    }
     myPeer.on('open', (id) => {
       setMyID(id);
       console.log('roomnumber, id', roomNumber, id);
       socket.emit('join-room', roomNumber, id);
     });
-  }, []);
+  }, [myPeer, socket]);
 
   //video remoteStream
   useEffect(() => {
@@ -226,18 +224,22 @@ export const Video = () => {
   }, [peers]);
 
   useEffect(() => {
+    if (!socket) {
+      return;
+    }
     socket.on('full', () => {
       alert('방이 꽉 찼습니다.');
       navigate('/');
     });
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
+    if (!myPeer || !socket) return;
     return () => {
       myPeer.destroy();
       socket.disconnect();
     };
-  }, []);
+  }, [myPeer, socket]);
 
   useEffect(() => {
     return () => {
@@ -251,6 +253,7 @@ export const Video = () => {
   };
 
   const sendStream = (updateConstraints: ConstraintsType) => {
+    if (!myPeer) return;
     navigator.mediaDevices
       .getUserMedia(updateConstraints)
       .then((mediaStream) => {
@@ -259,7 +262,7 @@ export const Video = () => {
         });
         setMyStream(mediaStream);
       })
-      .catch((err) => {
+      .catch(() => {
         setMyStream(undefined);
         if (!myStream) return;
         Object.keys(peers).forEach((elem) => {
