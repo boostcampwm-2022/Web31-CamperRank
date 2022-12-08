@@ -4,7 +4,7 @@ import {
   PasswordInputContainer,
 } from '../../styles/SignIn.style';
 import React, { useCallback, useMemo, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useUserState } from '../../hooks/useUserState';
 
 export const InputForm = () => {
@@ -28,8 +28,8 @@ export const InputForm = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          loginId: id.current!.value,
-          password: password.current!.value,
+          loginId: id.current?.value,
+          password: password.current?.value,
         }),
       })
         .then((res) => res.json())
@@ -40,7 +40,7 @@ export const InputForm = () => {
               new Date().getTime() + data.effectiveTime,
             ).toISOString();
             loginHandler(data.accessToken, expirationTime, data.userId);
-            navigate(-1);
+            navigate('/');
             return;
           }
           alert('로그인에 실패하였습니다.');
