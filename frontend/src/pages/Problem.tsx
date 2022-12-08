@@ -178,16 +178,13 @@ const langs = {
 const Problem = () => {
   const navigate = useNavigate();
   const { user } = useUserState();
-  // useEffect(() => {
-  //   console.log('user', user);
-  //   if (user.isLoggedIn) {
-  //     return;
-  //   }
-  //   navigate('/signin');
-  // }, [user, user.isLoggedIn]);
+
   useEffect(() => {
-    if (!window.localStorage.getItem('camperID')) navigate('/signin');
-  }, []);
+    if (user.isLoggedIn) {
+      return;
+    }
+    navigate('/signin');
+  }, [user, user.isLoggedIn]);
 
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
