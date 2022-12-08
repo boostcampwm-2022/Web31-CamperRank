@@ -17,6 +17,7 @@ export const InputForm = () => {
   );
   const navigate = useNavigate();
   const { loginHandler } = useUserState();
+  const { version } = useParams();
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -40,7 +41,7 @@ export const InputForm = () => {
               new Date().getTime() + data.effectiveTime,
             ).toISOString();
             loginHandler(data.accessToken, expirationTime, data.userId);
-            navigate('/');
+            !version && navigate(-1);
             return;
           }
           alert('로그인에 실패하였습니다.');

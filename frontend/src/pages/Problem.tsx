@@ -176,19 +176,8 @@ const langs = {
 // };
 
 const Problem = () => {
+  useUserState();
   const navigate = useNavigate();
-  const { user } = useUserState();
-  // useEffect(() => {
-  //   console.log('user', user);
-  //   if (user.isLoggedIn) {
-  //     return;
-  //   }
-  //   navigate('/signin');
-  // }, [user, user.isLoggedIn]);
-  useEffect(() => {
-    if (!window.localStorage.getItem('camperID')) navigate('/signin');
-  }, []);
-
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
   const [grade, setGrade] = useRecoilState(gradingState);
@@ -279,7 +268,7 @@ const Problem = () => {
         const { level, title, description } = res;
         setProblem({ level, title, description });
       })
-      .catch(() => {
+      .catch((err) => {
         alert('문제를 불러올 수 없습니다');
         navigate('/problems');
       });

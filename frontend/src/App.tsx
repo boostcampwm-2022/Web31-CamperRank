@@ -8,7 +8,6 @@ import { useMemo } from 'react';
 const App = () => {
   const { user } = useUserState();
   const { isLoggedIn } = useMemo(() => user, [user, user.isLoggedIn]);
-
   return (
     <BrowserRouter>
       <Routes>
