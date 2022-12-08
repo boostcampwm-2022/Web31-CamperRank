@@ -42,7 +42,11 @@ export class ProblemService {
   }: IFindProblemOptions) {
     let problemList;
 
-    if (isFalsy(loginId)) {
+    const foundUser = await this.userRepository.findOneBy({
+      loginId: loginId,
+    });
+
+    if (isFalsy(foundUser)) {
       problemList = await this.problemRepository
         .createQueryBuilder('problem')
         .select('*')
@@ -51,10 +55,6 @@ export class ProblemService {
         .take(take)
         .getRawMany();
     } else {
-      const foundUser = await this.userRepository.findOneBy({
-        loginId: loginId,
-      });
-
       const problemIdByLoginIdQuery = this.solvedRepository
         .createQueryBuilder('solved')
         .select('solved.problem.id as problemId')
