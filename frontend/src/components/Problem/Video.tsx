@@ -14,26 +14,32 @@ const VideoContainer = styled.div`
 `;
 
 const UserVideoContainer = styled.video`
-  min-width: 16rem;
-  min-height: 9rem;
   max-width: 16rem;
+  width: 33%;
   max-height: 9rem;
-  border: 3px inset;
-  box-sizing: border-box;
-
-  :last-child {
-    margin-right: 0;
-  }
+  height: auto;
+  margin-right: 2px;
+  //border: 3px inset;
+  //box-sizing: border-box;
 `;
 
 const DivWrapper = styled.div`
   position: relative;
+  max-height: 9rem;
+  max-width: 16rem;
+  width: 33%;
+  height: auto;
+  video {
+    width: 100%;
+    margin-right: 0;
+  }
 `;
 
 const ButtonContainer = styled.div`
   position: absolute;
   left: 0.6rem;
   bottom: 0.9rem;
+  display: flex;
 `;
 
 const ControllButton = styled.div`
@@ -42,11 +48,6 @@ const ControllButton = styled.div`
   display: block;
   font-size: 1rem;
   text-align: center;
-
-  & + & {
-    margin-top: 3px;
-  }
-
   z-index: 2;
 `;
 

@@ -16,7 +16,7 @@ const ContentWrapper = styled.div`
 
 const Level = styled.div`
   position: absolute;
-  top: 0;
+  top: -1rem;
   left: 0;
   font-weight: bold;
   font-size: 1rem;
