@@ -34,7 +34,6 @@ export class RankController {
   ) {
     const simpleRankDtoList = await this.rankService.getUserRanks(skip, take);
 
-    // TODO: simpleRankDtoList의 크기가 0일 때 status 어떻게 보낼지 결정
     return { ...simpleRankDtoList };
   }
 }
