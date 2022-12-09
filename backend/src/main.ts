@@ -4,10 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const isDevMode = process.env.NODE_ENV === 'development';
-  if (isDevMode) {
-    app.enableCors();
-  }
+  app.enableCors();
   app.setGlobalPrefix('api');
   const swaggerDocumentBuilder = new DocumentBuilder()
     .setTitle('CamperRank APIs')

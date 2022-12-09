@@ -1,25 +1,34 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TestCaseController } from './test-case.controller';
 import { TestCaseService } from './test-case.service';
-import { TestCaseRepository } from './test-case.repository';
-import { ProblemRepository } from '../problem/problem.repository';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { TestCase } from './entities/test-case.entity';
+import { MockTestCaseRepository } from '../mock/test-case.mock';
+import { MockProblemRepository } from '../mock/problem.mock';
+import { Problem } from '../problem/entities/problem.entity';
 
 describe('TestCaseController', () => {
   let testCaseController: TestCaseController;
   let testCaseService: TestCaseService;
-  // let testCaseRepository: TestCaseRepository;
-  // let problemRepository: ProblemRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TestCaseController],
-      providers: [TestCaseService, TestCaseRepository, ProblemRepository],
+      providers: [
+        TestCaseService,
+        {
+          provide: getRepositoryToken(TestCase),
+          useValue: MockTestCaseRepository(),
+        },
+        {
+          provide: getRepositoryToken(Problem),
+          useValue: MockProblemRepository(),
+        },
+      ],
     }).compile();
 
     testCaseController = module.get<TestCaseController>(TestCaseController);
     testCaseService = module.get<TestCaseService>(TestCaseService);
-    // testCaseRepository = module.get<TestCaseRepository>(TestCaseRepository);
-    // problemRepository = module.get<ProblemRepository>(ProblemRepository);
   });
 
   it('should be defined', () => {

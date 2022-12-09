@@ -1,4 +1,4 @@
-declare module "@types" {
+declare module '@types' {
   interface ProblemInfo {
     level?: number;
     title?: string;

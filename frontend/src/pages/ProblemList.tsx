@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useRecoilState } from "recoil";
-import { MainHeader } from "../components/MainHeader";
-import { SearchFilter, List } from "../components/ProblemList";
-import { Footer } from "../components/Footer";
-import { filterState } from "../recoils";
-import problems from "../utils/ProblemsDummy";
-import { ProblemInfo } from "@types";
-import { userState } from "../recoils";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { MainHeader } from '../components/MainHeader';
+import { SearchFilter, List } from '../components/ProblemList';
+import { Footer } from '../components/Footer';
+import { filterState } from '../recoils';
+import problems from '../utils/ProblemsDummy';
+import { ProblemInfo } from '@types';
+import { userState } from '../recoils';
 
 const URL = import.meta.env.VITE_SERVER_URL;
 
@@ -42,34 +42,37 @@ const ProblemList = () => {
   const [list, setList] = useState<ProblemInfo[]>([]);
   const [filtered, setFiltered] = useState<ProblemInfo[]>([]);
   const [user] = useRecoilState(userState);
-  
+
   useEffect(() => {
-    const {ID} = user;
-    console.log(ID);
+    const { ID } = user;
     const fetchURL = ID ? `${URL}/problem?loginId=${ID}` : `${URL}/problem`;
-    setFilter({solved: '푼 상태', level: '문제 레벨', search: ''});
+    setFilter({ solved: '푼 상태', level: '문제 레벨', search: '' });
     fetch(fetchURL)
-    .then(res => res.json())
-    .then(res => {
-      if (res.statusCode === 200) {
-        delete res.statusCode;
+      .then((res) => res.json())
+      .then((res) => {
         setList(Object.values(res));
-      }
-    })
+      });
   }, [user]);
-  
+
   useEffect(() => {
     const { solved, level, search } = filter;
     let filtered = [...list];
-    if (level && level !== "문제 레벨") filtered = filtered.filter((elem) => elem.level === +level.slice(-1));
-    if (search && search !== "") filtered = filtered.filter((elem) => elem.title.includes(search));
-    if (solved && solved !== '푼 상태') filtered = filtered.filter((elem) => {
-      return solved === '푼 문제'? elem.isSolved === true : elem.isSolved === false;
-    });
+    if (level && level !== '문제 레벨')
+      filtered = filtered.filter((elem) => elem.level === +level.slice(-1));
+    if (search && search !== '')
+      filtered = filtered.filter((elem) => {
+        if (elem.title) return elem.title.includes(search);
+        else return false;
+      });
+    if (solved && solved !== '푼 상태')
+      filtered = filtered.filter((elem) => {
+        return solved === '푼 문제'
+          ? elem.isSolved === true
+          : elem.isSolved === false;
+      });
 
     setFiltered(filtered);
   }, [filter, list]);
-
 
   return (
     <MainWrapper>

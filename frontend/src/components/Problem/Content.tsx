@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { ProblemType } from "@types";
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { ProblemType } from '@types';
 
 const ContentWrapper = styled.div`
-  border: 3px double #CBCBCB;
+  border: 3px double #cbcbcb;
   border-radius: 5px;
   width: 100%;
   margin-top: 2rem;
   padding: 1.5rem;
-  background: #F5FDF8;
+  background: #f5fdf8;
   height: fit-content;
+  min-height: 75%;
 `;
 
 const Level = styled.div`
   position: absolute;
-  top: 0;
+  top: -1rem;
   left: 0;
   font-weight: bold;
   font-size: 1rem;
@@ -46,12 +47,18 @@ const ProblemDummy = `
 `;
 
 const ProblemContent = ({ problem }: ProblemType) => {
-  if (!problem) return;
+  if (!problem) return <></>;
   const { level, description } = problem;
   return (
     <>
       <Level>LV. {level}</Level>
-      <ContentWrapper dangerouslySetInnerHTML={{ __html: description ? description.slice(1, description.length - 1) : "" }} />
+      <ContentWrapper
+        dangerouslySetInnerHTML={{
+          __html: description
+            ? description.slice(1, description.length - 1)
+            : '',
+        }}
+      />
     </>
   );
 };

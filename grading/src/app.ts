@@ -6,10 +6,10 @@ import methodOverride from "method-override";
 
 const app = express();
 
-const corsOptions = {
-  origin: "*",
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: "*",
+//   credentials: true,
+// };
 
 app.use(cors());
 
@@ -23,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 app.use("/grade-server", gradeRouter);
+
 
 app.listen("4000", () => {
   console.log(`

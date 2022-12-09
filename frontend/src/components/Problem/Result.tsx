@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styled, { css } from "styled-components";
-import { gradingState } from "../../recoils";
-import { useRecoilState } from "recoil";
+import React, { useCallback, useEffect, useState } from 'react';
+import styled, { css } from 'styled-components';
+import { gradingState } from '../../recoils';
+import { useRecoilState } from 'recoil';
 
 type ObjType = {
   [index: string]: string;
@@ -68,48 +68,58 @@ const CasePrint = styled.div`
 
 const Result = () => {
   const [grading, setGrading] = useRecoilState(gradingState);
-  const [result, setResult] = useState("");
-  const [point, setPoint] = useState("");
+  const [result, setResult] = useState('');
+  const [point, setPoint] = useState('');
   const [cases, setCases] = useState<any>([]);
   const [number, setNumber] = useState(0);
 
   useEffect(() => {
-    setPoint("");
-    setResult("");
+    setPoint('');
+    setResult('');
     setCases([]);
     if (!grading.result) return;
     Object.keys(grading.result).length > 0 && checkGrading();
   }, [grading]);
 
   useEffect(() => {
-    if (grading.status !== "run") return;
+    if (grading.status !== 'run') return;
     const interval = setInterval(() => {
-      if (point === ".....") setPoint(".");
-      else setPoint(point + ".");
+      if (point === '.....') setPoint('.');
+      else setPoint(point + '.');
     }, 800);
     return () => clearInterval(interval);
   });
 
   const textObj: ObjType = {
-    ready: "코드를 테스트하거나 제출해주세요!!",
-    run: "코드를 채점하고 있습니다",
-    complete: "채점 결과",
+    ready: '코드를 테스트하거나 제출해주세요!!',
+    run: '코드를 채점하고 있습니다',
+    complete: '채점 결과',
   };
 
   const checkGrading = useCallback(() => {
     if (!grading.result) return;
-    if (grading.kind === "테스트") {
-      let resArr = Object.entries(grading.result);
-      resArr = resArr.slice(0, resArr.length - 1);
+    if (grading.kind === '테스트') {
+      const resArr = Object.entries(grading.result);
       setCases(resArr);
-      const results = resArr.filter((elem) => elem[1].resultCode === 1000);
-      setNumber(results.length);
+      console.log(resArr, grading.result);
+      let cnt = 0;
+      let index = 0;
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        if (grading.result[index]) {
+          const obj = grading.result[index];
+          const { resultCode } = obj;
+          if (resultCode === 1000) cnt++;
+          index++;
+        } else break;
+      }
+      setNumber(cnt);
     } else {
-      if (grading.kind === "제출") {
+      if (grading.kind === '제출') {
         const { solvedResult } = grading.result;
-        solvedResult === "Success"
-          ? setResult("정답입니다!")
-          : setResult("틀렸습니다!");
+        solvedResult === 'Success'
+          ? setResult('정답입니다!')
+          : setResult('틀렸습니다!');
       }
       setCases([]);
     }
@@ -119,11 +129,11 @@ const Result = () => {
     <ResultWrapper>
       <Text>
         {textObj[grading.status]}
-        {grading.status === "run" && point}
+        {grading.status === 'run' && point}
       </Text>
       <>
-        {grading.status === "complete" &&
-          grading.kind === "테스트" &&
+        {grading.status === 'complete' &&
+          grading.kind === '테스트' &&
           cases.map((elem: any, idx: number) => {
             const { testCaseNumber, userPrint, userAnswer, resultCode } =
               elem[1];
@@ -136,16 +146,16 @@ const Result = () => {
             );
           })}
       </>
-      {grading.status === "complete" && (
+      {grading.status === 'complete' && (
         <>
           <Grade>
-            {grading.kind === "제출" && result}{" "}
-            {grading.kind === "테스트" &&
+            {grading.kind === '제출' && result}{' '}
+            {grading.kind === '테스트' &&
               `테스트케이스 ${cases.length}개 중 ${number}개 맞추셨습니다`}
           </Grade>
         </>
       )}
-      {grading.status === "error" && (
+      {grading.status === 'error' && (
         <ErrorText>
           코드 실행 중 오류가 발생했습니다. 코드를 확인한 뒤 다시 실행해주세요.
         </ErrorText>

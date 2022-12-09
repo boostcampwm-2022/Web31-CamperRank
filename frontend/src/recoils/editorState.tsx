@@ -1,4 +1,4 @@
-import {atom} from "recoil";
+import { atom } from 'recoil';
 
 interface Editor {
   text: string;
@@ -6,9 +6,9 @@ interface Editor {
 }
 
 export const editorState = atom<Editor>({
-  key: "editorState",
+  key: 'editorState',
   default: {
-    text: "",
-    language: "Javascript"
+    text: '',
+    language: '',
   },
 });

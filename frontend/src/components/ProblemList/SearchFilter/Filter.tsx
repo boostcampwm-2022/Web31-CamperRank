@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { FilterButton } from "../../../assets/icons";
-import Modal from "./Modal";
-import { FilterType } from "@types";
-import { useRecoilState } from "recoil";
-import { filterState } from "../../../recoils";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { SelectButton } from '../../../assets/icons';
+import Modal from './Modal';
+import { FilterType } from '@types';
+import { useRecoilState } from 'recoil';
+import { filterState } from '../../../recoils';
 
 const FilterWrapper = styled.div`
   width: 10rem;
@@ -20,7 +20,8 @@ const FilterWrapper = styled.div`
   align-items: center;
   justify-content: space-around;
   position: relative;
-  &: hover {
+
+  &:hover {
     border: 3px solid #80a471;
   }
 `;
@@ -38,9 +39,9 @@ const Filter = ({ content }: FilterType) => {
   const { solved, level } = filter;
   return (
     <FilterWrapper>
-      {name === "상태" ? solved : level}
+      {name === '상태' ? solved : level}
       <ModalButton
-        src={FilterButton}
+        src={SelectButton}
         onClick={() => setOpen(!open)}
       ></ModalButton>
       {open && (

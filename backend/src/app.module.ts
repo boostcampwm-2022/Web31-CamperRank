@@ -14,6 +14,7 @@ import { TestCase } from './test-case/entities/test-case.entity';
 import { Solved } from './solved/entities/solved.entity';
 import { Problem } from './problem/entities/problem.entity';
 import { RankModule } from './rank/rank.module';
+import * as process from 'process';
 
 @Module({
   imports: [
@@ -21,6 +22,8 @@ import { RankModule } from './rank/rank.module';
       // configuration 설정을 coifg module 불러 올 때 로드한다
       isGlobal: true,
       load: [typeormConfig],
+      envFilePath:
+        process.env.NODE_ENV === 'development' ? `.env` : '.env.production',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

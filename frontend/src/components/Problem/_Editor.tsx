@@ -1,6 +1,6 @@
-import React, {useState, useRef, useEffect} from "react";
-import styled from "styled-components";
-import ReservedWords from "../../utils/ReservedWords";
+import React, { useState, useRef, useEffect } from 'react';
+import styled from 'styled-components';
+import ReservedWords from '../../utils/ReservedWords';
 
 // OLD VERSION
 
@@ -10,7 +10,7 @@ const EditorWrapper = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
-`
+`;
 
 const Code = styled.div`
   width: 95%;
@@ -29,7 +29,7 @@ const CodeEditor = styled(Code)`
   }
   z-index: 1;
   opacity: 0.5;
-`
+`;
 
 const CodePrinter = styled(Code)`
   font-weight: 500;
@@ -38,7 +38,7 @@ const CodePrinter = styled(Code)`
   span {
     color: red;
   }
-`
+`;
 
 const Title = styled.div`
   font-weight: 600;
@@ -56,7 +56,7 @@ const LineWrapper = styled.div`
     color: #888888;
     margin-right: 0.5rem;
   }
-`
+`;
 
 const Editor = () => {
   const [code, setCode] = useState('');
@@ -66,14 +66,14 @@ const Editor = () => {
   const countEscape = (str: string) => {
     let count = 0;
     let hasChar = false;
-    for (let char of str) {
+    for (const char of str) {
       if (char === '\n') count++;
       else hasChar = true;
     }
     if (hasChar) count++;
     return count;
-  }
-  
+  };
+
   useEffect(() => {
     if (code === '') {
       if (printerRef && printerRef.current) {
@@ -83,8 +83,11 @@ const Editor = () => {
     const removedCode = code.replaceAll('\n\n', '\n');
     setLine(countEscape(removedCode));
     let editorHTML = editorRef.current?.innerHTML;
-    ReservedWords.map(elem => {
-      editorHTML = editorHTML?.replace(new RegExp(`\\b${elem}\\b`, 'g'), `<span>${elem}</span>`);
+    ReservedWords.map((elem) => {
+      editorHTML = editorHTML?.replace(
+        new RegExp(`\\b${elem}\\b`, 'g'),
+        `<span>${elem}</span>`,
+      );
     });
     if (editorHTML && printerRef && printerRef.current) {
       printerRef.current.innerHTML = editorHTML;
@@ -96,9 +99,10 @@ const Editor = () => {
       <Title>Solution</Title>
       <EditorWrapper>
         <LineWrapper>
-          {
-            Array.apply(null, new Array(line)).map((e, idx) => <p key={idx}>{idx + 1}</p>)
-          }
+          {/* eslint-disable-next-line prefer-spread */}
+          {Array.apply(null, new Array(line)).map((e, idx) => (
+            <p key={idx}>{idx + 1}</p>
+          ))}
         </LineWrapper>
         <CodeEditor
           contentEditable={true}
@@ -106,14 +110,13 @@ const Editor = () => {
           ref={editorRef}
           onInput={(e: React.KeyboardEvent<HTMLDivElement>) => {
             const target = e.target as HTMLDivElement;
-            setCode(target.innerText);}}
-        >
-        </CodeEditor>
+            setCode(target.innerText);
+          }}
+        ></CodeEditor>
         <CodePrinter ref={printerRef}></CodePrinter>
       </EditorWrapper>
-      
     </>
   );
-}
+};
 
 export default Editor;

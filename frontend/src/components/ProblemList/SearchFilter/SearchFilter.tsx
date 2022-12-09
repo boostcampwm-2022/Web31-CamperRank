@@ -1,10 +1,10 @@
-import React, {useState} from "react";
-import styled from "styled-components";
-import Filter from "./Filter";
-import FiltersInfo from "../../../utils/FiltersInfo";
-import Search from "./Search";
-import {useRecoilState} from "recoil";
-import {filterState} from "../../../recoils";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import Filter from './Filter';
+import FiltersInfo from '../../../utils/FiltersInfo';
+import Search from './Search';
+import { useRecoilState } from 'recoil';
+import { filterState } from '../../../recoils';
 
 const FiltersWrapper = styled.div`
   width: 100%;
@@ -40,7 +40,7 @@ const Button = styled.button`
   height: 48px;
   cursor: pointer;
 
-  &: hover {
+  &:hover {
     border: 3px solid #80a471;
   }
 `;
@@ -49,9 +49,9 @@ const SearchFilter = () => {
   const [, setFilter] = useRecoilState(filterState);
   const handleButtonClick = () => {
     setFilter({
-      solved: "푼 상태",
-      level: "문제 레벨",
-      search: "",
+      solved: '푼 상태',
+      level: '문제 레벨',
+      search: '',
     });
   };
   return (

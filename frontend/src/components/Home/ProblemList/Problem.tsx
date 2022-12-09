@@ -1,7 +1,11 @@
-import React from "react";
-import styled from "styled-components";
-import { ProblemType } from "@types";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import styled, { css } from 'styled-components';
+import { ProblemType } from '@types';
+import { Link } from 'react-router-dom';
+
+type Prop = {
+  active: boolean;
+};
 
 const ProblemWrapper = styled.div`
   border: 2px solid #888888;
@@ -16,7 +20,7 @@ const ProblemWrapper = styled.div`
   }
 `;
 
-const Level = styled.div`
+const Level = styled.div<Prop>`
   position: absolute;
   width: 20%;
   height: 3rem;
@@ -28,6 +32,13 @@ const Level = styled.div`
   font-weight: 600;
   font-size: 1.5rem;
   line-height: 2.5rem;
+  ${(props) =>
+    props.active &&
+    css`
+      background: #caf7d9;
+      border: none;
+      box-shadow: 1px 1px 3px 1px #b9b9b9;
+    `}
 `;
 
 const Name = styled.div`
@@ -69,19 +80,25 @@ const Button = styled.button`
     background: #aad4b6;
     color: white;
     font-weight: bold;
-    box-shadow: 2px 2px 2px 2px #b9b9b9;
+    box-shadow: 2px 2px 3px 2px #b9b9b9;
     border: none;
   }
 `;
 
 const Problem = ({ problem }: ProblemType) => {
   const { level, title, problemId } = problem;
+  const [active, setActive] = useState(false);
   const problemURL = `/problem/single/${problemId}`;
   return (
-    <ProblemWrapper>
-      <Level>LV. {level}</Level>
+    <ProblemWrapper
+      onMouseOver={() => setActive(true)}
+      onMouseOut={() => setActive(false)}
+    >
+      <Level active={active}>LV. {level}</Level>
       <Name>{title}</Name>
-      <Description>Lv{level}, Python, Javascript, Success Rate: 95.12%</Description>
+      <Description>
+        Lv{level}, Python, Javascript, Success Rate: 95.12%
+      </Description>
       <Link to={problemURL}>
         <Button>문제 풀기</Button>
       </Link>

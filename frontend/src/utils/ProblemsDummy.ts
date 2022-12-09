@@ -1,22 +1,22 @@
 const problem1 = {
   level: 1,
-  title: "A + B = ?",
-  description: "Lv1, Python, Javascript, Success Rate: 95.12%",
-  id: 1
+  title: 'A + B = ?',
+  description: 'Lv1, Python, Javascript, Success Rate: 95.12%',
+  id: 1,
 };
 
 const problem2 = {
   level: 2,
-  title: "A + B = ?",
-  description: "Lv2, Python, Javascript, Success Rate: 95.12%",
-  id: 2
+  title: 'A + B = ?',
+  description: 'Lv2, Python, Javascript, Success Rate: 95.12%',
+  id: 2,
 };
 
 const problem3 = {
   level: 3,
-  title: "A + B = ?",
-  description: "Lv3, Python, Javascript, Success Rate: 95.12%",
-  id: 3
+  title: 'A + B = ?',
+  description: 'Lv3, Python, Javascript, Success Rate: 95.12%',
+  id: 3,
 };
 
 const problems = [

@@ -1,4 +1,4 @@
-export interface FindSolvedByOpt {
+export interface IFindSolvedByOpt {
   problemId?: number;
   loginId?: string;
   skip?: number;

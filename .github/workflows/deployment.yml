@@ -2,9 +2,9 @@ name: Deploy CamperRank Server
 
 on:
   push:
-    branches: [main, dev]
+    branches: [ main, dev ]
   pull_request:
-    branches: [main, dev]
+    branches: [ main, dev ]
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
           ref: dev
 
       - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -27,13 +27,21 @@ jobs:
           script: |
             cd /home/code/Web31-CamperRank
             git pull origin dev
+            npm install pm2 -g
+            npm install yarn -g
             pm2 kill
             cd /home/code/Web31-CamperRank/frontend
             yarn install
             yarn build
+            pm2 start node_modules/y-webrtc/bin/server.js -n editor-server
             cd /home/code/Web31-CamperRank/backend
             npm install
             pm2 start -n server npm -- start
             cd /home/code/Web31-CamperRank/grading
+            npm install
             pm2 start -n grade-server npm -- start
+            cd /home/code/Web31-CamperRank/socket
+            npm install
+            pm2 start -n socket-server npm -- start
             sudo nginx -s reload
+            pm2 list

@@ -1,16 +1,16 @@
-import {atom} from "recoil";
+import { atom } from 'recoil';
 
 interface userInfo {
-  token: string,
-  isLoggedIn: boolean,
-  ID: string
+  token: string;
+  isLoggedIn: boolean;
+  ID: string;
 }
 
 export const userState = atom<userInfo>({
-  key: "user",
+  key: 'user',
   default: {
-    token: "",
+    token: '',
     isLoggedIn: false,
-    ID: ""
+    ID: '',
   },
 });

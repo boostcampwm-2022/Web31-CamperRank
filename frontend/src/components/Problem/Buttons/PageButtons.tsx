@@ -1,8 +1,8 @@
-import React, {useCallback} from "react";
-import {useParams} from "react-router-dom";
-import styled from "styled-components";
-import {InviteModal} from "../InviteModal";
-import useModal from "../../../hooks/useModal";
+import React, { useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { InviteModal } from '../InviteModal';
+import useModal from '../../../hooks/useModal';
 
 type ButtonProp = {
   name: string;
@@ -16,8 +16,9 @@ const ButtonWrapper = styled.button`
   background: #ffffff;
   border: 1px solid #888888;
 
-  &:nth-child(1), &:hover {
-    background: #EEF5F0;
+  &:nth-child(1),
+  &:hover {
+    background: #eef5f0;
     font-weight: 600;
     border: none;
   }
@@ -35,7 +36,7 @@ const ButtonWrapper = styled.button`
   }
 `;
 
-const Button = ({name, callback}: ButtonProp) => {
+const Button = ({ name, callback }: ButtonProp) => {
   return (
     <ButtonWrapper onClick={callback}>
       <span>{name}</span>
@@ -44,35 +45,38 @@ const Button = ({name, callback}: ButtonProp) => {
 };
 
 const PageButtons = () => {
-  const {version} = useParams();
-  const {isShowing, toggle} = useModal();
+  const { version } = useParams();
+  const { isShowing, toggle } = useModal();
 
   const setProblem = useCallback(() => {
+    return;
   }, []);
 
   const setQuestion = useCallback(() => {
+    return;
   }, []);
 
   const setTestcase = useCallback(() => {
+    return;
   }, []);
 
   const invite = useCallback(() => {
     toggle();
   }, [isShowing, toggle]);
 
-  const buttonNames = ["문제", "질문", "테스트케이스"];
+  const buttonNames = ['문제', '질문', '테스트케이스'];
   const callbackList = [setProblem, setQuestion, setTestcase];
-  if (version === "multi") {
-    buttonNames.push("초대");
+  if (version === 'multi') {
+    buttonNames.push('초대');
     callbackList.push(invite);
   }
 
   return (
     <>
       {buttonNames.map((name, idx) => (
-        <Button key={idx} name={name} callback={callbackList[idx]}/>
+        <Button key={idx} name={name} callback={callbackList[idx]} />
       ))}
-      <InviteModal isShowing={isShowing}/>
+      <InviteModal isShowing={isShowing} />
     </>
   );
 };

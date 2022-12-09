@@ -1,9 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const InputFormContainer = styled.form`
   width: 600px;
   height: 264px;
-  background: #CFE4B5;
+  background: #cfe4b5;
   box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   margin-top: 32px;
@@ -15,13 +15,13 @@ export const InputFormContainer = styled.form`
   flex-direction: column;
   justify-content: space-between;
   position: relative;
-  
-  button{
+
+  button {
     position: absolute;
     bottom: 16px;
     right: 104px;
-    background: #E1EBDB;
-    border: 2px solid #AEAEAE;
+    background: #e1ebdb;
+    border: 2px solid #aeaeae;
     border-radius: 10px;
     cursor: pointer;
     width: 112px;
@@ -48,8 +48,8 @@ export const IDInputContainer = styled.div`
 
   input {
     margin-right: 80px;
-    background: #F1F9EB;
-    border: 3px solid #9CCAAF;
+    background: #f1f9eb;
+    border: 3px solid #9ccaaf;
     border-radius: 10px;
     width: 256px;
     height: 36px;
@@ -66,8 +66,8 @@ export const PasswordInputContainer = styled.div`
 
   input {
     margin-right: 80px;
-    background: #F1F9EB;
-    border: 3px solid #9CCAAF;
+    background: #f1f9eb;
+    border: 3px solid #9ccaaf;
     border-radius: 10px;
     width: 256px;
     height: 36px;

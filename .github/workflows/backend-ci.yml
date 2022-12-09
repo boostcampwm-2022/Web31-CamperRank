@@ -2,23 +2,25 @@ name: CI CamperRank Backend Source Code
 
 on:
   push:
-    branches: [main, dev]
+    branches: [ main, dev ]
   pull_request:
-    branches: [main, dev]
+    branches: [ main, dev ]
 
 jobs:
   ci:
     name: ci backend source code
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [16.x]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        node-version: [ 16.x ]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
+        with:
+          ref: dev
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -29,4 +31,4 @@ jobs:
       - run: |
           cd backend
           npm install
-          # npm test
+          npm test

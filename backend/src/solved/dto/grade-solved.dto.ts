@@ -40,7 +40,7 @@ export class GradeSolvedDto {
 
     this.testCaseId = testCase.id;
     this.testCaseNumber = testCase.caseNumber;
-    this.testCaseInput = testCase.testInput;
-    this.testCaseOutput = testCase.testOutput;
+    this.testCaseInput = JSON.parse(testCase.testInput);
+    this.testCaseOutput = JSON.parse(testCase.testOutput);
   }
 }

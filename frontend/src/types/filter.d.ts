@@ -1,4 +1,4 @@
-declare module "@types" {
+declare module '@types' {
   interface FilterContent {
     name: string;
     elements: string[];

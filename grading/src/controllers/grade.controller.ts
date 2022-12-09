@@ -1,6 +1,5 @@
 import { execSync, spawnSync } from "child_process";
 import { v4 as uuid } from "uuid";
-
 import fs from "fs";
 
 const IDENTIFY_CODE = process.env.IDENTIFY_CODE || "secret";
@@ -90,18 +89,16 @@ export const gradingController = async (req: any, res: any) => {
       testCaseNumber,
       testCaseInput,
       testCaseOutput,
-    } = req.body.data;
+    } = req.body;
 
-    testCaseInput = JSON.parse(testCaseInput);
-    testCaseOutput = JSON.parse(testCaseOutput);
 
     const fileName = uuid();
     const plClassifier = PLClassifier(language);
-    const filePath = process.env.NEW_FILE_PATH + fileName + plClassifier.ext;
+    const filePath = "./" + fileName + plClassifier.ext;
     const totalCode = buildCode(userCode, testCaseInput, plClassifier.cmd);
 
     fs.writeFileSync(filePath, `${totalCode}`);
-    const pythonResult = spawnSync(
+    const spawnResult = spawnSync(
       plClassifier.cmd,
       [`${filePath}`, testCaseInput],
       {
@@ -109,16 +106,20 @@ export const gradingController = async (req: any, res: any) => {
         timeout: 10000,
       }
     );
-    const resultText = pythonResult.stdout.toString();
-    const errText = pythonResult.stderr.toString();
+
+    const stdout = spawnResult.stdout.toString();
+    const stderr = spawnResult.stderr.toString();
+    const status = spawnResult.status;
+    const signal = spawnResult.signal;
+    const error = spawnResult.error;
     fs.unlinkSync(filePath);
 
-    const strings = resultText.split(IDENTIFY_CODE);
+    const strings = stdout.split(IDENTIFY_CODE);
     const userPrint = strings[0].replace(/\\r\\n/gi, "\n");
     const userAnswer = strings[1].trim();
 
     if (
-      errText.length === 0 &&
+      stderr.length === 0 &&
       JSON.stringify(testCaseOutput) === JSON.stringify(JSON.parse(userAnswer))
     ) {
       res.status(200).json({
@@ -140,8 +141,8 @@ export const gradingController = async (req: any, res: any) => {
   } catch (err) {
     console.error(err);
     res.status(400).json({
-      solvedId: req.body.data.solvedId,
-      testCaseNumber: req.body.data.testCaseNumber,
+      solvedId: req.body.solvedId,
+      testCaseNumber: req.body.testCaseNumber,
       resultCode: 2000,
     });
   }
@@ -157,7 +158,7 @@ export const startGrade = async function (req: any, res: any) {
       language,
       testCaseInput,
       testCaseOutput,
-    } = req.body.data;
+    } = req.body;
     let filePath = "";
     let codeStyle = "";
     let fileList = [];
@@ -272,7 +273,7 @@ export const startDocker = async function (req: any, res: any) {
       language,
       testCaseInput,
       testCaseOutput,
-    } = req.body.data;
+    } = req.body;
 
     problemId = problemId || "undefined";
 

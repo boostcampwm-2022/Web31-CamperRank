@@ -2,23 +2,25 @@ name: CI CamperRank Frontend Source Code
 
 on:
   push:
-    branches: [main, dev]
+    branches: [ main, dev ]
   pull_request:
-    branches: [main, dev]
+    branches: [ main, dev ]
 
 jobs:
   ci:
     name: ci frontend source code
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [16.x]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        node-version: [ 16.x ]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
+        with:
+          ref: dev
 
       - name: Cache yarn dependencies
         uses: actions/cache@v3

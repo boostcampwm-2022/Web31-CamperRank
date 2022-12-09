@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useRecoilState } from "recoil";
-import { filterState } from "../../../recoils";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { filterState } from '../../../recoils';
 
 const SearchWrapper = styled.div`
   height: 3rem;
@@ -22,13 +22,12 @@ const SearchInput = styled.input`
   text-align: right;
   font-size: 1.5rem;
   padding-right: 0.5rem;
-  &: hover {
+  &:hover {
     border: 3px solid #80a471;
   }
 `;
 
 const SearchButton = styled.button`
-  border: none;
   outline: none;
   background: #fff;
   border: 3px solid #b5d4a8;
@@ -37,7 +36,7 @@ const SearchButton = styled.button`
   height: 3rem;
   cursor: pointer;
   width: 4rem;
-  &: hover {
+  &:hover {
     border: 3px solid #80a471;
   }
 `;
@@ -48,7 +47,7 @@ const Search = () => {
   return (
     <SearchWrapper>
       <SearchInput
-        value={search || ""}
+        value={search || ''}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setFilter({ ...filter, search: e.target.value })
         }

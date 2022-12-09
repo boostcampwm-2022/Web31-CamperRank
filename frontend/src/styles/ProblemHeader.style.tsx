@@ -1,10 +1,9 @@
-import styled from "styled-components";
-import {Link} from "react-router-dom";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const HeaderContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
-  min-width: 80rem;
   padding: 0 6rem;
   height: 100%;
   display: flex;
@@ -12,21 +11,23 @@ export const HeaderContainer = styled.div`
   align-items: center;
 
   div {
-    margin-right: 11rem;
+    margin-right: 4rem;
     height: 2.5rem;
 
     ul {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 2rem;
+      height: 3rem;
 
       li {
-        height: 1.5rem;
-        margin-left: 4rem;
+        height: 2rem;
+        margin-left: 2rem;
+        min-width: 9rem;
+        width: 9rem;
 
         .greater {
-          margin-top: 2px;
+          margin-top: 0.4rem;
           height: 1.5rem;
           width: 0.75rem;
         }
@@ -37,6 +38,11 @@ export const HeaderContainer = styled.div`
           font-size: 1.5rem;
           color: #000000;
         }
+      }
+
+      li:nth-child(2) {
+        min-width: 2rem;
+        width: 2rem;
       }
     }
   }
@@ -56,6 +62,8 @@ export const GreenMark = styled.mark`
 
 export const MenuContainer = styled.div`
   margin-bottom: 2rem;
+  min-width: 8rem;
+  width: 8rem;
 
   button {
     cursor: pointer;
@@ -64,10 +72,11 @@ export const MenuContainer = styled.div`
     font-size: 0.7rem;
     border: none;
     background: none;
+    min-width: 4rem;
   }
 
   a:nth-child(1) {
-    button{
+    button {
       border-right: solid 1px silver;
     }
   }

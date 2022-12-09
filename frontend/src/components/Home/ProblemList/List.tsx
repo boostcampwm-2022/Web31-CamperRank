@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import Problem from "./Problem";
-import { userState } from "../../../recoils";
-import {useRecoilState} from "recoil";
-import { ProblemInfo } from "@types";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import Problem from './Problem';
+import { userState } from '../../../recoils';
+import { useRecoilState } from 'recoil';
+import { ProblemInfo } from '@types';
 
 const URL = import.meta.env.VITE_SERVER_URL;
 
@@ -36,28 +36,19 @@ const ProblemListWrapper = styled.div`
   width: 95%;
 `;
 
-const problem = {
-  level: 1,
-  title: "A + B = ?",
-  description: "Lv1, Python, Javascript, Success Rate: 95.12%",
-  id: 1
-};
-
 const List = () => {
   const [user] = useRecoilState(userState);
   const [problems, setProblems] = useState<ProblemInfo[]>([]);
   useEffect(() => {
-    const {ID} = user;
-    console.log(ID);
-    const fetchURL = ID ? `${URL}/problem/random?loginId=${ID}` : `${URL}/problem/random`;
+    const { ID } = user;
+    const fetchURL = ID
+      ? `${URL}/problem/random?loginId=${ID}`
+      : `${URL}/problem/random`;
     fetch(fetchURL)
-    .then(res => res.json())
-    .then(res => {
-      if (res.statusCode === 200) {
-        delete res.statusCode;
+      .then((res) => res.json())
+      .then((res) => {
         setProblems(Object.values(res));
-      }
-    })
+      });
   }, [user]);
   return (
     <ListWrapper>

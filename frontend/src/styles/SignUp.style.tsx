@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const InputFormContainer = styled.form`
   width: 43rem;
@@ -23,7 +23,8 @@ export const InputFormContainer = styled.form`
     width: 7rem;
     height: 2.5rem;
     font-size: 0.9rem;
-    &: hover {
+
+    &:hover {
       background: #c2d5b7;
       border: none;
       box-shadow: 1px 1px 1px 1px #b9b9b9;
