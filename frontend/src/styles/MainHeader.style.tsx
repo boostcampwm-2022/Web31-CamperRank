@@ -10,7 +10,6 @@ export const MainHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   nav {
     margin-right: 11rem;
 

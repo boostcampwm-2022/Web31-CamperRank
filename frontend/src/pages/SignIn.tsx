@@ -2,7 +2,7 @@ import { MainHeader } from '../components/MainHeader';
 import { Footer } from '../components/Footer';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { InputForm } from '../components/SignIn/InputForm';
+import { SigninInputForm } from '../components/SignIn/InputForm';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../recoils';
 import { useNavigate } from 'react-router-dom';
@@ -54,7 +54,7 @@ export const SignIn = () => {
         <MainHeader></MainHeader>
       </HeaderWrapper>
       <ContentWrapper>
-        <InputForm />
+        <SigninInputForm />
       </ContentWrapper>
       <FooterWrapper>
         <Footer />

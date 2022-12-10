@@ -2,12 +2,16 @@ import {
   IDInputContainer,
   InputFormContainer,
   PasswordInputContainer,
+  AnchorLogo,
+  GreenMark,
+  TextLink,
+  InfoContainer,
 } from '../../styles/SignIn.style';
 import React, { useCallback, useMemo, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUserState } from '../../hooks/useUserState';
 
-export const InputForm = () => {
+export const SigninInputForm = () => {
   const [isLoading, setLoading] = useState(false);
   const id = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
@@ -57,21 +61,30 @@ export const InputForm = () => {
   );
 
   return (
-    <InputFormContainer onSubmit={handleSubmit}>
-      <p>로그인</p>
-      <IDInputContainer>
-        <p>아이디</p>
-        <input type={'text'} ref={id} />
-      </IDInputContainer>
-      <PasswordInputContainer>
-        <p>비밀번호</p>
-        <input type={'password'} ref={password} />
-      </PasswordInputContainer>
-      {isLoading ? (
-        <span>sending...</span>
-      ) : (
-        <button type={'submit'}>로그인</button>
-      )}
-    </InputFormContainer>
+    <>
+      <InfoContainer>
+        <AnchorLogo to={'/'}>
+          Signin to
+          <br />
+          Camper<GreenMark>Rank</GreenMark>
+        </AnchorLogo>
+        <TextLink to={'/signup'}>↪ Go to Signup</TextLink>
+      </InfoContainer>
+      <InputFormContainer onSubmit={handleSubmit}>
+        <IDInputContainer>
+          <p>아이디</p>
+          <input type={'text'} ref={id} />
+        </IDInputContainer>
+        <PasswordInputContainer>
+          <p>비밀번호</p>
+          <input type={'password'} ref={password} />
+        </PasswordInputContainer>
+        {isLoading ? (
+          <span>sending...</span>
+        ) : (
+          <button type={'submit'}>로그인</button>
+        )}
+      </InputFormContainer>
+    </>
   );
 };
