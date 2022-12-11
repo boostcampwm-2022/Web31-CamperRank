@@ -21,7 +21,7 @@ const HeaderWrapper = styled.div`
 const ContentWrapper = styled.div`
   min-width: 80rem;
   flex: 1;
-  background: #e4e8e0;
+  background: #e5ebdf;
 `;
 
 const FooterWrapper = styled.div`

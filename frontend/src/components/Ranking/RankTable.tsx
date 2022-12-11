@@ -8,7 +8,7 @@ const Table = styled.table`
   background: #ffffff;
   border: 1px solid #b9b9b9;
   border-radius: 2px;
-  margin: 2rem auto;
+  margin: 1rem auto;
   font-weight: 400;
   font-size: 1rem;
   font-family: Noto Sans KR, sans-serif;

@@ -13,6 +13,12 @@ const RankWrapper = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   position: relative;
+
+  p {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 1.5rem 0 0 2.2rem;
+  }
 `;
 
 interface UserTableInfo {
@@ -82,6 +88,7 @@ export const RankContainer = () => {
 
   return (
     <RankWrapper>
+      <p>랭킹</p>
       <RankTable columns={columns} data={data} />
     </RankWrapper>
   );

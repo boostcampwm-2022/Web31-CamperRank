@@ -30,7 +30,7 @@ const ContentWrapper = styled.div`
   width: 80rem;
   min-height: 38rem;
   height: 38rem;
-  background: #e4e8e0;
+  background: #e5ebdf;
   justify-content: space-around;
 `;
 
