@@ -22,6 +22,11 @@ const ModalWrapper = styled.div`
 const ModalElement = styled.div`
   font-size: 20px;
   cursor: pointer;
+  color: #80a471;
+  &:hover {
+    background: #e2f0dc;
+    font-weight: bold;
+  }
 `;
 
 const Modal = ({ onClick, name, elements }: ModalElements) => {

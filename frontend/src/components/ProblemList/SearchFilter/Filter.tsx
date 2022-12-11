@@ -14,7 +14,7 @@ const FilterWrapper = styled.div`
   background: #fff;
   text-align: center;
   font-weight: 500;
-  font-size: 1.5rem;
+  font-size: 1.45rem;
   line-height: 3rem;
   display: flex;
   align-items: center;

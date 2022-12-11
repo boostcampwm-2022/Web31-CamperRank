@@ -13,21 +13,25 @@ const URL = import.meta.env.VITE_SERVER_URL;
 
 const MainWrapper = styled.div`
   width: 100%;
-  height: 135rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  min-width: 1100px;
+  align-items: center;
+  min-width: 80rem;
+  min-height: 123rem;
+  height: 123rem;
 `;
 
 const HeaderWrapper = styled.div`
-  width: 100%;
+  min-width: 80rem;
+  width: 80rem;
+  min-height: 8rem;
   height: 8rem;
 `;
 
 const ListWrapper = styled.div`
   width: 100%;
-  height: 95rem;
+  height: 90rem;
   background: #f1f5ee;
   display: flex;
 `;

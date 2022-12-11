@@ -9,12 +9,18 @@ type ListType = {
   list: ProblemInfo[];
 };
 
+const ListContainer = styled.div`
+  min-width: 80rem;
+  width: 80rem;
+  margin: 0 auto;
+  display: flex;
+  padding: 0 5rem;
+`;
+
 const ListWrapper = styled.div`
   width: 75%;
   display: flex;
-  align-items: center;
   flex-direction: column;
-  padding: 4rem;
   gap: 2.5rem;
   height: 100%;
   position: relative;
@@ -25,6 +31,12 @@ const SubWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+`;
+
+const Info = styled.div`
+  font-size: 1.2rem;
+  color: #537744;
+  margin: 1.5rem 0 0 1rem;
 `;
 
 const List = ({ list }: ListType) => {
@@ -45,17 +57,24 @@ const List = ({ list }: ListType) => {
 
   return (
     <>
-      <ListWrapper>
-        {pagedList.length <= 7 &&
-          pagedList.map((elem, idx) => <Problem key={idx} problem={elem} />)}
-        <PageController
-          page={page}
-          onClickPage={(now: number) => setPage({ ...page, now })}
-        ></PageController>
-      </ListWrapper>
-      <SubWrapper>
-        <SearchBox></SearchBox>
-      </SubWrapper>
+      <ListContainer>
+        <ListWrapper>
+          <Info>
+            {list.length == 0
+              ? '해당하는 문제가 존재하지 않습니다'
+              : `총 ${list.length} 문제가 검색되었습니다`}
+          </Info>
+          {pagedList.length <= 7 &&
+            pagedList.map((elem, idx) => <Problem key={idx} problem={elem} />)}
+          <PageController
+            page={page}
+            onClickPage={(now: number) => setPage({ ...page, now })}
+          ></PageController>
+        </ListWrapper>
+        <SubWrapper>
+          <SearchBox></SearchBox>
+        </SubWrapper>
+      </ListContainer>
     </>
   );
 };

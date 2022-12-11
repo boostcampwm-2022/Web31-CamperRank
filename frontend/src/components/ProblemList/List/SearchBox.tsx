@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Delete, RedDelete } from '../../../assets/icons';
 import { useRecoilState } from 'recoil';
 import { filterState } from '../../../recoils';
 
 const SearchWrapper = styled.div`
-  width: fit-content;
+  width: 13rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   margin-top: 4rem;
-  margin-right: 4rem;
+  margin-right: 3rem;
 `;
 
 const Title = styled.div`
@@ -27,11 +27,12 @@ const Box = styled.div`
 
 const Search = styled.div`
   width: 10rem;
-  height: 2.7rem;
+  word-break: break-all;
+  height: fit-content;
   border: 3px solid #b5d4a8;
   border-radius: 8px;
   background: #fff;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   text-align: center;
   line-height: 2.5rem;
   margin-left: 2rem;
@@ -55,9 +56,13 @@ const SearchBox = () => {
     if (kind == 'solved' || kind == 'level' || kind == 'search')
       clickEvent[kind]();
   };
+  const checkFilter = useCallback(() => {
+    const { solved, level, search } = filter;
+    return solved !== '푼 상태' || level !== '문제 레벨' || search !== '';
+  }, [filter]);
   return (
     <SearchWrapper>
-      <Title>SEARCH STATUS</Title>
+      <Title>{checkFilter() ? '현재 검색어' : ''}</Title>
       {Object.entries(filter).map((elem, idx) => {
         const [kind, value] = elem;
         if (
