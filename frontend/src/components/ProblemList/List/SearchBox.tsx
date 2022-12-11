@@ -36,6 +36,7 @@ const Search = styled.div`
   text-align: center;
   line-height: 2.5rem;
   margin-left: 2rem;
+  text-overflow: ellipsis;
 `;
 
 const DeleteIcon = styled.img`
@@ -74,7 +75,9 @@ const SearchBox = () => {
         return (
           <Box key={idx}>
             <DeleteIcon src={RedDelete} onClick={() => handleImgClick(kind)} />
-            <Search>{value}</Search>
+            <Search>
+              {value.length >= 20 ? `${value.slice(0, 20)}...` : value}
+            </Search>
           </Box>
         );
       })}

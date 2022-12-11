@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import Filter from './Filter';
 import FiltersInfo from '../../../utils/FiltersInfo';
