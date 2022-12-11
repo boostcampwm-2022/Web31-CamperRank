@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { RankTable } from './RankTable';
-import { useTable } from 'react-table';
 
 const RankWrapper = styled.div`
   width: 50rem;
@@ -13,12 +12,8 @@ const RankWrapper = styled.div`
   border-radius: 10px;
   margin-top: auto;
   margin-bottom: auto;
+  position: relative;
 `;
-
-// interface RankTableProps {
-//   columns: Array<object>;
-//   data: Array<object>;
-// }
 
 interface UserTableInfo {
   rank: number;
@@ -76,7 +71,6 @@ export const RankContainer = () => {
             };
           });
         setUserList(tempUserList);
-        console.log(tempUserList);
       });
   }, []);
 

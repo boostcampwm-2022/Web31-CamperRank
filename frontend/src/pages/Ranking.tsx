@@ -1,6 +1,6 @@
 import { MainHeader } from '../components/MainHeader';
 import { Footer } from '../components/Footer';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { useUserState } from '../hooks/useUserState';
 import { MyInfo } from '../components/Ranking/MyInfo';
@@ -41,32 +41,9 @@ const FooterWrapper = styled.div`
   height: 16rem;
 `;
 
-interface UserRankInfo {
-  rank: number;
-  ID: string;
-  count: number;
-}
-
 export const Ranking = () => {
   const { user } = useUserState();
-  const { ID, isLoggedIn } = useMemo(() => user, [user, user.isLoggedIn]);
-  const [userRank, setUserRank] = useState<UserRankInfo[]>([]);
-  //fetch 쏴서 받고, 내 닉네임과 일치하는 것 찾아서 MyInfo로 props 전달 필요
-
-  useEffect(() => {
-    setUserRank([
-      {
-        rank: 1,
-        ID: 'GOAT',
-        count: 5173,
-      },
-      {
-        rank: 2,
-        ID: 'KONG',
-        count: 22,
-      },
-    ]);
-  }, []);
+  const { isLoggedIn } = useMemo(() => user, [user, user.isLoggedIn]);
 
   return (
     <Wrapper>

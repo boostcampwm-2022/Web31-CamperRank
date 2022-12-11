@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useTable, usePagination } from 'react-table';
+import PageController from './PageController';
 
 const Table = styled.table`
   width: 90%;
@@ -33,16 +34,34 @@ const Table = styled.table`
   }
 
   td {
-    border: #9b9b9b 1px solid;
+    border: silver 0.5px solid;
   }
 `;
 
 export const RankTable = ({ columns, data }: any) => {
+  const [page, setPage] = useState({
+    now: 1,
+    max: Math.ceil(data.length / 10),
+  });
+  const [pagedList, setPagedList] = useState(data);
+
+  useEffect(() => {
+    const { now } = page;
+    now && setPagedList([...data.slice(10 * (now - 1), 10 * now)]);
+  }, [page]);
+
+  useEffect(() => {
+    setPage({
+      now: 1,
+      max: Math.ceil(data.length / 10),
+    });
+  }, [data]);
+
   const tableInstance = useTable(
     {
       // @ts-ignore
       columns,
-      data,
+      data: pagedList,
     },
     usePagination,
   );
@@ -51,62 +70,68 @@ export const RankTable = ({ columns, data }: any) => {
     tableInstance;
 
   return (
-    <Table {...getTableProps()}>
-      <thead>
-        {
-          // Loop over the header rows
-          headerGroups.map((headerGroup) => (
-            // Apply the header row props
-            // eslint-disable-next-line react/jsx-key
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {
-                // Loop over the headers in each row
-                headerGroup.headers.map((column) => (
-                  // Apply the header cell props
-                  // eslint-disable-next-line react/jsx-key
-                  <th {...column.getHeaderProps()}>
-                    {
-                      // Render the header
-                      column.render('Header')
-                    }
-                  </th>
-                ))
-              }
-            </tr>
-          ))
-        }
-      </thead>
-      {/* Apply the table body props */}
-      <tbody {...getTableBodyProps()}>
-        {
-          // Loop over the table rows
-          rows.map((row) => {
-            // Prepare the row for display
-            prepareRow(row);
-            return (
-              // Apply the row props
+    <>
+      <Table {...getTableProps()}>
+        <thead>
+          {
+            // Loop over the header rows
+            headerGroups.map((headerGroup) => (
+              // Apply the header row props
               // eslint-disable-next-line react/jsx-key
-              <tr {...row.getRowProps()}>
+              <tr {...headerGroup.getHeaderGroupProps()}>
                 {
-                  // Loop over the rows cells
-                  row.cells.map((cell) => {
-                    // Apply the cell props
-                    return (
-                      // eslint-disable-next-line react/jsx-key
-                      <td {...cell.getCellProps()}>
-                        {
-                          // Render the cell contents
-                          cell.render('Cell')
-                        }
-                      </td>
-                    );
-                  })
+                  // Loop over the headers in each row
+                  headerGroup.headers.map((column) => (
+                    // Apply the header cell props
+                    // eslint-disable-next-line react/jsx-key
+                    <th {...column.getHeaderProps()}>
+                      {
+                        // Render the header
+                        column.render('Header')
+                      }
+                    </th>
+                  ))
                 }
               </tr>
-            );
-          })
-        }
-      </tbody>
-    </Table>
+            ))
+          }
+        </thead>
+        {/* Apply the table body props */}
+        <tbody {...getTableBodyProps()}>
+          {
+            // Loop over the table rows
+            rows.map((row) => {
+              // Prepare the row for display
+              prepareRow(row);
+              return (
+                // Apply the row props
+                // eslint-disable-next-line react/jsx-key
+                <tr {...row.getRowProps()}>
+                  {
+                    // Loop over the rows cells
+                    row.cells.map((cell) => {
+                      // Apply the cell props
+                      return (
+                        // eslint-disable-next-line react/jsx-key
+                        <td {...cell.getCellProps()}>
+                          {
+                            // Render the cell contents
+                            cell.render('Cell')
+                          }
+                        </td>
+                      );
+                    })
+                  }
+                </tr>
+              );
+            })
+          }
+        </tbody>
+      </Table>
+      <PageController
+        page={page}
+        onClickPage={(now: number) => setPage({ ...page, now })}
+      />
+    </>
   );
 };
