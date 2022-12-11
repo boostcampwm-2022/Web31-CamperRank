@@ -3,3 +3,4 @@
 .flaskenv*
 !.env.project
 !.env.vault
+yarn.lock
