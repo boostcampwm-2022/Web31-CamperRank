@@ -25,6 +25,7 @@ import { SolvedResult } from './entities/SolvedResult.enum';
 import { GradeResultSolvedDto } from './dto/grade-result-solved.dto';
 import { isFalsy } from '../utils/boolUtils';
 import * as process from 'process';
+import { ProgrammingLanguage } from './entities/ProgrammingLanguage.enum';
 
 @Controller('solved')
 @ApiTags('답안 제출 기록 관련 API')
@@ -144,6 +145,17 @@ export class SolvedController {
     return { ...gradeResultList };
   }
 
+  getServerlessURLByPL(language: ProgrammingLanguage) {
+    switch (language.toLowerCase()) {
+      case 'javascript':
+        return process.env.SERVERLESS_GRADE_JAVASCRIPT;
+      case 'python':
+        return process.env.SERVERLESS_GRADE_PYTHON;
+      default:
+        return null;
+    }
+  }
+
   @Post('NCP-cloud-functions')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
@@ -171,7 +183,9 @@ export class SolvedController {
       gradeSolvedDtoList.map((value) => {
         return this.httpService.axiosRef
           .post(
-            `${process.env.NCP_CLOUD_FUNCTIONS_URL}?blocking=true&result=true`,
+            `${this.getServerlessURLByPL(
+              createSolvedDto.language,
+            )}?blocking=true&result=true`,
             { ...value },
           )
           .then((response) => response.data)
