@@ -29,6 +29,7 @@ export const InputFormContainer = styled.form`
     height: 2.7rem;
     float: right;
     font-size: 1.2rem;
+    color: #0f5e29;
     &:hover {
       background: #b2dcbd;
       border: none;
@@ -74,6 +75,7 @@ export const IDInputContainer = styled.div`
 
   p {
     margin-right: 1rem;
+    color: #186e35;
   }
 `;
 
@@ -95,6 +97,7 @@ export const PasswordInputContainer = styled.div`
 
   p {
     margin-right: 1rem;
+    color: #186e35;
   }
 
   margin-bottom: 4rem;
