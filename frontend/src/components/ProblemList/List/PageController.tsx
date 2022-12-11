@@ -14,8 +14,10 @@ interface pageProps {
 
 const ControllerWrapper = styled.div`
   position: absolute;
-  bottom: 3rem;
+  bottom: 2rem;
   display: flex;
+  justify-content: center;
+  width: 100%;
   gap: 1.5rem;
 `;
 

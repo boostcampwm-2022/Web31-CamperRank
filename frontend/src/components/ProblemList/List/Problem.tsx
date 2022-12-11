@@ -6,12 +6,12 @@ import uuid from 'react-uuid';
 
 const ProblemWrapper = styled.div`
   width: 100%;
-  height: 8.5rem;
-  border: 2px solid #888888;
+  height: 7.5rem;
+  border: 3px solid #cbcbcb;
   border-radius: 8px;
   background: #fff;
   position: relative;
-  min-width: 800px;
+  min-width: 40rem;
 
   &:hover {
     background: #e6f3ea;
@@ -22,7 +22,7 @@ const ProblemWrapper = styled.div`
 
 const Title = styled.div`
   position: absolute;
-  top: 1.5rem;
+  top: 1rem;
   left: 3rem;
   font-style: normal;
   font-weight: 500;
@@ -31,7 +31,7 @@ const Title = styled.div`
 
 const Description = styled.div`
   position: absolute;
-  bottom: 1.5rem;
+  bottom: 0.8rem;
   left: 3rem;
   font-style: normal;
   font-weight: 500;
@@ -41,8 +41,8 @@ const Description = styled.div`
 
 const ButtonWrapper = styled.div`
   position: absolute;
-  bottom: 1rem;
-  right: 1.5rem;
+  bottom: 0.9rem;
+  right: 0.9rem;
   display: flex;
   gap: 1.5rem;
 `;
@@ -89,9 +89,7 @@ const Problem = ({ problem }: ProblemType) => {
   return (
     <ProblemWrapper>
       <Title>{title}</Title>
-      <Description>
-        Lv{level}, Python, Javascript, Success Rate: 95.12%
-      </Description>
+      <Description>Lv{level}, Python, Javascript</Description>
       <ButtonWrapper>
         <Link to={singleURL}>
           <Button>혼자 풀기</Button>

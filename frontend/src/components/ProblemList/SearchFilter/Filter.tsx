@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { SelectButton } from '../../../assets/icons';
 import Modal from './Modal';
@@ -14,7 +14,7 @@ const FilterWrapper = styled.div`
   background: #fff;
   text-align: center;
   font-weight: 500;
-  font-size: 1.5rem;
+  font-size: 1.45rem;
   line-height: 3rem;
   display: flex;
   align-items: center;
@@ -37,13 +37,24 @@ const Filter = ({ content }: FilterType) => {
   const [open, setOpen] = useState(false);
   const [filter] = useRecoilState(filterState);
   const { solved, level } = filter;
+  const filterRef = useRef<HTMLDivElement>(null);
+  const handleClickOutside = ({ target }: any) => {
+    if (!filterRef.current || !filterRef.current.contains(target)) {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('click', handleClickOutside);
+    return () => {
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <FilterWrapper>
+    <FilterWrapper ref={filterRef} onClick={() => setOpen(!open)}>
       {name === '상태' ? solved : level}
-      <ModalButton
-        src={SelectButton}
-        onClick={() => setOpen(!open)}
-      ></ModalButton>
+      <ModalButton src={SelectButton}></ModalButton>
       {open && (
         <Modal
           onClick={() => setOpen(!open)}
