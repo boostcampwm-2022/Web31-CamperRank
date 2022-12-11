@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SliderLeft, SliderRight } from '../../../assets/icons';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 type BannerControllerType = {
   pageNum: number;
   onClickButton: (num: number) => void;
 };
 
-const ControllerWrapper = styled.div`
+type WrapperProp = {
+  left: number;
+};
+const ControllerWrapper = styled.div<WrapperProp>`
   position: absolute;
-  top: 16rem;
-  left: 4rem;
+  bottom: 0.5rem;
+  ${(props) =>
+    props.left &&
+    css`
+      left: ${props.left}px;
+    `}
   display: flex;
+  line-height: 1rem;
 `;
 
 const SliderController = styled.img`
-  height: 1.7rem;
+  height: 1.3rem;
   width: 0.8rem;
   cursor: pointer;
 `;
@@ -26,10 +34,25 @@ const SliderPage = styled.div`
   text-align: center;
   color: #0b6113;
   font-weight: 500;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
 `;
 
 const BannerController = ({ pageNum, onClickButton }: BannerControllerType) => {
+  const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+  const [left, setLeft] = useState(23 * rem);
+  const handleResize = () => {
+    const windowLen = Math.max(80 * rem, window.innerWidth);
+    const len = (windowLen - 80 * rem) / 2;
+    setLeft(len + 2 * rem);
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   const handleLeftClick = () => {
     if (pageNum == 0) onClickButton(2);
     else onClickButton(pageNum - 1);
@@ -39,7 +62,7 @@ const BannerController = ({ pageNum, onClickButton }: BannerControllerType) => {
     else onClickButton(pageNum + 1);
   };
   return (
-    <ControllerWrapper>
+    <ControllerWrapper left={left}>
       <SliderController
         src={SliderLeft}
         onClick={handleLeftClick}

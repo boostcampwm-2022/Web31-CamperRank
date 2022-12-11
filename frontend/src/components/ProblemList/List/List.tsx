@@ -21,7 +21,7 @@ const ListWrapper = styled.div`
   width: 75%;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2rem;
   height: 100%;
   position: relative;
 `;
@@ -36,7 +36,7 @@ const SubWrapper = styled.div`
 const Info = styled.div`
   font-size: 1.2rem;
   color: #537744;
-  margin: 1.5rem 0 0 1rem;
+  margin: 3rem 0 0 1rem;
 `;
 
 const List = ({ list }: ListType) => {

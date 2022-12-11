@@ -7,35 +7,39 @@ import { useUserState } from '../hooks/useUserState';
 
 const MainWrapper = styled.div`
   width: 100%;
-  height: 120rem;
+  height: fit-content;
   min-width: 80rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 const HeaderWrapper = styled.div`
-  width: 100%;
+  min-width: 80rem;
+  width: 80rem;
+  min-height: 8rem;
   height: 8rem;
 `;
 
 const BannerWrapper = styled.div`
   width: 100%;
-  height: 20rem;
-  border: 3px solid #e0dcdc;
+  height: 15rem;
   overflow: hidden;
   position: relative;
 `;
 
 const ListWrapper = styled.div`
-  width: 100%;
-  flex: 1;
-  background: #e4e8e0;
+  min-width: 80rem;
+  width: 80rem;
+  height: 55rem;
 `;
 
 const FooterWrapper = styled.div`
-  width: 100%;
-  height: 20rem;
+  min-width: 80rem;
+  width: 80rem;
+  min-height: 15rem;
+  height: 15rem;
 `;
 
 const Main = () => {

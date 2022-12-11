@@ -36,9 +36,6 @@ export const MainHeader = () => {
           <li>
             <Link to="/ranking">랭킹</Link>
           </li>
-          <li>
-            <Link to="/contest">대회</Link>
-          </li>
         </ul>
       </nav>
       <MenuContainer>
