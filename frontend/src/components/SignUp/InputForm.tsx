@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import {
+  AnchorLogo,
   ButtonContainer,
   CheckButton,
+  GreenMark,
   IDInputContainer,
   InputFormContainer,
   LightContainer,
   PasswordInputContainer,
-  AnchorLogo,
-  GreenMark,
 } from '../../styles/SignUp.style';
 import useInput from '../../hooks/useInput';
 import { useNavigate } from 'react-router-dom';
@@ -108,11 +108,14 @@ export const SignupInputForm = () => {
       fetch(`${URL}/users?loginId=${id.value}`)
         .then((res) => res.json())
         .then((res) => {
-          if (res.statusCode !== 404) throw new Error();
-          alert('아이디를 사용하실 수 있습니다');
-          setIdCheck(true);
-          setCheckedId(id.value);
-          if (pwRef.current) pwRef.current.focus();
+          if (res.foundStatus === 1000) {
+            throw new Error();
+          } else if (res.foundStatus === 1001) {
+            alert('아이디를 사용하실 수 있습니다');
+            setIdCheck(true);
+            setCheckedId(id.value);
+            if (pwRef.current) pwRef.current.focus();
+          }
         })
         .catch((err) => {
           alert('아이디를 사용하실 수 없습니다');
