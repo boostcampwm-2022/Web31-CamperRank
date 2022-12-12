@@ -21,7 +21,7 @@ const RankWrapper = styled.div`
   }
 `;
 
-interface UserTableInfo {
+export interface UserTableInfo {
   rank: number;
   ID: number;
   count: number;
@@ -79,12 +79,6 @@ export const RankContainer = () => {
         setUserList(tempUserList);
       });
   }, []);
-
-  useEffect(() => {
-    if (userList.length === 0) {
-      return;
-    }
-  }, [userList]);
 
   return (
     <RankWrapper>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useTable, usePagination } from 'react-table';
 import PageController from './PageController';
+import { UserTableInfo } from './RankContainer';
 
 const Table = styled.table`
   width: 90%;
@@ -38,7 +39,12 @@ const Table = styled.table`
   }
 `;
 
-export const RankTable = ({ columns, data }: any) => {
+interface TableProps {
+  columns: { accessor: string; Header: string }[];
+  data: Array<UserTableInfo>;
+}
+
+export const RankTable = ({ columns, data }: TableProps) => {
   const [page, setPage] = useState({
     now: 1,
     max: Math.ceil(data.length / 10),
