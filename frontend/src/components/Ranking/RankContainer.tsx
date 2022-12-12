@@ -23,12 +23,12 @@ const RankWrapper = styled.div`
 
 interface UserTableInfo {
   rank: number;
-  ID: number;
+  ID: string;
   count: number;
 }
 
 interface UserSolvedInfo {
-  userId: number;
+  loginId: string;
   solvedCount: number;
 }
 
@@ -72,7 +72,7 @@ export const RankContainer = () => {
           .map((ele: UserSolvedInfo, idx) => {
             return {
               rank: idx + 1,
-              ID: ele.userId,
+              ID: ele.loginId,
               count: ele.solvedCount,
             };
           });
