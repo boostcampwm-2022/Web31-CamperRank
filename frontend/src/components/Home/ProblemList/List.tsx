@@ -46,10 +46,12 @@ const List = () => {
     const { ID } = user;
     const fetchURL = ID
       ? `${URL}/problem/random?loginId=${ID}`
-      : `${URL}/problem/random`;
+      : `${URL}/problem/random?loginId=0`;
+    console.log(fetchURL);
     fetch(fetchURL)
       .then((res) => res.json())
       .then((res) => {
+        console.log(res);
         setProblems(Object.values(res));
       });
   }, [user]);
