@@ -23,7 +23,7 @@ const RankWrapper = styled.div`
 
 export interface UserTableInfo {
   rank: number;
-  ID: number;
+  ID: string;
   count: number;
 }
 

@@ -45,7 +45,7 @@ const FooterWrapper = styled.div`
 `;
 
 interface UserSolvedInfo {
-  userId: number;
+  loginId: string;
   solvedCount: number;
 }
 
@@ -73,7 +73,7 @@ export const Ranking = () => {
           .map((ele: UserSolvedInfo, idx) => {
             return {
               rank: idx + 1,
-              ID: ele.userId,
+              ID: ele.loginId,
               count: ele.solvedCount,
             };
           });
@@ -81,13 +81,14 @@ export const Ranking = () => {
       });
   }, []);
 
-  // useEffect(() => {
-  //   const myInfo = userList.find((ele) => ele.ID === user.ID);
-  //   if (!myInfo) {
-  //     return;
-  //   }
-  //   setMyRank(myInfo.rank);
-  // }, [userList]);
+  useEffect(() => {
+    const myInfo = userList.find((ele) => ele.ID === user.ID);
+    if (!myInfo) {
+      return;
+    }
+    console.log(myInfo);
+    setMyRank(myInfo.rank);
+  }, [userList]);
 
   return (
     <Wrapper>

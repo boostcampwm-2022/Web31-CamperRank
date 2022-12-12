@@ -55,7 +55,7 @@ export const MyInfo = ({ rank }: { rank: number }) => {
 
   useEffect(() => {
     setMyRank(rank);
-  }, []);
+  }, [rank]);
 
   return (
     <MyInfoWrapper>
