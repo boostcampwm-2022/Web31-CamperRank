@@ -5,8 +5,7 @@ import styled from 'styled-components';
 const MyInfoWrapper = styled.div`
   min-width: 22rem;
   width: 22rem;
-  min-height: 12rem;
-  height: 12rem;
+  height: fit-content;
   border-radius: 0.75rem;
   border: 1px solid #9ccaaf;
   margin-top: 2rem;
@@ -28,22 +27,7 @@ const MyInfoTitle = styled.p`
   font-weight: 600;
 `;
 
-const NickNameWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  min-width: 16rem;
-  width: 16rem;
-  min-height: 2rem;
-  height: 2rem;
-  margin-top: 1.5rem;
-  span {
-    :nth-child(2) {
-      font-weight: 600;
-    }
-  }
-`;
-
-const MyRankWrapper = styled.div`
+const SingleInfoWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   min-width: 16rem;
@@ -57,28 +41,41 @@ const MyRankWrapper = styled.div`
       font-weight: 600;
     }
   }
+
+  :last-child {
+    margin-bottom: 1.5rem;
+  }
 `;
 
-export const MyInfo = ({ rank }: { rank: number }) => {
+export const MyInfo = ({ rank, count }: { rank: number; count: number }) => {
   const { user } = useUserState();
   const { ID } = useMemo(() => user, [user, user.ID]);
   const [myRank, setMyRank] = useState(0);
+  const [mySolved, setMySolved] = useState(0);
 
   useEffect(() => {
     setMyRank(rank);
   }, [rank]);
 
+  useEffect(() => {
+    setMySolved(rank);
+  }, [count]);
+
   return (
     <MyInfoWrapper>
       <MyInfoTitle>내 정보</MyInfoTitle>
-      <NickNameWrapper>
+      <SingleInfoWrapper>
         <span>닉네임</span>
         <span>{ID}</span>
-      </NickNameWrapper>
-      <MyRankWrapper>
+      </SingleInfoWrapper>
+      <SingleInfoWrapper>
         <span>현재 순위</span>
         <span>{myRank ? myRank : 'unranked'}</span>
-      </MyRankWrapper>
+      </SingleInfoWrapper>
+      <SingleInfoWrapper>
+        <span>푼 문제 수</span>
+        <span>{mySolved}</span>
+      </SingleInfoWrapper>
     </MyInfoWrapper>
   );
 };

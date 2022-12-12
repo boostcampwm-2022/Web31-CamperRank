@@ -63,6 +63,7 @@ export const Ranking = () => {
   const { isLoggedIn } = useMemo(() => user, [user, user.isLoggedIn]);
   const [userList, setUserList] = useState<Array<UserTableInfo>>([]);
   const [myRank, setMyRank] = useState(0);
+  const [mySolved, setMySolved] = useState(0);
 
   useEffect(() => {
     fetch(`${URL}/rank`, {})
@@ -87,6 +88,7 @@ export const Ranking = () => {
       return;
     }
     setMyRank(myInfo.rank);
+    setMySolved(myInfo.count);
   }, [userList]);
 
   return (
@@ -95,7 +97,7 @@ export const Ranking = () => {
         <MainHeader></MainHeader>
       </HeaderWrapper>
       <ContentWrapper>
-        {isLoggedIn && <MyInfo rank={myRank} />}
+        {isLoggedIn && <MyInfo rank={myRank} count={mySolved} />}
         <RankContainer userList={userList} />
       </ContentWrapper>
       <FooterWrapper>
