@@ -15,8 +15,9 @@ export const Footer = () => {
         Try to solve a problem with your friend.
       </MainText>
       <ButtonContainer>
-        <a href={'/'}>👀 Team</a>
-        <a href={'/'}>👋 Contact</a>
+        <a href={'https://github.com/boostcampwm-2022/Web31-CamperRank/wiki'}>
+          👀 Team
+        </a>
       </ButtonContainer>
     </FooterContainer>
   );
