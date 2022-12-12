@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Filter from './Filter';
 import FiltersInfo from '../../../utils/FiltersInfo';
@@ -71,9 +71,9 @@ const SearchFilter = () => {
         <FilterTitle>Select the Problems!</FilterTitle>
         <FilterContent>
           {FiltersInfo.map((elem, idx) => (
-            <Filter key={idx} content={elem}></Filter>
+            <Filter key={idx} content={elem} />
           ))}
-          <Search></Search>
+          <Search />
           <Button onClick={handleButtonClick}>검색 초기화</Button>
         </FilterContent>
       </FiltersWrapper>

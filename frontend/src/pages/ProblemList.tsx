@@ -5,7 +5,6 @@ import { MainHeader } from '../components/MainHeader';
 import { SearchFilter, List } from '../components/ProblemList';
 import { Footer } from '../components/Footer';
 import { filterState } from '../recoils';
-import problems from '../utils/ProblemsDummy';
 import { ProblemInfo } from '@types';
 import { userState } from '../recoils';
 
@@ -81,14 +80,14 @@ const ProblemList = () => {
   return (
     <MainWrapper>
       <HeaderWrapper>
-        <MainHeader></MainHeader>
+        <MainHeader />
       </HeaderWrapper>
-      <SearchFilter></SearchFilter>
+      <SearchFilter />
       <ListWrapper>
-        <List list={filtered}></List>
+        <List list={filtered} />
       </ListWrapper>
       <FooterWrapper>
-        <Footer></Footer>
+        <Footer />
       </FooterWrapper>
     </MainWrapper>
   );

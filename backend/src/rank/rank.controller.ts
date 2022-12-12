@@ -32,7 +32,7 @@ export class RankController {
     @Query('take', new DefaultValuePipe(1000))
     take: number,
   ) {
-    const simpleRankDtoList = await this.rankService.getUserRanks(skip, take);
+    const simpleRankDtoList = await this.rankService.getUserRanksV2(skip, take);
 
     return { ...simpleRankDtoList };
   }

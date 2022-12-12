@@ -6,7 +6,7 @@ import { FilterType } from '@types';
 import { useRecoilState } from 'recoil';
 import { filterState } from '../../../recoils';
 
-const FilterWrapper = styled.div`
+const FilterWrapper = styled.button`
   width: 10rem;
   height: 3rem;
   border: 3px solid #b5d4a8;
@@ -20,6 +20,7 @@ const FilterWrapper = styled.div`
   align-items: center;
   justify-content: space-around;
   position: relative;
+  cursor: pointer;
 
   &:hover {
     border: 3px solid #80a471;
@@ -37,7 +38,7 @@ const Filter = ({ content }: FilterType) => {
   const [open, setOpen] = useState(false);
   const [filter] = useRecoilState(filterState);
   const { solved, level } = filter;
-  const filterRef = useRef<HTMLDivElement>(null);
+  const filterRef = useRef<HTMLButtonElement>(null);
   const handleClickOutside = ({ target }: any) => {
     if (!filterRef.current || !filterRef.current.contains(target)) {
       setOpen(false);

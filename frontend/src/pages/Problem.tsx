@@ -19,8 +19,8 @@ import { WebrtcProvider } from 'y-webrtc';
 
 import { EditorView, basicSetup } from 'codemirror';
 import { EditorState, Compartment } from '@codemirror/state';
-import { javascript, javascriptLanguage } from '@codemirror/lang-javascript';
-import { python, pythonLanguage } from '@codemirror/lang-python';
+import { javascript } from '@codemirror/lang-javascript';
+import { python } from '@codemirror/lang-python';
 import { keymap } from '@codemirror/view';
 import { indentWithTab } from '@codemirror/commands';
 // import { LanguageSupport, syntaxHighlighting } from '@codemirror/language';
@@ -180,8 +180,8 @@ const Problem = () => {
   const navigate = useNavigate();
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
-  const [grade, setGrade] = useRecoilState(gradingState);
-  const [eState, setEState] = useState<EditorState>();
+  const [, setGrade] = useRecoilState(gradingState);
+  const [, setEState] = useState<EditorState>();
   const [eView, setEView] = useState<EditorView>();
   const [problem, setProblem] = useState<ProblemInfo>();
   const { id, version } = useParams();
@@ -256,7 +256,7 @@ const Problem = () => {
         const { level, title, description } = res;
         setProblem({ level, title, description });
       })
-      .catch((err) => {
+      .catch(() => {
         alert('문제를 불러올 수 없습니다');
         navigate('/problems');
       });
@@ -427,10 +427,7 @@ const Problem = () => {
   const resizeProblemWrapper = (x: number) => {
     if (problemRef.current != null && editorRef.current != null) {
       const problemRefWidth = +problemRef.current.style.width.replace('px', '');
-      const editorRefWidth = +editorRef.current.style.maxWidth.replace(
-        'px',
-        '',
-      );
+      +editorRef.current.style.maxWidth.replace('px', '');
       const PX = +REM.replace('px', '');
       if (x > 0.175 * window.innerWidth)
         problemRef.current.style.width = `${Math.max(
@@ -501,7 +498,7 @@ const Problem = () => {
       </HeaderWrapper>
       <MainWrapper>
         <PageButtonsWrapper>
-          <PageButtons></PageButtons>
+          <PageButtons />
         </PageButtonsWrapper>
         <ProblemWrapper ref={problemRef}>
           {version === 'multi' && <Video />}
