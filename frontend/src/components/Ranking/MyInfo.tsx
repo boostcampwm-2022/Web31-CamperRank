@@ -25,7 +25,7 @@ const MyInfoTitle = styled.p`
   height: 2rem;
   margin-top: 1.5rem;
   font-size: 1.5rem;
-  font-weight: 500;
+  font-weight: 600;
 `;
 
 const NickNameWrapper = styled.div`
@@ -36,6 +36,11 @@ const NickNameWrapper = styled.div`
   min-height: 2rem;
   height: 2rem;
   margin-top: 1.5rem;
+  span {
+    :nth-child(2) {
+      font-weight: 600;
+    }
+  }
 `;
 
 const MyRankWrapper = styled.div`
@@ -46,6 +51,12 @@ const MyRankWrapper = styled.div`
   min-height: 2rem;
   height: 2rem;
   margin-top: 1.5rem;
+
+  span {
+    :nth-child(2) {
+      font-weight: 600;
+    }
+  }
 `;
 
 export const MyInfo = ({ rank }: { rank: number }) => {

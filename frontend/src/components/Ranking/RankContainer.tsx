@@ -16,7 +16,7 @@ const RankWrapper = styled.div`
 
   p {
     font-size: 1.5rem;
-    font-weight: 500;
+    font-weight: 600;
     margin: 1.5rem 0 0 2.2rem;
   }
 `;
