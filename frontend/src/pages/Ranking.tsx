@@ -1,10 +1,13 @@
 import { MainHeader } from '../components/MainHeader';
 import { Footer } from '../components/Footer';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useUserState } from '../hooks/useUserState';
 import { MyInfo } from '../components/Ranking/MyInfo';
-import { RankContainer } from '../components/Ranking/RankContainer';
+import {
+  RankContainer,
+  UserTableInfo,
+} from '../components/Ranking/RankContainer';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -41,9 +44,50 @@ const FooterWrapper = styled.div`
   height: 16rem;
 `;
 
+interface UserSolvedInfo {
+  userId: number;
+  solvedCount: number;
+}
+
+interface RankFetchResult {
+  string: UserSolvedInfo;
+}
+
+const compare = (a: UserSolvedInfo, b: UserSolvedInfo) =>
+  b.solvedCount - a.solvedCount;
+
+const URL = import.meta.env.VITE_SERVER_URL;
+
 export const Ranking = () => {
   const { user } = useUserState();
   const { isLoggedIn } = useMemo(() => user, [user, user.isLoggedIn]);
+  const [userList, setUserList] = useState<Array<UserTableInfo>>([]);
+  const [myRank, setMyRank] = useState(0);
+
+  useEffect(() => {
+    fetch(`${URL}/rank`, {})
+      .then((res) => res.json())
+      .then((res: RankFetchResult) => {
+        const tempUserList: Array<UserTableInfo> = Object.values(res)
+          .sort(compare)
+          .map((ele: UserSolvedInfo, idx) => {
+            return {
+              rank: idx + 1,
+              ID: ele.userId,
+              count: ele.solvedCount,
+            };
+          });
+        setUserList(tempUserList);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   const myInfo = userList.find((ele) => ele.ID === user.ID);
+  //   if (!myInfo) {
+  //     return;
+  //   }
+  //   setMyRank(myInfo.rank);
+  // }, [userList]);
 
   return (
     <Wrapper>
@@ -51,8 +95,8 @@ export const Ranking = () => {
         <MainHeader></MainHeader>
       </HeaderWrapper>
       <ContentWrapper>
-        {isLoggedIn && <MyInfo />}
-        <RankContainer />
+        {isLoggedIn && <MyInfo rank={myRank} />}
+        <RankContainer userList={userList} />
       </ContentWrapper>
       <FooterWrapper>
         <Footer />

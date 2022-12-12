@@ -48,13 +48,13 @@ const MyRankWrapper = styled.div`
   margin-top: 1.5rem;
 `;
 
-export const MyInfo = () => {
+export const MyInfo = ({ rank }: { rank: number }) => {
   const { user } = useUserState();
   const { ID } = useMemo(() => user, [user, user.ID]);
   const [myRank, setMyRank] = useState(0);
 
   useEffect(() => {
-    setMyRank(5173);
+    setMyRank(rank);
   }, []);
 
   return (
@@ -66,7 +66,7 @@ export const MyInfo = () => {
       </NickNameWrapper>
       <MyRankWrapper>
         <span>현재 순위</span>
-        <span>{myRank}</span>
+        <span>{myRank ? myRank : 'unranked'}</span>
       </MyRankWrapper>
     </MyInfoWrapper>
   );

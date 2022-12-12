@@ -5,7 +5,6 @@ import { MainHeader } from '../components/MainHeader';
 import { SearchFilter, List } from '../components/ProblemList';
 import { Footer } from '../components/Footer';
 import { filterState } from '../recoils';
-import problems from '../utils/ProblemsDummy';
 import { ProblemInfo } from '@types';
 import { userState } from '../recoils';
 

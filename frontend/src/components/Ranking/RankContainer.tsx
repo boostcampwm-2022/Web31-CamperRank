@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { RankTable } from './RankTable';
 
@@ -27,23 +27,11 @@ export interface UserTableInfo {
   count: number;
 }
 
-interface UserSolvedInfo {
-  userId: number;
-  solvedCount: number;
-}
-
-interface RankFetchResult {
-  string: UserSolvedInfo;
-}
-
-const URL = import.meta.env.VITE_SERVER_URL;
-
-const compare = (a: UserSolvedInfo, b: UserSolvedInfo) => {
-  return b.solvedCount - a.solvedCount;
-};
-
-export const RankContainer = () => {
-  const [userList, setUserList] = useState<Array<UserTableInfo>>([]);
+export const RankContainer = ({
+  userList,
+}: {
+  userList: Array<UserTableInfo>;
+}) => {
   const columns = useMemo(
     () => [
       {
@@ -62,23 +50,6 @@ export const RankContainer = () => {
     [],
   );
   const data = useMemo(() => userList, [userList]);
-
-  useEffect(() => {
-    fetch(`${URL}/rank`, {})
-      .then((res) => res.json())
-      .then((res: RankFetchResult) => {
-        const tempUserList: Array<UserTableInfo> = Object.values(res)
-          .sort(compare)
-          .map((ele: UserSolvedInfo, idx) => {
-            return {
-              rank: idx + 1,
-              ID: ele.userId,
-              count: ele.solvedCount,
-            };
-          });
-        setUserList(tempUserList);
-      });
-  }, []);
 
   return (
     <RankWrapper>
