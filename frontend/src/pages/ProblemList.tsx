@@ -80,14 +80,14 @@ const ProblemList = () => {
   return (
     <MainWrapper>
       <HeaderWrapper>
-        <MainHeader></MainHeader>
+        <MainHeader />
       </HeaderWrapper>
-      <SearchFilter></SearchFilter>
+      <SearchFilter />
       <ListWrapper>
-        <List list={filtered}></List>
+        <List list={filtered} />
       </ListWrapper>
       <FooterWrapper>
-        <Footer></Footer>
+        <Footer />
       </FooterWrapper>
     </MainWrapper>
   );
