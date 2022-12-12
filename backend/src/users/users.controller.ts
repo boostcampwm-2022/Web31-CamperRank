@@ -58,12 +58,9 @@ export class UsersController {
     });
 
     if (simpleUserDto !== null) {
-      return { ...simpleUserDto };
+      return { ...simpleUserDto, foundStatus: 1000 };
     } else {
-      throw new HttpException(
-        '사용자를 찾을 수 없습니다.',
-        HttpStatus.NOT_FOUND,
-      );
+      return { foundStatus: 1001 };
     }
   }
 }
