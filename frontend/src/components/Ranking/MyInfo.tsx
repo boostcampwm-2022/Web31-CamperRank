@@ -58,7 +58,7 @@ export const MyInfo = ({ rank, count }: { rank: number; count: number }) => {
   }, [rank]);
 
   useEffect(() => {
-    setMySolved(rank);
+    setMySolved(count);
   }, [count]);
 
   return (
