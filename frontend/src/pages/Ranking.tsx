@@ -86,7 +86,6 @@ export const Ranking = () => {
     if (!myInfo) {
       return;
     }
-    console.log(myInfo);
     setMyRank(myInfo.rank);
   }, [userList]);
 
