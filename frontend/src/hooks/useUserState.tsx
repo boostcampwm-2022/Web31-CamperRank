@@ -73,9 +73,6 @@ export const useUserState = () => {
   //   })
   //     .then((res) => res.json())
   //     .then((res) => {
-  //       console.log(user.token);
-  //       console.log(res.userId);
-  //       console.log(user.ID);
   //       if (res.userId === user.ID) {
   //         return;
   //       }

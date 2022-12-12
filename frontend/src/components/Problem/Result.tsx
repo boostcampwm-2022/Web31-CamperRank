@@ -67,7 +67,7 @@ const CasePrint = styled.div`
 `;
 
 const Result = () => {
-  const [grading, setGrading] = useRecoilState(gradingState);
+  const [grading] = useRecoilState(gradingState);
   const [result, setResult] = useState('');
   const [point, setPoint] = useState('');
   const [cases, setCases] = useState<any>([]);
@@ -101,7 +101,6 @@ const Result = () => {
     if (grading.kind === '테스트') {
       const resArr = Object.entries(grading.result);
       setCases(resArr);
-      console.log(resArr, grading.result);
       let cnt = 0;
       let index = 0;
       // eslint-disable-next-line no-constant-condition
