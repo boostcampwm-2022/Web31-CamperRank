@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 type BannerImageType = {
@@ -16,7 +16,7 @@ const SliderImage = styled.img`
 `;
 
 const BannerImage = ({ source }: BannerImageType) => {
-  return <SliderImage src={source}></SliderImage>;
+  return <SliderImage src={source} alt={'배너 이미지'}></SliderImage>;
 };
 
 export default BannerImage;
