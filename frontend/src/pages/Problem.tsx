@@ -6,7 +6,7 @@ import { ProblemHeader } from '../components/ProblemHeader';
 import { ProblemContent, Result } from '../components/Problem';
 import { ProblemInfo } from '@types';
 import { useRecoilState } from 'recoil';
-import { editorState, gradingState } from '../recoils';
+import { editorState, gradingState, socketState } from '../recoils';
 import { Video } from '../components/Problem/Video';
 import editorColors from '../utils/editorColors';
 import LanguageSelector from '../components/Problem/LanguageSelector';
@@ -23,8 +23,6 @@ import { javascript } from '@codemirror/lang-javascript';
 import { python } from '@codemirror/lang-python';
 import { keymap } from '@codemirror/view';
 import { indentWithTab } from '@codemirror/commands';
-// import { LanguageSupport, syntaxHighlighting } from '@codemirror/language';
-// import oneDarkHighlightStyle from '../utils/theme';
 
 import * as random from 'lib0/random';
 import { useUserState } from '../hooks/useUserState';
@@ -164,16 +162,11 @@ const REM = getComputedStyle(document.documentElement).fontSize;
 const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 
 const languageCompartment = new Compartment();
-//const highlightThemeCompartment = new Compartment();
 
 const langs = {
   JavaScript: javascript(),
   Python: python(),
 };
-
-// const highlightThemeExtensions = {
-//   dark: syntaxHighlighting(oneDarkHighlightStyle),
-// };
 
 const Problem = () => {
   useUserState();
@@ -216,15 +209,15 @@ const Problem = () => {
   );
 
   useEffect(() => {
-    let language;
-    if (text === defaultCode['Python'] || text.includes('def solution'))
-      language = 'Python';
-    else if (
+    let lang = '';
+    if (
       text === defaultCode['JavaScript'] ||
       text.includes('function solution')
     )
-      language = 'JavaScript';
-    if (language) setCode({ ...code, language, text });
+      lang = 'JavaScript';
+    else if (text === defaultCode['Python'] || text.includes('def solution'))
+      lang = 'Python';
+    if (lang) setCode({ ...code, text, language: lang });
     else setCode({ ...code, text });
   }, [text]);
 
@@ -248,18 +241,6 @@ const Problem = () => {
     alert('올바르지 않은 URL 입니다.');
     navigate('/');
   }, [isMultiVersion, roomNumber]);
-
-  const handleChangeEditorLanguage = (language: string) => {
-    if (eView) {
-      let insertCode;
-      if (language === '' || language === 'JavaScript' || language === 'Python')
-        insertCode = defaultCode[language];
-      const transaction = eView.state.update({
-        changes: { from: 0, to: eView.state.doc.length, insert: insertCode },
-      });
-      eView.dispatch(transaction);
-    }
-  };
 
   useEffect(() => {
     fetch(`${URL}/problem/${id}`)
@@ -306,9 +287,6 @@ const Problem = () => {
       });
 
     const languageExtension = languageCompartment.of(langs['JavaScript']);
-    // const highlightThemeExtension = highlightThemeCompartment.of(
-    //   highlightThemeExtensions['dark'],
-    // );
 
     const extensions = [
       basicSetup,
@@ -380,6 +358,56 @@ const Problem = () => {
     });
   }, []);
 
+  useEffect(() => {
+    removeLocalStorage();
+    return () => {
+      removeLocalStorage();
+    };
+  }, []);
+
+  const removeLocalStorage = () => {
+    localStorage.removeItem('JavaScript');
+    localStorage.removeItem('Python');
+  };
+
+  const saveCode = (code: string, language: string) => {
+    localStorage.setItem(language, code);
+  };
+
+  const getSavedCode = (language: string) => {
+    return localStorage.getItem(language);
+  };
+
+  const handleChangeEditorLanguage = (language: string) => {
+    if (eView) {
+      let insertCode;
+      const { text: priorText, language: priorLanguage } = code;
+      if (priorLanguage) saveCode(priorText, priorLanguage);
+      if (language === '' || language === 'JavaScript' || language === 'Python')
+        insertCode = defaultCode[language];
+      const savedCode = getSavedCode(language);
+      if (savedCode) insertCode = savedCode;
+      const transaction = eView.state.update({
+        changes: { from: 0, to: eView.state.doc.length, insert: insertCode },
+      });
+      eView.dispatch(transaction);
+    }
+  };
+
+  const handleClickClearButton = () => {
+    if (eView) {
+      let insertCode;
+      const { text: priorText, language: priorLanguage } = code;
+      saveCode(priorText, priorLanguage);
+      if (language === '' || language === 'JavaScript' || language === 'Python')
+        insertCode = defaultCode[language];
+      const transaction = eView.state.update({
+        changes: { from: 0, to: eView.state.doc.length, insert: insertCode },
+      });
+      eView.dispatch(transaction);
+    }
+  };
+
   const handleSize = () => {
     const PX = +REM.replace('px', '');
     if (editorRef.current)
@@ -393,6 +421,7 @@ const Problem = () => {
         window.innerWidth * 0.47,
       )}px`;
   };
+
   const resizeProblemWrapper = (x: number) => {
     if (problemRef.current != null && editorRef.current != null) {
       const problemRefWidth = +problemRef.current.style.width.replace('px', '');
@@ -415,6 +444,7 @@ const Problem = () => {
       )}px`;
     }
   };
+
   const resizeEditorWrapper = (y: number) => {
     if (editorRef.current != null) {
       const PX = +REM.replace('px', '');
@@ -486,7 +516,7 @@ const Problem = () => {
             <Result></Result>
           </ResultWrapper>
           <ButtonsWrapper>
-            <ProblemButtons onClickClearBtn={handleChangeEditorLanguage} />
+            <ProblemButtons onClickClearBtn={handleClickClearButton} />
           </ButtonsWrapper>
         </SolvingWrapper>
       </MainWrapper>

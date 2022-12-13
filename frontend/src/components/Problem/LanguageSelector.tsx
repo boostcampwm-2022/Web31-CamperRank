@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
-import { editorState } from '../../recoils';
+import { editorState, socketState } from '../../recoils';
 import { useRecoilState } from 'recoil';
 import { SelectButton } from '../../assets/icons';
+import { useParams } from 'react-router-dom';
 
 type SelectorProp = {
   onClickModalElement: (str: string) => void;
@@ -86,8 +87,12 @@ const Modal = ({ onClickElement, onClickModalElement }: ModalProp) => {
 const LanguageSelector = ({ onClickModalElement }: SelectorProp) => {
   const [editor, setEditor] = useRecoilState(editorState);
   const [open, setOpen] = useState(false);
+  const [socket] = useRecoilState(socketState);
   const selectorRef = useRef<HTMLDivElement>(null);
-  const { language } = editor;
+  const { version } = useParams();
+  const [isMultiVersion] = useState(version === 'multi');
+  const { roomNumber } = isMultiVersion ? useParams() : { roomNumber: null };
+  const [language, setLanguage] = useState(editor.language);
   const handleClickOutside = ({ target }: any) => {
     if (!selectorRef.current || !selectorRef.current.contains(target)) {
       setOpen(false);
@@ -97,8 +102,39 @@ const LanguageSelector = ({ onClickModalElement }: SelectorProp) => {
   const handleClickWrapper = () => setOpen(!open);
 
   const handleModalElement = (language: string) => {
+    if (socket) {
+      socket.emit(
+        'change-language',
+        roomNumber,
+        JSON.stringify(editor),
+        language,
+      );
+    }
     setEditor({ ...editor, language });
   };
+
+  useEffect(() => {
+    setLanguage(editor.language);
+  }, [editor]);
+
+  const saveCode = (code: string, language: string) => {
+    localStorage.setItem(language, code);
+  };
+
+  const changeLanguageCallback = (code: string, lang: string) => {
+    if (!code) return;
+    const { text, language } = JSON.parse(code);
+    saveCode(text, language);
+    setEditor({ ...editor, language: lang });
+  };
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on('change-language', changeLanguageCallback);
+    return () => {
+      socket.off('change-language', changeLanguageCallback);
+    };
+  }, [socket]);
 
   useEffect(() => {
     window.addEventListener('click', handleClickOutside);
