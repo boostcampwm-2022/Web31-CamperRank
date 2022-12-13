@@ -4,6 +4,7 @@ import {
   DefaultValuePipe,
   Delete,
   Get,
+  Header,
   HttpCode,
   HttpException,
   HttpStatus,
@@ -78,6 +79,7 @@ export class ProblemController {
     summary: '문제 정보 제공 API',
     description: '문제 정보를 제공한다.',
   })
+  @Header('Cache-Control', 'public, max-age=86400')
   @ApiResponse({
     description:
       '문제 식별 아이디를 이용해 찾은 문제를 문제 제목, 레벨, 문제 내용을 담아 반환한다.',
