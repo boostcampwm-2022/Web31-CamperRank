@@ -6,7 +6,6 @@ import { ProblemHeader } from '../components/ProblemHeader';
 import { ProblemContent, Result } from '../components/Problem';
 import { ProblemInfo } from '@types';
 import { useRecoilState } from 'recoil';
-import io, { Socket } from 'socket.io-client';
 import { editorState, gradingState, socketState } from '../recoils';
 import { Video } from '../components/Problem/Video';
 import editorColors from '../utils/editorColors';
@@ -181,7 +180,6 @@ const Problem = () => {
   const { id, version } = useParams();
   const [isMultiVersion] = useState(version === 'multi');
   const [code, setCode] = useRecoilState(editorState);
-  const [socket] = useRecoilState(socketState);
   const [language, setLanguage] = useState(code.language);
   const [text, setText] = useState(code.text);
   const [param, setParam] = useState(1);
@@ -211,15 +209,15 @@ const Problem = () => {
   );
 
   useEffect(() => {
-    let language;
-    if (text === defaultCode['Python'] || text.includes('def solution'))
-      language = 'Python';
-    else if (
+    let lang = '';
+    if (
       text === defaultCode['JavaScript'] ||
       text.includes('function solution')
     )
-      language = 'JavaScript';
-    if (language) setCode({ ...code, language, text });
+      lang = 'JavaScript';
+    else if (text === defaultCode['Python'] || text.includes('def solution'))
+      lang = 'Python';
+    if (lang) setCode({ ...code, text, language: lang });
     else setCode({ ...code, text });
   }, [text]);
 
@@ -361,22 +359,15 @@ const Problem = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.removeItem('JavaScript');
-    localStorage.removeItem('Python');
+    removeLocalStorage();
+    return () => {
+      removeLocalStorage();
+    };
   }, []);
 
-  useEffect(() => {
-    if (!socket) return;
-    socket.on('change-language', changeLanguageCallback);
-    return () => {
-      socket.off('change-language', changeLanguageCallback);
-    };
-  }, [socket]);
-
-  const changeLanguageCallback = (code: string) => {
-    if (!code) return;
-    const { text, language } = JSON.parse(code);
-    saveCode(text, language);
+  const removeLocalStorage = () => {
+    localStorage.removeItem('JavaScript');
+    localStorage.removeItem('Python');
   };
 
   const saveCode = (code: string, language: string) => {
@@ -389,12 +380,9 @@ const Problem = () => {
 
   const handleChangeEditorLanguage = (language: string) => {
     if (eView) {
-      if (socket) {
-        socket.emit('change-language', roomNumber, JSON.stringify(code));
-      }
       let insertCode;
       const { text: priorText, language: priorLanguage } = code;
-      saveCode(priorText, priorLanguage);
+      if (priorLanguage) saveCode(priorText, priorLanguage);
       if (language === '' || language === 'JavaScript' || language === 'Python')
         insertCode = defaultCode[language];
       const savedCode = getSavedCode(language);
