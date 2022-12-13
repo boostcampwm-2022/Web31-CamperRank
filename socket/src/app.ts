@@ -43,10 +43,10 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('change-webrtc', (roomId, userId) => {
-    logging('change userId: ', userId);
+  socket.on('change-language', (roomId, code) => {
     logging('roomId: ', roomId);
-    socket.to(roomId).emit('change-webrtc', userId);
+    logging('code: ', code);
+    socket.to(roomId).emit('change-language', code);
   });
 });
 

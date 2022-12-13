@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import io, { Socket } from 'socket.io-client';
 import { Peer } from 'peerjs';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { socketState } from '../../recoils';
 
 const VideoContainer = styled.div`
   margin-top: 1rem;
@@ -94,7 +96,7 @@ export const Video = () => {
   const navigate = useNavigate();
 
   const [myPeer, setMyPeer] = useState<Peer>();
-  const [socket, setSocket] = useState<Socket>();
+  const [socket, setSocket] = useRecoilState(socketState);
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia(Constraints).then((mediaStream) => {

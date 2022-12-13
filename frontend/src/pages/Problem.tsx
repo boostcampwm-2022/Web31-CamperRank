@@ -6,7 +6,8 @@ import { ProblemHeader } from '../components/ProblemHeader';
 import { ProblemContent, Result } from '../components/Problem';
 import { ProblemInfo } from '@types';
 import { useRecoilState } from 'recoil';
-import { editorState, gradingState } from '../recoils';
+import io, { Socket } from 'socket.io-client';
+import { editorState, gradingState, socketState } from '../recoils';
 import { Video } from '../components/Problem/Video';
 import editorColors from '../utils/editorColors';
 import LanguageSelector from '../components/Problem/LanguageSelector';
@@ -23,8 +24,6 @@ import { javascript } from '@codemirror/lang-javascript';
 import { python } from '@codemirror/lang-python';
 import { keymap } from '@codemirror/view';
 import { indentWithTab } from '@codemirror/commands';
-// import { LanguageSupport, syntaxHighlighting } from '@codemirror/language';
-// import oneDarkHighlightStyle from '../utils/theme';
 
 import * as random from 'lib0/random';
 import { useUserState } from '../hooks/useUserState';
@@ -164,16 +163,11 @@ const REM = getComputedStyle(document.documentElement).fontSize;
 const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 
 const languageCompartment = new Compartment();
-//const highlightThemeCompartment = new Compartment();
 
 const langs = {
   JavaScript: javascript(),
   Python: python(),
 };
-
-// const highlightThemeExtensions = {
-//   dark: syntaxHighlighting(oneDarkHighlightStyle),
-// };
 
 const Problem = () => {
   useUserState();
@@ -187,6 +181,7 @@ const Problem = () => {
   const { id, version } = useParams();
   const [isMultiVersion] = useState(version === 'multi');
   const [code, setCode] = useRecoilState(editorState);
+  const [socket] = useRecoilState(socketState);
   const [language, setLanguage] = useState(code.language);
   const [text, setText] = useState(code.text);
   const [param, setParam] = useState(1);
@@ -370,6 +365,20 @@ const Problem = () => {
     localStorage.removeItem('Python');
   }, []);
 
+  useEffect(() => {
+    if (!socket) return;
+    socket.on('change-language', changeLanguageCallback);
+    return () => {
+      socket.off('change-language', changeLanguageCallback);
+    };
+  }, [socket]);
+
+  const changeLanguageCallback = (code: string) => {
+    if (!code) return;
+    const { text, language } = JSON.parse(code);
+    saveCode(text, language);
+  };
+
   const saveCode = (code: string, language: string) => {
     localStorage.setItem(language, code);
   };
@@ -380,6 +389,9 @@ const Problem = () => {
 
   const handleChangeEditorLanguage = (language: string) => {
     if (eView) {
+      if (socket) {
+        socket.emit('change-language', roomNumber, JSON.stringify(code));
+      }
       let insertCode;
       const { text: priorText, language: priorLanguage } = code;
       saveCode(priorText, priorLanguage);
