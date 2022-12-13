@@ -32,7 +32,8 @@ const SliderPage = styled.div`
   height: 1.8rem;
   width: 7rem;
   text-align: center;
-  color: #0b6113;
+  //color: #0b6113;
+  color: black;
   font-weight: 500;
   font-size: 1.2rem;
 `;
