@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { editorState, socketState } from '../../recoils';
 import { useRecoilState } from 'recoil';
@@ -30,7 +30,9 @@ const SelectorWrapper = styled.div`
   align-items: center;
   justify-content: space-around;
   z-index: 1;
-  &: hover {
+  cursor: pointer;
+
+  &:hover {
     border: 2px solid #ababab;
   }
 `;
@@ -38,7 +40,6 @@ const SelectorWrapper = styled.div`
 const ModalButton = styled.img`
   width: 0.6rem;
   height: 0.6rem;
-  cursor: pointer;
   position: relative;
 `;
 
@@ -60,7 +61,7 @@ const ModalElement = styled.div`
   height: 1.2rem;
   text-align: center;
   line-height: 1.2rem;
-  &: hover {
+  &:hover {
     background: rgba(240, 240, 240, 0.8);
   }
 `;
@@ -146,7 +147,7 @@ const LanguageSelector = ({ onClickModalElement }: SelectorProp) => {
   return (
     <SelectorWrapper ref={selectorRef} onClick={handleClickWrapper}>
       {language ? language : 'Language'}
-      <ModalButton src={SelectButton} />
+      <ModalButton src={SelectButton} alt={'언어 설정 드롭다운 이미지'} />
       {open && (
         <Modal
           onClickElement={handleModalElement}

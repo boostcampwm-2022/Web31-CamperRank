@@ -55,7 +55,10 @@ const Filter = ({ content }: FilterType) => {
   return (
     <FilterWrapper ref={filterRef} onClick={() => setOpen(!open)}>
       {name === '상태' ? solved : level}
-      <ModalButton src={SelectButton}></ModalButton>
+      <ModalButton
+        src={SelectButton}
+        alt={'필터 드롭다운 이미지'}
+      ></ModalButton>
       {open && (
         <Modal
           onClick={() => setOpen(!open)}
