@@ -366,10 +366,8 @@ const Problem = () => {
   }, []);
 
   useEffect(() => {
-    return () => {
-      localStorage.removeItem('JavaScript');
-      localStorage.removeItem('Python');
-    };
+    localStorage.removeItem('JavaScript');
+    localStorage.removeItem('Python');
   }, []);
 
   const saveCode = (code: string, language: string) => {
