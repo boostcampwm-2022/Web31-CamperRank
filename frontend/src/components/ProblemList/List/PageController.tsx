@@ -61,7 +61,7 @@ const PageController = ({ page, onClickPage }: pageProps) => {
       <SliderImage
         src={SliderLeft}
         onClick={handleLeftImageClick}
-        alt={'랭킹 좌페이지 버튼'}
+        alt={'좌페이지 버튼'}
       />
       <PageWrapper>
         {/* eslint-disable-next-line prefer-spread */}
@@ -80,7 +80,7 @@ const PageController = ({ page, onClickPage }: pageProps) => {
       <SliderImage
         src={SliderRight}
         onClick={handleRightImageClick}
-        alt={'랭킹 우페이지 버튼'}
+        alt={'우페이지 버튼'}
       />
     </ControllerWrapper>
   );

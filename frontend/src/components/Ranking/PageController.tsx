@@ -24,7 +24,7 @@ const ControllerWrapper = styled.div`
 const SliderImage = styled.img`
   height: 2rem;
   width: 1rem;
-  border-radius: 15px;
+  border-radius: 2rem;
   object-fit: cover;
   cursor: pointer;
 `;
@@ -58,7 +58,11 @@ const PageController = ({ page, onClickPage }: pageProps) => {
   };
   return (
     <ControllerWrapper>
-      <SliderImage src={SliderLeft} onClick={handleLeftImageClick} />
+      <SliderImage
+        src={SliderLeft}
+        onClick={handleLeftImageClick}
+        alt={'왼페이지 버튼'}
+      />
       <PageWrapper>
         {/* eslint-disable-next-line prefer-spread */}
         {Array.apply(null, new Array(max)).map((e, idx) =>
@@ -73,7 +77,11 @@ const PageController = ({ page, onClickPage }: pageProps) => {
           ),
         )}
       </PageWrapper>
-      <SliderImage src={SliderRight} onClick={handleRightImageClick} />
+      <SliderImage
+        src={SliderRight}
+        onClick={handleRightImageClick}
+        alt={'우페이지 버튼'}
+      />
     </ControllerWrapper>
   );
 };
