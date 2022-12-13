@@ -66,11 +66,13 @@ const BannerController = ({ pageNum, onClickButton }: BannerControllerType) => {
       <SliderController
         src={SliderLeft}
         onClick={handleLeftClick}
+        alt={'좌측 화살표'}
       ></SliderController>
       <SliderPage>0{pageNum + 1} | 03</SliderPage>
       <SliderController
         src={SliderRight}
         onClick={handleRightClick}
+        alt={'우측 화살표'}
       ></SliderController>
     </ControllerWrapper>
   );
