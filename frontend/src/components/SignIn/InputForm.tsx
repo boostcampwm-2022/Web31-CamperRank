@@ -70,12 +70,12 @@ export const SigninInputForm = () => {
       </InfoContainer>
       <InputFormContainer onSubmit={handleSubmit}>
         <IDInputContainer>
-          <p>아이디</p>
-          <input type={'text'} ref={id} />
+          <label htmlFor={'id'}>아이디</label>
+          <input type={'text'} ref={id} id={'id'} />
         </IDInputContainer>
         <PasswordInputContainer>
-          <p>비밀번호</p>
-          <input type={'password'} ref={password} />
+          <label htmlFor={'password'}>비밀번호</label>
+          <input type={'password'} ref={password} id={'password'} />
         </PasswordInputContainer>
         {isLoading ? (
           <span>sending...</span>

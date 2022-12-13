@@ -5,7 +5,7 @@ export const InputFormContainer = styled.form`
   width: 38rem;
   height: 18rem;
   background: #f9fffa;
-  box-shadow: 0px 6px 16px 0px #c4e6cd;
+  box-shadow: 0 6px 16px 0 #c4e6cd;
   margin-top: 3rem;
   margin-bottom: 2rem;
   padding: 1.5rem;
@@ -73,7 +73,7 @@ export const IDInputContainer = styled.div`
     }
   }
 
-  p {
+  label {
     margin-right: 1rem;
     color: #186e35;
   }
@@ -95,7 +95,7 @@ export const PasswordInputContainer = styled.div`
     }
   }
 
-  p {
+  label {
     margin-right: 1rem;
     color: #186e35;
   }
