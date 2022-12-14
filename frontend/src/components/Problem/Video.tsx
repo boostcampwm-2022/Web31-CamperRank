@@ -107,8 +107,6 @@ export const Video = () => {
       setSocket(
         io(import.meta.env.VITE_SOCKET_SERVER_URL, {
           secure: process.env.NODE_ENV !== 'development',
-          // transports: ['websocket'],
-          withCredentials: true,
         }),
       );
     });
