@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { SliderLeft, SliderRight } from '../../../assets/icons';
 
@@ -50,12 +50,12 @@ const NowPage = styled(Page)`
 const PageController = ({ page, onClickPage }: pageProps) => {
   const { now, max } = page;
   const handlePageClick = (page: number) => onClickPage(page);
-  const handleLeftImageClick = () => {
+  const handleLeftImageClick = useCallback(() => {
     if (now > 1) onClickPage(now - 1);
-  };
-  const handleRightImageClick = () => {
+  }, [onClickPage]);
+  const handleRightImageClick = useCallback(() => {
     if (now < max) onClickPage(now + 1);
-  };
+  }, [onClickPage]);
   return (
     <ControllerWrapper>
       <SliderImage

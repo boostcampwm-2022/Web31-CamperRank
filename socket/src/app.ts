@@ -43,10 +43,10 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('change-language', (roomId, code) => {
+  socket.on('change-language', (roomId, code, lang) => {
     logging('roomId: ', roomId);
     logging('code: ', code);
-    socket.to(roomId).emit('change-language', code);
+    socket.to(roomId).emit('change-language', code, lang);
   });
 });
 
