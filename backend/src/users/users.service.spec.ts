@@ -8,6 +8,25 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockUserRepository } from '../mock/user.mock';
 import { MockRepository } from '../mock/common.mock';
 
+async function createTestUser(
+  userId: number,
+  loginId: string,
+  password: string,
+) {
+  const user = User.createUser({
+    loginId: loginId,
+    password: await bcrypt.hash(password, 10),
+    userStatus: 0,
+  });
+
+  user.id = userId;
+  const now = new Date();
+  user.createdAt = now;
+  user.updatedAt = now;
+
+  return user;
+}
+
 describe('UsersService', () => {
   let userService: UsersService;
   let userRepository: MockRepository<User>;
@@ -28,62 +47,434 @@ describe('UsersService', () => {
     expect(userService).toBeDefined();
   });
 
-  it('create user', async () => {
-    const user = User.createUser({
-      loginId: 'loginId1',
-      password: await bcrypt.hash('12341234', 10),
-      userStatus: 0,
+  it('create: 사용자 생성 성공', async () => {
+    const userId = 1;
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    const user = await createTestUser(userId, loginId, password);
+
+    // 검색 하였을 때 찾은 결과가 없어야 한다.
+    const userRepositoryFindOneBySpy = jest
+      .spyOn(userRepository, 'findOneBy')
+      .mockResolvedValue(null);
+
+    // 검색 하였을 때 찾은 결과가 없어야 한다.
+    const userRepositorySaveSpy = jest
+      .spyOn(userRepository, 'save')
+      .mockResolvedValue(user);
+
+    const createUserDto = new CreateUserDto(loginId, password);
+    const simpleUserDto = await userService.create(createUserDto);
+
+    expect(userRepositoryFindOneBySpy).toBeCalledWith({ loginId: loginId });
+
+    // password는 암호화되고 같은 암호를 암화화해도 같지 않기 때문에 단순 비교할 수 없다.
+    // expect(userRepositorySaveSpy).toBeCalledWith(
+    //   User.createUser({
+    //     loginId: loginId,
+    //     password: await bcrypt.hash(password, 10),
+    //     userStatus: 0,
+    //   }),
+    // );
+    expect(userRepositoryFindOneBySpy).toBeCalled();
+    expect(simpleUserDto).toEqual(new SimpleUserDto(user));
+  });
+
+  it('create: 사용자 생성 실패 - 아이디가 빈 문자열', async () => {
+    const userId = 1;
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    const user = await createTestUser(userId, loginId, password);
+
+    const createUserDto = new CreateUserDto(loginId, password);
+    const simpleUserDto = await userService.create(createUserDto);
+
+    expect(simpleUserDto).toEqual(null);
+  });
+
+  it('create: 사용자 생성 실패 - 아이디가 undefined', async () => {
+    const userId = 1;
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    const user = await createTestUser(userId, loginId, password);
+
+    const createUserDto = new CreateUserDto(loginId, password);
+    const simpleUserDto = await userService.create(createUserDto);
+
+    expect(simpleUserDto).toEqual(null);
+  });
+
+  it('create: 사용자 생성 실패 - 아이디가 null', async () => {
+    const userId = 1;
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    const user = await createTestUser(userId, loginId, password);
+
+    const createUserDto = new CreateUserDto(loginId, password);
+    const simpleUserDto = await userService.create(createUserDto);
+
+    expect(simpleUserDto).toEqual(null);
+  });
+
+  it('create: 사용자 생성 실패 - 존재하는 사용자', async () => {
+    const userId = 1;
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    const user = await createTestUser(userId, loginId, password);
+
+    // 검색했을 떄 찾은 결과가 있는 경우
+    const userRepositoryFindOneBySpy = jest
+      .spyOn(userRepository, 'findOneBy')
+      .mockResolvedValue(user);
+
+    const createUserDto = new CreateUserDto(loginId, password);
+    const simpleUserDto = await userService.create(createUserDto);
+
+    expect(userRepositoryFindOneBySpy).toBeCalledWith({ loginId: loginId });
+
+    expect(simpleUserDto).toEqual(null);
+  });
+
+  it('foundUser: 검색 성공 - userId가 정상, loginId를 비워둠', async () => {
+    const userId = 1;
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    const user = await createTestUser(userId, loginId, password);
+
+    const userRepositoryFindOneBySpy = jest
+      .spyOn(userRepository, 'findOneBy')
+      .mockResolvedValue(user);
+
+    const simpleUserDto = await userService.findOneUser({ userId: userId });
+
+    expect(userRepositoryFindOneBySpy).toBeCalledWith({ id: userId });
+    expect(simpleUserDto.loginId).toBe(loginId);
+  });
+
+  it('foundUser: 검색 성공 - userId가 정상, loginId가 undefined', async () => {
+    const userId = 1;
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    const user = await createTestUser(userId, loginId, password);
+
+    const userRepositoryFindOneBySpy2 = jest
+      .spyOn(userRepository, 'findOneBy')
+      .mockResolvedValue(user);
+
+    const simpleUserDto = await userService.findOneUser({
+      userId: userId,
+      loginId: undefined,
     });
-    user.id = 1;
-    const now = new Date();
-    user.createdAt = now;
-    user.updatedAt = now;
+
+    expect(userRepositoryFindOneBySpy2).toBeCalledWith({
+      id: userId,
+      loginId: undefined,
+    });
+
+    expect(simpleUserDto).toEqual(new SimpleUserDto(user));
+  });
+
+  it('foundUser: 검색 성공 - userId가 정상, loginId가 null', async () => {
+    const userId = 1;
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    const user = await createTestUser(userId, loginId, password);
+
+    const userRepositoryFindOneBySpy3 = jest
+      .spyOn(userRepository, 'findOneBy')
+      .mockResolvedValue(user);
+
+    const simpleUserDto3 = await userService.findOneUser({
+      userId: userId,
+      loginId: null,
+    });
+
+    expect(userRepositoryFindOneBySpy3).toBeCalledWith({
+      id: userId,
+      loginId: null,
+    });
+    expect(simpleUserDto3).toEqual(new SimpleUserDto(user));
+  });
+
+  it('foundUser: 검색 성공 - loginId가 정상, userId를 비워둠', async () => {
+    const userId = 1;
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    await userService.create(new CreateUserDto(loginId, password));
+    const user = await createTestUser(userId, loginId, password);
+
+    const userRepositoryFindOneBySpy1 = jest
+      .spyOn(userRepository, 'findOneBy')
+      .mockResolvedValue(user);
+
+    const simpleUserDto1 = await userService.findOneUser({ loginId: loginId });
+
+    expect(userRepositoryFindOneBySpy1).toBeCalledWith({ loginId: loginId });
+    expect(simpleUserDto1).toEqual(new SimpleUserDto(user));
+  });
+
+  it('foundUser: 검색 성공 - loginId가 정상, userId가 undefined', async () => {
+    const userId = 1;
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    await userService.create(new CreateUserDto(loginId, password));
+
+    const user = await createTestUser(userId, loginId, password);
+
+    const userRepositoryFindOneBySpy2 = jest
+      .spyOn(userRepository, 'findOneBy')
+      .mockResolvedValue(user);
+
+    const simpleUserDto2 = await userService.findOneUser({
+      userId: undefined,
+      loginId: loginId,
+    });
+
+    expect(userRepositoryFindOneBySpy2).toBeCalledWith({
+      id: undefined,
+      loginId: loginId,
+    });
+    expect(simpleUserDto2).toEqual(new SimpleUserDto(user));
+  });
+
+  it('foundUser: 검색 성공 - loginId가 정상, userId가 null', async () => {
+    const userId = 1;
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    await userService.create(new CreateUserDto(loginId, password));
+
+    const user = await createTestUser(userId, loginId, password);
+
+    const userRepositoryFindOneBySpy3 = jest
+      .spyOn(userRepository, 'findOneBy')
+      .mockResolvedValue(user);
+
+    const simpleUserDto3 = await userService.findOneUser({
+      userId: null,
+      loginId: loginId,
+    });
+
+    expect(userRepositoryFindOneBySpy3).toBeCalledWith({
+      id: null,
+      loginId: loginId,
+    });
+
+    expect(simpleUserDto3).toEqual(new SimpleUserDto(user));
+  });
+
+  it('foundUser: 검색 성공 - userId와 loginId가 모두 정상', async () => {
+    const userId = 1;
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    // foundUser: 검색 성공 - userId가 정상, loginId를 비워둠
+    await userService.create(new CreateUserDto(loginId, password));
+    const user = await createTestUser(userId, loginId, password);
+
+    const userRepositoryFindOneBySpy = jest
+      .spyOn(userRepository, 'findOneBy')
+      .mockResolvedValue(user);
+
+    const simpleUserDto = await userService.findOneUser({
+      userId: userId,
+      loginId: loginId,
+    });
+
+    expect(userRepositoryFindOneBySpy).toBeCalledWith({
+      id: userId,
+      loginId: loginId,
+    });
+    expect(simpleUserDto).toEqual(new SimpleUserDto(user));
+  });
+
+  it('foundUser: 검색 실패 - 잘못된 userId와 loginId가 비어있음', async () => {
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    // foundUser: 검색 성공 - userId가 정상, loginId를 비워둠
+    await userService.create(new CreateUserDto(loginId, password));
 
     const userRepositoryFindOneBySpy = jest
       .spyOn(userRepository, 'findOneBy')
       .mockResolvedValue(null);
 
-    const userRepositorySaveSpy = jest
-      .spyOn(userRepository, 'save')
-      .mockResolvedValue(user);
+    const simpleUserDto = await userService.findOneUser({
+      userId: 2,
+    });
 
-    const createUserDto = new CreateUserDto('loginId1', '12341234');
-    const simpleUserDto = await userService.create(createUserDto);
+    expect(userRepositoryFindOneBySpy).toBeCalledWith({
+      id: 2,
+    });
 
-    expect(userRepositoryFindOneBySpy).toBeCalledWith({ loginId: 'loginId1' });
-    // TODO: 비밀번호 암호화 부분 떄문에 오류 발생
-    // expect(userRepositorySaveSpy).toBeCalledWith(user);
-    expect(simpleUserDto).toEqual(new SimpleUserDto(user));
+    expect(simpleUserDto).toEqual(null);
   });
 
-  it('foundUser({userId})를 호출하여 처리', async () => {
-    const user = User.createUser({
-      loginId: 'loginId1',
-      password: await bcrypt.hash('12341234', 10),
-      userStatus: 0,
-    });
-    user.id = 1;
-    const now = new Date();
-    user.createdAt = now;
-    user.updatedAt = now;
+  it('foundUser: 검색 실패 - 잘못된 userId와 loginId가 정상', async () => {
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    // foundUser: 검색 성공 - userId가 정상, loginId를 비워둠
+    await userService.create(new CreateUserDto(loginId, password));
 
     const userRepositoryFindOneBySpy = jest
       .spyOn(userRepository, 'findOneBy')
-      .mockResolvedValue(user);
+      .mockResolvedValue(null);
 
-    const simpleUserDto = await userService.findOneUser({ userId: 1 });
+    const simpleUserDto = await userService.findOneUser({
+      userId: 2,
+      loginId: loginId,
+    });
 
-    expect(userRepositoryFindOneBySpy).toBeCalledWith({ id: 1 });
-    expect(simpleUserDto).toEqual(new SimpleUserDto(user));
+    expect(userRepositoryFindOneBySpy).toBeCalledWith({
+      id: 2,
+      loginId: loginId,
+    });
 
-    expect(userService).toBeDefined();
+    expect(simpleUserDto).toEqual(null);
   });
 
-  it('foundUser({loginId})를 호출하여 처리', () => {
-    expect(userService).toBeDefined();
+  it('foundUser: 검색 실패 - 잘못된 loginId와 userId가 비어있음', async () => {
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    // foundUser: 검색 성공 - userId가 정상, loginId를 비워둠
+    await userService.create(new CreateUserDto(loginId, password));
+
+    const userRepositoryFindOneBySpy = jest
+      .spyOn(userRepository, 'findOneBy')
+      .mockResolvedValue(null);
+
+    const simpleUserDto = await userService.findOneUser({
+      loginId: 'loginId2',
+    });
+
+    expect(userRepositoryFindOneBySpy).toBeCalledWith({
+      loginId: 'loginId2',
+    });
+
+    expect(simpleUserDto).toEqual(null);
   });
 
-  it('foundUser({userId, loginId})를 호출하여 처리', () => {
-    expect(userService).toBeDefined();
+  it('foundUser: 검색 실패 - 잘못된 loginId와 userId가 정상', async () => {
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    // foundUser: 검색 성공 - userId가 정상, loginId를 비워둠
+    await userService.create(new CreateUserDto(loginId, password));
+
+    const userRepositoryFindOneBySpy = jest
+      .spyOn(userRepository, 'findOneBy')
+      .mockResolvedValue(null);
+
+    const simpleUserDto = await userService.findOneUser({
+      userId: 1,
+      loginId: 'loginId2',
+    });
+
+    expect(userRepositoryFindOneBySpy).toBeCalledWith({
+      id: 1,
+      loginId: 'loginId2',
+    });
+
+    expect(simpleUserDto).toEqual(null);
+  });
+
+  it('foundUser: 검색 실패 - 잘못된 userId와 loginId', async () => {
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    await userService.create(new CreateUserDto(loginId, password));
+
+    const userRepositoryFindOneBySpy = jest
+      .spyOn(userRepository, 'findOneBy')
+      .mockResolvedValue(null);
+
+    const simpleUserDto = await userService.findOneUser({
+      userId: 2,
+      loginId: 'loginId2',
+    });
+
+    expect(userRepositoryFindOneBySpy).toBeCalledWith({
+      id: 2,
+      loginId: 'loginId2',
+    });
+
+    expect(simpleUserDto).toEqual(null);
+  });
+
+  it('foundUser: 검색 실패 - userId가 null, loginId를 비워둠', async () => {
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    await userService.create(new CreateUserDto(loginId, password));
+
+    const simpleUserDto = await userService.findOneUser({
+      userId: null,
+    });
+
+    expect(simpleUserDto).toEqual(null);
+  });
+
+  it('foundUser: 검색 실패 - loginId가 null, userId를 비워둠', async () => {
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    await userService.create(new CreateUserDto(loginId, password));
+
+    const simpleUserDto = await userService.findOneUser({
+      loginId: null,
+    });
+
+    expect(simpleUserDto).toEqual(null);
+  });
+
+  it('foundUser: 검색 실패 - userId와 loginId를 비워둠', async () => {
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    await userService.create(new CreateUserDto(loginId, password));
+
+    const simpleUserDto = await userService.findOneUser({});
+
+    expect(simpleUserDto).toEqual(null);
+  });
+
+  it('foundUser: 검색 실패 - userId와 loginId가 undefined', async () => {
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    await userService.create(new CreateUserDto(loginId, password));
+
+    const simpleUserDto = await userService.findOneUser({
+      userId: undefined,
+      loginId: undefined,
+    });
+
+    expect(simpleUserDto).toEqual(null);
+  });
+
+  it('foundUser: 검색 실패 - userId와 loginId가 null', async () => {
+    const loginId = 'loginId1';
+    const password = '12341234';
+
+    await userService.create(new CreateUserDto(loginId, password));
+
+    const simpleUserDto = await userService.findOneUser({
+      userId: null,
+      loginId: null,
+    });
+
+    expect(simpleUserDto).toEqual(null);
   });
 });
