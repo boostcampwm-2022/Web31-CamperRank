@@ -102,4 +102,4 @@ const Problem = ({ problem }: ProblemType) => {
   );
 };
 
-export default Problem;
+export default React.memo(Problem);

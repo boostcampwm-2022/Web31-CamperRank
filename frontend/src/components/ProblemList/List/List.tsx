@@ -54,7 +54,9 @@ const List = ({ list }: ListType) => {
       max: Math.ceil(list.length / 7),
     });
   }, [list]);
-
+  useEffect(() => {
+    console.log(pagedList);
+  }, [pagedList]);
   return (
     <>
       <ListContainer>
@@ -65,7 +67,9 @@ const List = ({ list }: ListType) => {
               : `총 ${list.length} 문제가 검색되었습니다`}
           </Info>
           {pagedList.length <= 7 &&
-            pagedList.map((elem, idx) => <Problem key={idx} problem={elem} />)}
+            pagedList.map((elem, idx) => (
+              <Problem key={elem.problemId} problem={elem} />
+            ))}
           <PageController
             page={page}
             onClickPage={(now: number) => setPage({ ...page, now })}

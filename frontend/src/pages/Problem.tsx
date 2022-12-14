@@ -6,7 +6,7 @@ import { ProblemHeader } from '../components/ProblemHeader';
 import { ProblemContent, Result } from '../components/Problem';
 import { ProblemInfo } from '@types';
 import { useRecoilState } from 'recoil';
-import { editorState, gradingState, socketState } from '../recoils';
+import { editorState, gradingState } from '../recoils';
 import { Video } from '../components/Problem/Video';
 import editorColors from '../utils/editorColors';
 import LanguageSelector from '../components/Problem/LanguageSelector';

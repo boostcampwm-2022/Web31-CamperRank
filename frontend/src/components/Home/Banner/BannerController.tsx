@@ -41,10 +41,16 @@ const SliderPage = styled.div`
 const BannerController = ({ pageNum, onClickButton }: BannerControllerType) => {
   const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
   const [left, setLeft] = useState(23 * rem);
+  const [throttle, setThrottle] = useState(false);
+
   const handleResize = () => {
-    const windowLen = Math.max(80 * rem, window.innerWidth);
-    const len = (windowLen - 80 * rem) / 2;
-    setLeft(len + 2 * rem);
+    if (throttle) return;
+    setThrottle(true);
+    setTimeout(() => {
+      const windowLen = Math.max(80 * rem, window.innerWidth);
+      const len = (windowLen - 80 * rem) / 2;
+      setLeft(len + 2 * rem);
+    }, 500);
   };
 
   useEffect(() => {
@@ -54,14 +60,17 @@ const BannerController = ({ pageNum, onClickButton }: BannerControllerType) => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
   const handleLeftClick = () => {
     if (pageNum == 0) onClickButton(2);
     else onClickButton(pageNum - 1);
   };
+
   const handleRightClick = () => {
     if (pageNum == 2) onClickButton(0);
     else onClickButton(pageNum + 1);
   };
+
   return (
     <ControllerWrapper left={left}>
       <SliderController
