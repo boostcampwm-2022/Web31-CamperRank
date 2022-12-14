@@ -257,7 +257,7 @@ const Problem = () => {
 
   useEffect(() => {
     if (!problem) return;
-    fetch(`${URL}/test-case?testCAseId=1&problemId=${id}`)
+    fetch(`${URL}/test-case?problemId=${id}`)
       .then((res) => res.json())
       .then((res) => {
         const testcase = res[0];
