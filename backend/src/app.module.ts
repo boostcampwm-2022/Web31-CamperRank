@@ -36,10 +36,12 @@ import * as process from 'process';
         password: configService.get('database.password'),
         database: configService.get('database.database'),
         entities: [User, TestCase, Solved, Problem],
+        dropSchema: false,
         synchronize: false,
         logging: false,
       }),
     }),
+
     UsersModule,
     ProblemModule,
     TestCaseModule,
