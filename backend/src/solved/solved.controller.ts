@@ -32,7 +32,7 @@ import { ProgrammingLanguage } from './entities/ProgrammingLanguage.enum';
 export class SolvedController {
   constructor(
     private readonly solvedService: SolvedService,
-    private readonly httpService: HttpService,
+    private readonly httpService: HttpService, // @InjectQueue('gradeQueue') private gradeQueue: Queue,
   ) {}
 
   async createToGrade(createSolvedDto: CreateSolvedDto, skip, take, saveFlag) {
@@ -81,8 +81,17 @@ export class SolvedController {
       true,
     );
 
+    // await Promise.all(
+    //   gradeSolvedDtoList.map(async (value) => {
+    //     await this.gradeQueue.add('grade', { ...value });
+    //     // const temp = await this.gradeService.addJob();
+    //     // console.log(temp);
+    //   }),
+    // );
+
     const gradeResultList = await Promise.all(
-      gradeSolvedDtoList.map((value) => {
+      gradeSolvedDtoList.map(async (value) => {
+        // await this.gradeQueue.add('grade', { foo: 'bar' });
         return this.httpService.axiosRef
           .post(process.env.GRADING_SERVER_URL, { ...value })
           .then((response) => response.data)
