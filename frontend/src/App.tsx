@@ -1,7 +1,5 @@
 import { Route, Routes, BrowserRouter, Navigate } from 'react-router-dom';
-import { Home, ProblemList, Problem, Ranking, Profile } from './pages';
-import { SignUp } from './pages/SignUp';
-import { SignIn } from './pages/SignIn';
+import { Home, ProblemList, Problem, Ranking, Profile, Sign } from './pages';
 import { useUserState } from './hooks/useUserState';
 import { useMemo } from 'react';
 
@@ -12,13 +10,13 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        {!isLoggedIn && <Route path="/signup" element={<SignUp />} />}
-        {!isLoggedIn && <Route path="/signin" element={<SignIn />} />}
+        {!isLoggedIn && <Route path="/signup" element={<Sign />} />}
+        {!isLoggedIn && <Route path="/signin" element={<Sign />} />}
         <Route path="/problems" element={<ProblemList />} />
         {isLoggedIn ? (
           <Route path="/problem/:version/:id" element={<Problem />} />
         ) : (
-          <Route path="/problem/:version/:id" element={<SignIn />} />
+          <Route path="/problem/:version/:id" element={<Sign />} />
         )}
         {isLoggedIn ? (
           <Route
@@ -26,10 +24,7 @@ const App = () => {
             element={<Problem />}
           />
         ) : (
-          <Route
-            path="/problem/:version/:id/:roomNumber"
-            element={<SignIn />}
-          />
+          <Route path="/problem/:version/:id/:roomNumber" element={<Sign />} />
         )}
         <Route path="/ranking" element={<Ranking />} />
         {isLoggedIn && <Route path="/profile" element={<Profile />} />}

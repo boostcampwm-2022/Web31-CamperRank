@@ -11,7 +11,6 @@ export const HeaderContainer = styled.div`
   align-items: center;
 
   div {
-    margin-right: 4rem;
     height: 2.5rem;
 
     ul {
@@ -43,6 +42,10 @@ export const HeaderContainer = styled.div`
       li:nth-child(2) {
         min-width: 2rem;
         width: 2rem;
+      }
+
+      li:nth-child(3) {
+        width: auto;
       }
     }
   }

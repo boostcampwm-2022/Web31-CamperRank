@@ -1,33 +1,36 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const InputFormContainer = styled.form`
-  width: 43rem;
-  height: 18.5rem;
-  background: #cfe4b5;
-  box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25);
-  border-radius: 1rem;
-  margin-top: 2rem;
+  width: 44rem;
+  height: 21rem;
+  background: #f9fffa;
+  box-shadow: 0px 6px 16px 0px #c4e6cd;
+  margin-top: 3rem;
   margin-bottom: 2rem;
-  padding: 1.5rem 1.5rem 4.5rem;
+  padding: 1.6rem 1.5rem 4.5rem;
   font-weight: 400;
   font-size: 1.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 1.8rem;
   position: relative;
 
   button {
-    background: #e1ebdb;
-    border: 2px solid #aeaeae;
+    background: #c4e6cd;
+    border: 2px solid #f0f0f0;
     border-radius: 10px;
     width: 7rem;
     height: 2.5rem;
-    font-size: 0.9rem;
-
+    font-size: 1rem;
+    color: #0f5e29;
     &:hover {
-      background: #c2d5b7;
+      background: #b2dcbd;
       border: none;
-      box-shadow: 1px 1px 1px 1px #b9b9b9;
+      font-weight: bold;
+      font-size: 1rem;
+      box-shadow: 2px 2px 1px 1px #b9b9b9;
     }
   }
 `;
@@ -39,7 +42,7 @@ export const IDInputContainer = styled.div`
   input {
     margin-right: 1rem;
     background: #f1f9eb;
-    border: 3px solid #9ccaaf;
+    border: 3px solid #c4e6cd;
     border-radius: 10px;
     width: 16rem;
     height: 2.5rem;
@@ -50,10 +53,14 @@ export const IDInputContainer = styled.div`
       text-align: center;
       color: #919191;
     }
+    &:hover {
+      border: 3px solid #9fcdab;
+    }
   }
 
   p {
     margin-right: 1rem;
+    color: #186e35;
   }
 `;
 
@@ -63,7 +70,7 @@ export const PasswordInputContainer = styled.div`
   margin-right: 11rem;
   input {
     background: #f1f9eb;
-    border: 3px solid #9ccaaf;
+    border: 3px solid #c4e6cd;
     border-radius: 10px;
     width: 16rem;
     height: 2.5rem;
@@ -74,10 +81,14 @@ export const PasswordInputContainer = styled.div`
       text-align: center;
       color: #919191;
     }
+    &:hover {
+      border: 3px solid #9fcdab;
+    }
   }
 
   p {
     margin-right: 1rem;
+    color: #186e35;
   }
 `;
 
@@ -85,7 +96,7 @@ export const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-around;
   position: absolute;
-  bottom: 0.8rem;
+  bottom: 1.2rem;
   right: 12.5rem;
   width: 16rem;
 `;
@@ -108,4 +119,16 @@ export const LightContainer = styled.div`
   line-height: 1rem;
   position: absolute;
   filter: invert(0.9);
+`;
+
+export const AnchorLogo = styled(Link)`
+  font-weight: 700;
+  font-size: 3.5rem;
+  cursor: pointer;
+  text-decoration: none;
+`;
+
+export const GreenMark = styled.mark`
+  color: #1f7a41;
+  background: none;
 `;

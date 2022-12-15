@@ -1634,7 +1634,7 @@
   resolved "https://registry.npmjs.org/@remix-run/router/-/router-1.0.3.tgz"
   integrity sha512-ceuyTSs7PZ/tQqi19YZNBc5X7kj1f8p+4DIyrcIYFY9h+hd1OKm4RqtiWldR9eGEvIiJfsqwM4BsuCtRIuEw6Q==
 
-"@rollup/pluginutils@^5.0.0":
+"@rollup/pluginutils@^5.0.0", "@rollup/pluginutils@^5.0.2":
   version "5.0.2"
   resolved "https://registry.npmjs.org/@rollup/pluginutils/-/pluginutils-5.0.2.tgz"
   integrity sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==
@@ -2025,6 +2025,13 @@
   version "18.0.8"
   resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.0.8.tgz"
   integrity sha512-C3GYO0HLaOkk9dDAz3Dl4sbe4AKUGTCfFIZsz3n/82dPNN8Du533HzKatDxeUYWu24wJgMP1xICqkWk1YOLOIw==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-table@^7.7.12":
+  version "7.7.12"
+  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.7.12.tgz#628011d3cb695b07c678704a61f2f1d5b8e567fd"
+  integrity sha512-bRUent+NR/WwtDGwI/BqhZ8XnHghwHw0HUKeohzB5xN3K2qKWYE5w19e7GCuOkL1CXD9Gi1HFy7TIm2AvgWUHg==
   dependencies:
     "@types/react" "*"
 
@@ -5749,6 +5756,11 @@ react-router@6.4.3:
   dependencies:
     "@remix-run/router" "1.0.3"
 
+react-table@^7.8.0:
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.8.0.tgz#07858c01c1718c09f7f1aed7034fcfd7bda907d2"
+  integrity sha512-hNaz4ygkZO4bESeFfnfOft73iBUj8K5oKi1EcSHPAibEydfsX2MyU6Z8KCr3mv3C9Kqqh71U+DhZkFvibbnPbA==
+
 react-testing-library@^8.0.1:
   version "8.0.1"
   resolved "https://registry.npmjs.org/react-testing-library/-/react-testing-library-8.0.1.tgz"
@@ -6541,6 +6553,13 @@ vary@^1, vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
+
+vite-plugin-compression2@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/vite-plugin-compression2/-/vite-plugin-compression2-0.4.1.tgz#e4feed1bc0f9b05093bcf58bc5494c5b92143bbf"
+  integrity sha512-a9lRnJvNWGMSw8zbZQLs5NJy0PVghfnbu5DvvzpfpBQDt8f+Lf5Gv49zK9pQ4Dj8WL+UuvBVc6NuS/h295LXFw==
+  dependencies:
+    "@rollup/pluginutils" "^5.0.2"
 
 vite-plugin-svgr@^2.2.2:
   version "2.2.2"

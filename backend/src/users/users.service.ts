@@ -15,6 +15,10 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
+    if (isFalsy(createUserDto.loginId) || isFalsy(createUserDto.password)) {
+      return null;
+    }
+
     const foundUsers = await this.usersRepository.findOneBy({
       loginId: createUserDto.loginId,
     });
@@ -30,6 +34,7 @@ export class UsersService {
         userStatus: 0,
       }),
     );
+
     return new SimpleUserDto(savedUser);
   }
 

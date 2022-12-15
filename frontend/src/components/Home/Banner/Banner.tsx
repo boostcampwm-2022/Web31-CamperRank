@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import BannerContent from './BannerContent';
 import BannerController from './BannerController';
@@ -23,17 +23,29 @@ const BannerContainer = styled.div<BannerType>`
 const Banner = () => {
   const [page, setPage] = useState(0);
   const [width, setWidth] = useState(window.innerWidth);
+  const [throttle, setThrottle] = useState(false);
+
   useEffect(() => {
     const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
     if (width < 80 * rem) setWidth(80 * rem);
   }, [width]);
-  const handleResize = () => setWidth(window.innerWidth);
+
+  const handleResize = () => {
+    if (throttle) return;
+    setThrottle(true);
+    setTimeout(() => {
+      setWidth(window.innerWidth);
+      setThrottle(false);
+    }, 300);
+  };
+
   useEffect(() => {
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  });
+
   const handleButtonClick = (num: number) => setPage(num);
 
   useEffect(() => {

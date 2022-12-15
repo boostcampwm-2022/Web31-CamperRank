@@ -32,10 +32,10 @@ const SearchButton = styled.button`
   background: #fff;
   border: 3px solid #b5d4a8;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 1.25rem;
   height: 3rem;
   cursor: pointer;
-  width: 4rem;
+  width: 4.4rem;
   &:hover {
     border: 3px solid #80a471;
   }

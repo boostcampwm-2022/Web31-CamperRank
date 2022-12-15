@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { ProblemType } from '@types';
 import { Link } from 'react-router-dom';
@@ -8,13 +8,13 @@ type Prop = {
 };
 
 const ProblemWrapper = styled.div`
-  border: 2px solid #888888;
   border-radius: 16px;
   position: relative;
-  background: #ffffff;
+  border: 2px solid #dddddd;
   min-width: 36rem;
+  background: #eff9f2;
   &:hover {
-    background: #e6f3ea;
+    background: #c9e2d1;
     border: none;
     box-shadow: 3px 3px 3px 3px #b9b9b9;
   }
@@ -23,15 +23,15 @@ const ProblemWrapper = styled.div`
 const Level = styled.div<Prop>`
   position: absolute;
   width: 20%;
-  height: 3rem;
-  left: 2rem;
-  top: 1.5rem;
-  border: 2px solid #33c363;
+  height: 2.5rem;
+  left: 1rem;
+  top: 1rem;
+  border: 2px solid #34b35a;
   border-radius: 8px;
   text-align: center;
   font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 2.5rem;
+  font-size: 1.4rem;
+  line-height: 2rem;
   ${(props) =>
     props.active &&
     css`
@@ -46,38 +46,39 @@ const Name = styled.div`
   width: fit-content;
   height: 3rem;
   left: 2rem;
-  top: 6rem;
+  top: 4.5rem;
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 2.3rem;
   line-height: 3rem;
   text-align: center;
+  color: #104e22;
 `;
 
 const Description = styled.div`
   position: absolute;
   height: 1.5rem;
   left: 2rem;
-  bottom: 1.5rem;
+  bottom: 1rem;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 1rem;
 `;
 
 const Button = styled.button`
   position: absolute;
   width: 27%;
-  height: 3.5rem;
-  right: 2.5rem;
-  bottom: 2rem;
-  border: 2px solid #888888;
+  height: 3rem;
+  right: 1rem;
+  bottom: 1rem;
+  border: 2px solid #afd5bb;
   border-radius: 8px;
   background: #fff;
   font-weight: 500;
-  font-size: 1.5rem;
-  line-height: 3rem;
+  font-size: 1.45rem;
+  line-height: 2.5rem;
   text-align: center;
   cursor: pointer;
   &:hover {
-    background: #aad4b6;
+    background: #9fcdad;
     color: white;
     font-weight: bold;
     box-shadow: 2px 2px 3px 2px #b9b9b9;
@@ -85,8 +86,19 @@ const Button = styled.button`
   }
 `;
 
+const Mark = styled.div`
+  position: absolute;
+  left: -0.5rem;
+  top: -5rem;
+  text-align: center;
+  font-size: 6rem;
+  color: #e69c9f;
+  font-weight: bold;
+  z-index: 2;
+`;
+
 const Problem = ({ problem }: ProblemType) => {
-  const { level, title, problemId } = problem;
+  const { level, title, problemId, isSolved } = problem;
   const [active, setActive] = useState(false);
   const problemURL = `/problem/single/${problemId}`;
   return (
@@ -94,16 +106,15 @@ const Problem = ({ problem }: ProblemType) => {
       onMouseOver={() => setActive(true)}
       onMouseOut={() => setActive(false)}
     >
+      {isSolved && <Mark>✓</Mark>}
       <Level active={active}>LV. {level}</Level>
       <Name>{title}</Name>
-      <Description>
-        Lv{level}, Python, Javascript, Success Rate: 95.12%
-      </Description>
+      <Description>Lv{level}, Python, Javascript</Description>
       <Link to={problemURL}>
-        <Button>문제 풀기</Button>
+        <Button>{isSolved ? '다시 풀기' : '문제 풀기'}</Button>
       </Link>
     </ProblemWrapper>
   );
 };
 
-export default Problem;
+export default memo(Problem);

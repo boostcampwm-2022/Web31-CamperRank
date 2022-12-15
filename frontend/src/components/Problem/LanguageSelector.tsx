@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { editorState } from '../../recoils';
+import { editorState, socketState } from '../../recoils';
 import { useRecoilState } from 'recoil';
 import { SelectButton } from '../../assets/icons';
+import { useParams } from 'react-router-dom';
 
 type SelectorProp = {
   onClickModalElement: (str: string) => void;
@@ -29,7 +30,9 @@ const SelectorWrapper = styled.div`
   align-items: center;
   justify-content: space-around;
   z-index: 1;
-  &: hover {
+  cursor: pointer;
+
+  &:hover {
     border: 2px solid #ababab;
   }
 `;
@@ -37,7 +40,6 @@ const SelectorWrapper = styled.div`
 const ModalButton = styled.img`
   width: 0.6rem;
   height: 0.6rem;
-  cursor: pointer;
   position: relative;
 `;
 
@@ -59,7 +61,7 @@ const ModalElement = styled.div`
   height: 1.2rem;
   text-align: center;
   line-height: 1.2rem;
-  &: hover {
+  &:hover {
     background: rgba(240, 240, 240, 0.8);
   }
 `;
@@ -86,8 +88,12 @@ const Modal = ({ onClickElement, onClickModalElement }: ModalProp) => {
 const LanguageSelector = ({ onClickModalElement }: SelectorProp) => {
   const [editor, setEditor] = useRecoilState(editorState);
   const [open, setOpen] = useState(false);
+  const [socket] = useRecoilState(socketState);
   const selectorRef = useRef<HTMLDivElement>(null);
-  const { language } = editor;
+  const { version } = useParams();
+  const [isMultiVersion] = useState(version === 'multi');
+  const { roomNumber } = isMultiVersion ? useParams() : { roomNumber: null };
+  const [language, setLanguage] = useState(editor.language);
   const handleClickOutside = ({ target }: any) => {
     if (!selectorRef.current || !selectorRef.current.contains(target)) {
       setOpen(false);
@@ -97,8 +103,39 @@ const LanguageSelector = ({ onClickModalElement }: SelectorProp) => {
   const handleClickWrapper = () => setOpen(!open);
 
   const handleModalElement = (language: string) => {
+    if (socket) {
+      socket.emit(
+        'change-language',
+        roomNumber,
+        JSON.stringify(editor),
+        language,
+      );
+    }
     setEditor({ ...editor, language });
   };
+
+  useEffect(() => {
+    setLanguage(editor.language);
+  }, [editor]);
+
+  const saveCode = (code: string, language: string) => {
+    localStorage.setItem(language, code);
+  };
+
+  const changeLanguageCallback = (code: string, lang: string) => {
+    if (!code) return;
+    const { text, language } = JSON.parse(code);
+    if (language) saveCode(text, language);
+    setEditor({ ...editor, language: lang });
+  };
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on('change-language', changeLanguageCallback);
+    return () => {
+      socket.off('change-language', changeLanguageCallback);
+    };
+  }, [socket]);
 
   useEffect(() => {
     window.addEventListener('click', handleClickOutside);
@@ -110,7 +147,7 @@ const LanguageSelector = ({ onClickModalElement }: SelectorProp) => {
   return (
     <SelectorWrapper ref={selectorRef} onClick={handleClickWrapper}>
       {language ? language : 'Language'}
-      <ModalButton src={SelectButton} />
+      <ModalButton src={SelectButton} alt={'언어 설정 드롭다운 이미지'} />
       {open && (
         <Modal
           onClickElement={handleModalElement}

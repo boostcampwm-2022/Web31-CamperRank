@@ -19,12 +19,10 @@ import { WebrtcProvider } from 'y-webrtc';
 
 import { EditorView, basicSetup } from 'codemirror';
 import { EditorState, Compartment } from '@codemirror/state';
-import { javascript, javascriptLanguage } from '@codemirror/lang-javascript';
-import { python, pythonLanguage } from '@codemirror/lang-python';
+import { javascript } from '@codemirror/lang-javascript';
+import { python } from '@codemirror/lang-python';
 import { keymap } from '@codemirror/view';
 import { indentWithTab } from '@codemirror/commands';
-// import { LanguageSupport, syntaxHighlighting } from '@codemirror/language';
-// import oneDarkHighlightStyle from '../utils/theme';
 
 import * as random from 'lib0/random';
 import { useUserState } from '../hooks/useUserState';
@@ -164,24 +162,19 @@ const REM = getComputedStyle(document.documentElement).fontSize;
 const webRTCURL = import.meta.env.VITE_SOCKET_URL;
 
 const languageCompartment = new Compartment();
-//const highlightThemeCompartment = new Compartment();
 
 const langs = {
   JavaScript: javascript(),
   Python: python(),
 };
 
-// const highlightThemeExtensions = {
-//   dark: syntaxHighlighting(oneDarkHighlightStyle),
-// };
-
 const Problem = () => {
   useUserState();
   const navigate = useNavigate();
   const [moveColResize, setMoveColResize] = useState(false);
   const [moveRowResize, setMoveRowResize] = useState(false);
-  const [grade, setGrade] = useRecoilState(gradingState);
-  const [eState, setEState] = useState<EditorState>();
+  const [, setGrade] = useRecoilState(gradingState);
+  const [, setEState] = useState<EditorState>();
   const [eView, setEView] = useState<EditorView>();
   const [problem, setProblem] = useState<ProblemInfo>();
   const { id, version } = useParams();
@@ -216,15 +209,15 @@ const Problem = () => {
   );
 
   useEffect(() => {
-    let language;
-    if (text === defaultCode['Python'] || text.includes('def solution'))
-      language = 'Python';
-    else if (
+    let lang = '';
+    if (
       text === defaultCode['JavaScript'] ||
       text.includes('function solution')
     )
-      language = 'JavaScript';
-    if (language) setCode({ ...code, language, text });
+      lang = 'JavaScript';
+    else if (text === defaultCode['Python'] || text.includes('def solution'))
+      lang = 'Python';
+    if (lang) setCode({ ...code, text, language: lang });
     else setCode({ ...code, text });
   }, [text]);
 
@@ -249,18 +242,6 @@ const Problem = () => {
     navigate('/');
   }, [isMultiVersion, roomNumber]);
 
-  const handleChangeEditorLanguage = (language: string) => {
-    if (eView) {
-      let insertCode;
-      if (language === '' || language === 'JavaScript' || language === 'Python')
-        insertCode = defaultCode[language];
-      const transaction = eView.state.update({
-        changes: { from: 0, to: eView.state.doc.length, insert: insertCode },
-      });
-      eView.dispatch(transaction);
-    }
-  };
-
   useEffect(() => {
     fetch(`${URL}/problem/${id}`)
       .then((res) => res.json())
@@ -268,7 +249,7 @@ const Problem = () => {
         const { level, title, description } = res;
         setProblem({ level, title, description });
       })
-      .catch((err) => {
+      .catch(() => {
         alert('문제를 불러올 수 없습니다');
         navigate('/problems');
       });
@@ -276,7 +257,7 @@ const Problem = () => {
 
   useEffect(() => {
     if (!problem) return;
-    fetch(`${URL}/test-case?testCAseId=1&problemId=${id}`)
+    fetch(`${URL}/test-case?problemId=${id}`)
       .then((res) => res.json())
       .then((res) => {
         const testcase = res[0];
@@ -306,9 +287,6 @@ const Problem = () => {
       });
 
     const languageExtension = languageCompartment.of(langs['JavaScript']);
-    // const highlightThemeExtension = highlightThemeCompartment.of(
-    //   highlightThemeExtensions['dark'],
-    // );
 
     const extensions = [
       basicSetup,
@@ -380,6 +358,56 @@ const Problem = () => {
     });
   }, []);
 
+  useEffect(() => {
+    removeLocalStorage();
+    return () => {
+      removeLocalStorage();
+    };
+  }, []);
+
+  const removeLocalStorage = () => {
+    localStorage.removeItem('JavaScript');
+    localStorage.removeItem('Python');
+  };
+
+  const saveCode = (code: string, language: string) => {
+    localStorage.setItem(language, code);
+  };
+
+  const getSavedCode = (language: string) => {
+    return localStorage.getItem(language);
+  };
+
+  const handleChangeEditorLanguage = (language: string) => {
+    if (eView) {
+      let insertCode;
+      const { text: priorText, language: priorLanguage } = code;
+      if (priorLanguage) saveCode(priorText, priorLanguage);
+      if (language === '' || language === 'JavaScript' || language === 'Python')
+        insertCode = defaultCode[language];
+      const savedCode = getSavedCode(language);
+      if (savedCode) insertCode = savedCode;
+      const transaction = eView.state.update({
+        changes: { from: 0, to: eView.state.doc.length, insert: insertCode },
+      });
+      eView.dispatch(transaction);
+    }
+  };
+
+  const handleClickClearButton = () => {
+    if (eView) {
+      let insertCode;
+      const { text: priorText, language: priorLanguage } = code;
+      saveCode(priorText, priorLanguage);
+      if (language === '' || language === 'JavaScript' || language === 'Python')
+        insertCode = defaultCode[language];
+      const transaction = eView.state.update({
+        changes: { from: 0, to: eView.state.doc.length, insert: insertCode },
+      });
+      eView.dispatch(transaction);
+    }
+  };
+
   const handleSize = () => {
     const PX = +REM.replace('px', '');
     if (editorRef.current)
@@ -393,13 +421,11 @@ const Problem = () => {
         window.innerWidth * 0.47,
       )}px`;
   };
+
   const resizeProblemWrapper = (x: number) => {
     if (problemRef.current != null && editorRef.current != null) {
       const problemRefWidth = +problemRef.current.style.width.replace('px', '');
-      const editorRefWidth = +editorRef.current.style.maxWidth.replace(
-        'px',
-        '',
-      );
+      +editorRef.current.style.maxWidth.replace('px', '');
       const PX = +REM.replace('px', '');
       if (x > 0.175 * window.innerWidth)
         problemRef.current.style.width = `${Math.max(
@@ -418,6 +444,7 @@ const Problem = () => {
       )}px`;
     }
   };
+
   const resizeEditorWrapper = (y: number) => {
     if (editorRef.current != null) {
       const PX = +REM.replace('px', '');
@@ -469,7 +496,7 @@ const Problem = () => {
       </HeaderWrapper>
       <MainWrapper>
         <PageButtonsWrapper>
-          <PageButtons></PageButtons>
+          <PageButtons />
         </PageButtonsWrapper>
         <ProblemWrapper ref={problemRef}>
           {version === 'multi' && <Video />}
@@ -489,7 +516,7 @@ const Problem = () => {
             <Result></Result>
           </ResultWrapper>
           <ButtonsWrapper>
-            <ProblemButtons onClickClearBtn={handleChangeEditorLanguage} />
+            <ProblemButtons onClickClearBtn={handleClickClearButton} />
           </ButtonsWrapper>
         </SolvingWrapper>
       </MainWrapper>

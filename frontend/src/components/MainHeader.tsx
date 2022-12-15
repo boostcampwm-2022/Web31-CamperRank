@@ -14,7 +14,7 @@ export const MainHeader = () => {
   const [user, setUser] = useRecoilState(userState);
   const { logoutHandler } = useUserState();
   const handleLogoutClick = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
+    (/*e: React.MouseEvent<HTMLButtonElement>*/) => {
       if (!user.isLoggedIn) {
         return;
       }
@@ -36,13 +36,10 @@ export const MainHeader = () => {
           <li>
             <Link to="/ranking">랭킹</Link>
           </li>
-          <li>
-            <Link to="/contest">대회</Link>
-          </li>
         </ul>
       </nav>
       <MenuContainer>
-        <Link to={user.isLoggedIn ? '/profile' : '/signup'}>
+        <Link to={user.isLoggedIn ? '' : '/signup'}>
           <button type={'button'}>
             {user.isLoggedIn ? user.ID : '회원가입'}
           </button>

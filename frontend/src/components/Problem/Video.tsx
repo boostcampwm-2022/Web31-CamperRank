@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import io, { Socket } from 'socket.io-client';
 import { Peer } from 'peerjs';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { socketState } from '../../recoils';
 
 const VideoContainer = styled.div`
   margin-top: 1rem;
@@ -19,8 +21,6 @@ const UserVideoContainer = styled.video`
   max-height: 9rem;
   height: auto;
   margin-right: 2px;
-  //border: 3px inset;
-  //box-sizing: border-box;
 `;
 
 const DivWrapper = styled.div`
@@ -29,6 +29,7 @@ const DivWrapper = styled.div`
   max-width: 16rem;
   width: 33%;
   height: auto;
+
   video {
     width: 100%;
     margin-right: 0;
@@ -51,7 +52,6 @@ const ControllButton = styled.div`
   z-index: 2;
 `;
 
-//pointer-events:none;
 const Text = styled.div`
   font-size: 0.8rem;
   color: #777777;
@@ -86,7 +86,7 @@ export const Video = () => {
   const [myStream, setMyStream] = useState<MediaStream | undefined>();
   const videoRef = useRef<HTMLVideoElement>(null);
   const { roomNumber } = useParams();
-  const [myID, setMyID] = useState('');
+  const [, setMyID] = useState('');
   const [peers, setPeers] = useState<any>({});
   const [videoOn, setVideoOn] = useState(false);
   const [micOn, setMicOn] = useState(false);
@@ -96,7 +96,7 @@ export const Video = () => {
   const navigate = useNavigate();
 
   const [myPeer, setMyPeer] = useState<Peer>();
-  const [socket, setSocket] = useState<Socket>();
+  const [socket, setSocket] = useRecoilState(socketState);
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia(Constraints).then((mediaStream) => {
@@ -112,12 +112,9 @@ export const Video = () => {
     });
   }, []);
 
-  //call 받은 피어
   const callCallback = useCallback(
     (call: any) => {
-      console.log(`callCallback`);
-      console.log(`callerID: ${call.peer}`);
-      call.answer(myStream); //송신자에게 stream 전달
+      call.answer(myStream);
       call.on('stream', () => {
         setPeers({
           ...peers,
@@ -127,8 +124,7 @@ export const Video = () => {
         });
       });
       call.on('close', () => {
-        console.log('call close rcv');
-        console.log(`closeID: ${call.peer}`);
+        return;
       });
     },
     [myStream, peers],
@@ -137,8 +133,6 @@ export const Video = () => {
   //기존 접속한 peer 여기로
   const connectCallback = useCallback(
     (userId: string) => {
-      console.log(`connectCallback`);
-      console.log(`newUserID: ${userId}`);
       if (!myStream || !myPeer) {
         return;
       }
@@ -153,8 +147,7 @@ export const Video = () => {
       });
 
       call.on('close', () => {
-        console.log('call close rcv');
-        console.log(`closeID: ${userId}`);
+        return;
       });
     },
     [myStream, peers, myPeer],
@@ -162,8 +155,6 @@ export const Video = () => {
 
   const disconnectCallback = useCallback(
     (userId: string) => {
-      console.log('disconnectCallback');
-      console.log(`disconnID: ${userId}`);
       if (!peers[userId]) {
         return;
       }
@@ -195,7 +186,7 @@ export const Video = () => {
       myPeer.off('call', callCallback);
       socket.off('user-connected', connectCallback);
     };
-  }, [myStream, callCallback, myPeer, socket]); //내부도 해제해야 하는지 확인 필요
+  }, [myStream, callCallback, myPeer, socket]);
 
   useEffect(() => {
     if (!socket) return;
@@ -211,7 +202,6 @@ export const Video = () => {
     }
     myPeer.on('open', (id) => {
       setMyID(id);
-      console.log('roomnumber, id', roomNumber, id);
       socket.emit('join-room', roomNumber, id);
     });
   }, [myPeer, socket]);

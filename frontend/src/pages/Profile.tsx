@@ -15,12 +15,13 @@ const Wrapper = styled.div`
 const HeaderWrapper = styled.div`
   min-width: 80rem;
   min-height: 8rem;
+  height: 8rem;
 `;
 
 const ContentWrapper = styled.div`
   min-width: 80rem;
   flex: 1;
-  background: #e4e8e0;
+  background: #e5ebdf;
 `;
 
 const FooterWrapper = styled.div`

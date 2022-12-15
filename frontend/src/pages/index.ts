@@ -3,5 +3,5 @@ import ProblemList from './ProblemList';
 import Problem from './Problem';
 import { Ranking } from './Ranking';
 import { Profile } from './Profile';
-
-export { Problem, Home, ProblemList, Ranking, Profile };
+import { Sign } from './Sign';
+export { Sign, Problem, Home, ProblemList, Ranking, Profile };

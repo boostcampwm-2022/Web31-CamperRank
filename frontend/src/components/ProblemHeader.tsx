@@ -62,7 +62,7 @@ export const ProblemHeader = ({ URL, problemName, type }: propsType) => {
         </ul>
       </div>
       <MenuContainer>
-        <Link to={user.isLoggedIn ? '/profile' : '/signup'}>
+        <Link to={user.isLoggedIn ? '' : '/signup'}>
           <button type={'button'}>
             {user.isLoggedIn ? user.ID : '회원가입'}
           </button>

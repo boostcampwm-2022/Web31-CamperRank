@@ -12,6 +12,15 @@ import { TestCase } from '../test-case/entities/test-case.entity';
   imports: [
     TypeOrmModule.forFeature([Solved, Problem, User, TestCase]),
     HttpModule,
+    // BullModule.forRoot({
+    //   redis: {
+    //     host: 'localhost',
+    //     port: 6379,
+    //   },
+    // }),
+    // BullModule.registerQueue({
+    //   name: 'gradeQueue',
+    // }),
   ],
   controllers: [SolvedController],
   providers: [SolvedService],
