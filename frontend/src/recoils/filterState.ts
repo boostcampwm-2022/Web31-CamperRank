@@ -4,6 +4,7 @@ interface Filter {
   solved?: string;
   level?: string;
   search?: string;
+  check: boolean;
 }
 
 export const filterState = atom<Filter>({
@@ -12,5 +13,6 @@ export const filterState = atom<Filter>({
     solved: '푼 상태',
     level: '문제 레벨',
     search: '',
+    check: false,
   },
 });

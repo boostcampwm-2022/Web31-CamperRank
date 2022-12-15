@@ -4,6 +4,8 @@ import Problem from './Problem';
 import PageController from './PageController';
 import { ProblemInfo } from '@types';
 import SearchBox from './SearchBox';
+import { useRecoilState } from 'recoil';
+import { filterState } from '../../../recoils';
 
 type ListType = {
   list: ProblemInfo[];
@@ -42,6 +44,7 @@ const Info = styled.div`
 const List = ({ list }: ListType) => {
   const [page, setPage] = useState({ now: 1, max: Math.ceil(list.length / 7) });
   const [pagedList, setPagedList] = useState(list);
+  const [filter] = useRecoilState(filterState);
 
   useEffect(() => {
     const { now } = page;
@@ -65,7 +68,11 @@ const List = ({ list }: ListType) => {
           </Info>
           {pagedList.length <= 7 &&
             pagedList.map((elem, idx) => (
-              <Problem key={elem.problemId} problem={elem} />
+              <Problem
+                key={elem.problemId}
+                problem={elem}
+                check={filter.check}
+              />
             ))}
           <PageController
             page={page}
