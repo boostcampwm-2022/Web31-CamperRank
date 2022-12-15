@@ -44,10 +44,8 @@
 </div>
 
 <br/>
-<br/>
 
 # 🎯프로젝트 주요 기능
-
 
 |<img src="https://user-images.githubusercontent.com/46220202/207910934-2f993898-927f-42dc-8c1b-4822e75e7771.gif" />|<img src="https://user-images.githubusercontent.com/46220202/207911144-9b0bb50c-dbdb-40ac-bb81-2e33a799b613.gif" />|
 |:----:|:----:|
