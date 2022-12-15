@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import styled from 'styled-components';
 import { ProblemType } from '@types';
 import { ProblemInfo } from '@types';
@@ -65,7 +65,7 @@ const Button = styled.button`
   line-height: 1.5rem;
   text-align: center;
   box-shadow: 0.5px 0.5px 0.5px 0.5px #75efa2;
-
+  position: relative;
   &:hover {
     background: #aad4b6;
     color: white;
@@ -120,4 +120,4 @@ const Problem = ({ problem, check }: ProblemProps) => {
   );
 };
 
-export default Problem;
+export default memo(Problem);

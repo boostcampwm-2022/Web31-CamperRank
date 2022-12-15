@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, memo } from 'react';
 import styled from 'styled-components';
 import { SelectButton } from '../../../assets/icons';
 import Modal from './Modal';
@@ -70,4 +70,4 @@ const Filter = ({ content }: FilterType) => {
   );
 };
 
-export default Filter;
+export default memo(Filter);

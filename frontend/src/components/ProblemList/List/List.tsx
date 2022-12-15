@@ -44,7 +44,7 @@ const Info = styled.div`
 const List = ({ list }: ListType) => {
   const [page, setPage] = useState({ now: 1, max: Math.ceil(list.length / 7) });
   const [pagedList, setPagedList] = useState(list);
-  const [filter, setFilter] = useRecoilState(filterState);
+  const [filter] = useRecoilState(filterState);
 
   useEffect(() => {
     const { now } = page;
