@@ -54,9 +54,6 @@ const List = ({ list }: ListType) => {
       max: Math.ceil(list.length / 7),
     });
   }, [list]);
-  useEffect(() => {
-    console.log(pagedList);
-  }, [pagedList]);
   return (
     <>
       <ListContainer>
