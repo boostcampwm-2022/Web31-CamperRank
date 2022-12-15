@@ -1,8 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import styled from 'styled-components';
 import { ProblemType } from '@types';
+import { ProblemInfo } from '@types';
 import { Link } from 'react-router-dom';
 import uuid from 'react-uuid';
+
+type ProblemProps = {
+  problem: ProblemInfo;
+  check: boolean;
+};
 
 const ProblemWrapper = styled.div`
   width: 100%;
@@ -59,7 +65,7 @@ const Button = styled.button`
   line-height: 1.5rem;
   text-align: center;
   box-shadow: 0.5px 0.5px 0.5px 0.5px #75efa2;
-
+  position: relative;
   &:hover {
     background: #aad4b6;
     color: white;
@@ -78,8 +84,19 @@ const getRoomNumber = (id: number) => {
   return room;
 };
 
-const Problem = ({ problem }: ProblemType) => {
-  const { problemId, title, level } = problem;
+const Mark = styled.div`
+  position: absolute;
+  left: 0rem;
+  top: -2.2rem;
+  text-align: center;
+  font-size: 3rem;
+  color: #e69c9f;
+  font-weight: bold;
+  z-index: 2;
+`;
+
+const Problem = ({ problem, check }: ProblemProps) => {
+  const { problemId, title, level, isSolved } = problem;
   const singleURL = `/problem/single/${problemId}`;
   let multiURL = `/problem/multi/${problemId}/`;
   if (problemId != null) {
@@ -88,6 +105,7 @@ const Problem = ({ problem }: ProblemType) => {
 
   return (
     <ProblemWrapper>
+      {check && isSolved && <Mark>✓</Mark>}
       <Title>{title}</Title>
       <Description>Lv{level}, Python, Javascript</Description>
       <ButtonWrapper>
@@ -102,4 +120,4 @@ const Problem = ({ problem }: ProblemType) => {
   );
 };
 
-export default Problem;
+export default memo(Problem);

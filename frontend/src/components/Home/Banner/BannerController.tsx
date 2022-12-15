@@ -32,7 +32,6 @@ const SliderPage = styled.div`
   height: 1.8rem;
   width: 7rem;
   text-align: center;
-  //color: #0b6113;
   color: black;
   font-weight: 500;
   font-size: 1.2rem;
@@ -40,7 +39,7 @@ const SliderPage = styled.div`
 
 const BannerController = ({ pageNum, onClickButton }: BannerControllerType) => {
   const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-  const [left, setLeft] = useState(23 * rem);
+  const [left, setLeft] = useState(0);
   const [throttle, setThrottle] = useState(false);
 
   const handleResize = () => {
@@ -50,7 +49,7 @@ const BannerController = ({ pageNum, onClickButton }: BannerControllerType) => {
       const windowLen = Math.max(80 * rem, window.innerWidth);
       const len = (windowLen - 80 * rem) / 2;
       setLeft(len + 2 * rem);
-    }, 500);
+    }, 300);
   };
 
   useEffect(() => {
@@ -73,17 +72,21 @@ const BannerController = ({ pageNum, onClickButton }: BannerControllerType) => {
 
   return (
     <ControllerWrapper left={left}>
-      <SliderController
-        src={SliderLeft}
-        onClick={handleLeftClick}
-        alt={'좌측 화살표'}
-      ></SliderController>
-      <SliderPage>0{pageNum + 1} | 03</SliderPage>
-      <SliderController
-        src={SliderRight}
-        onClick={handleRightClick}
-        alt={'우측 화살표'}
-      ></SliderController>
+      {left > 0 && (
+        <>
+          <SliderController
+            src={SliderLeft}
+            onClick={handleLeftClick}
+            alt={'좌측 화살표'}
+          ></SliderController>
+          <SliderPage>0{pageNum + 1} | 03</SliderPage>
+          <SliderController
+            src={SliderRight}
+            onClick={handleRightClick}
+            alt={'우측 화살표'}
+          ></SliderController>
+        </>
+      )}
     </ControllerWrapper>
   );
 };

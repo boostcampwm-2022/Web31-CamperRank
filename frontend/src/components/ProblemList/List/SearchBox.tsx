@@ -64,16 +64,17 @@ const SearchBox = () => {
   return (
     <SearchWrapper>
       <Title>{checkFilter() ? '현재 검색어' : ''}</Title>
-      {Object.entries(filter).map((elem, idx) => {
+      {Object.entries(filter).map((elem) => {
         const [kind, value] = elem;
         if (
           (kind === 'solved' && value === '푼 상태') ||
           (kind === 'level' && value === '문제 레벨') ||
-          value === ''
+          value === '' ||
+          kind === 'check'
         )
           return;
         return (
-          <Box key={idx}>
+          <Box key={`${kind}${value}`}>
             <DeleteIcon src={RedDelete} onClick={() => handleImgClick(kind)} />
             <Search>
               {value.length >= 20 ? `${value.slice(0, 20)}...` : value}
