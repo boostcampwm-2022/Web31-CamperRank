@@ -30,7 +30,6 @@ jobs:
             cd /home/code/Web31-CamperRank/frontend
             yarn install
             yarn build
-            pm2 start node_modules/y-webrtc/bin/server.js -n editor-server
             cd /home/code/Web31-CamperRank/backend
             npm install
             cd /home/code/Web31-CamperRank/grading
