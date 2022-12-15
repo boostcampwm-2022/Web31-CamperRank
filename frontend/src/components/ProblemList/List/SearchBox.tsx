@@ -69,7 +69,8 @@ const SearchBox = () => {
         if (
           (kind === 'solved' && value === '푼 상태') ||
           (kind === 'level' && value === '문제 레벨') ||
-          value === ''
+          value === '' ||
+          kind === 'check'
         )
           return;
         return (

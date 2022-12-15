@@ -35,9 +35,6 @@ const SliderPage = styled.div`
   color: black;
   font-weight: 500;
   font-size: 1.2rem;
-  &:hover {
-    font-weight: 700;
-  }
 `;
 
 const BannerController = ({ pageNum, onClickButton }: BannerControllerType) => {

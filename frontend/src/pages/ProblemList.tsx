@@ -49,10 +49,16 @@ const ProblemList = () => {
   useEffect(() => {
     const { ID } = user;
     const fetchURL = ID ? `${URL}/problem?loginId=${ID}` : `${URL}/problem`;
-    setFilter({ solved: '푼 상태', level: '문제 레벨', search: '' });
+    setFilter({
+      solved: '푼 상태',
+      level: '문제 레벨',
+      search: '',
+      check: false,
+    });
     fetch(fetchURL)
       .then((res) => res.json())
       .then((res) => {
+        console.log(res);
         setList(Object.values(res));
       });
   }, [user]);
@@ -64,7 +70,8 @@ const ProblemList = () => {
       filtered = filtered.filter((elem) => elem.level === +level.slice(-1));
     if (search && search !== '')
       filtered = filtered.filter((elem) => {
-        if (elem.title) return elem.title.includes(search);
+        if (elem.title)
+          return elem.title.toUpperCase().includes(search.toUpperCase());
         else return false;
       });
     if (solved && solved !== '푼 상태')
