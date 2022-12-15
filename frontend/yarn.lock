@@ -1634,7 +1634,7 @@
   resolved "https://registry.npmjs.org/@remix-run/router/-/router-1.0.3.tgz"
   integrity sha512-ceuyTSs7PZ/tQqi19YZNBc5X7kj1f8p+4DIyrcIYFY9h+hd1OKm4RqtiWldR9eGEvIiJfsqwM4BsuCtRIuEw6Q==
 
-"@rollup/pluginutils@^5.0.0":
+"@rollup/pluginutils@^5.0.0", "@rollup/pluginutils@^5.0.2":
   version "5.0.2"
   resolved "https://registry.npmjs.org/@rollup/pluginutils/-/pluginutils-5.0.2.tgz"
   integrity sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==
@@ -6553,6 +6553,13 @@ vary@^1, vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
+
+vite-plugin-compression2@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/vite-plugin-compression2/-/vite-plugin-compression2-0.4.1.tgz#e4feed1bc0f9b05093bcf58bc5494c5b92143bbf"
+  integrity sha512-a9lRnJvNWGMSw8zbZQLs5NJy0PVghfnbu5DvvzpfpBQDt8f+Lf5Gv49zK9pQ4Dj8WL+UuvBVc6NuS/h295LXFw==
+  dependencies:
+    "@rollup/pluginutils" "^5.0.2"
 
 vite-plugin-svgr@^2.2.2:
   version "2.2.2"
