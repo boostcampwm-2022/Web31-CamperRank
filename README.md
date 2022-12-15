@@ -48,22 +48,14 @@
 
 # 🎯프로젝트 주요 기능
 
-> 온라인으로 PS 문제를 해결할 수 있습니다.
 
-<img src="https://user-images.githubusercontent.com/46220202/207908382-6b4e476a-7e9a-4e90-b771-e00a19fcf5f4.png" width="540" height="540"/>
-
-<br/>
-
-> 공동 편집 기능으로 같이 코드를 편집할 수 있습니다.
-
-<img src="https://user-images.githubusercontent.com/46220202/207908429-c76bc720-8a0e-4834-9ca8-d69730e631e4.png" width="540" height="540"/>
+|<img src="https://user-images.githubusercontent.com/46220202/207910934-2f993898-927f-42dc-8c1b-4822e75e7771.gif" />|<img src="https://user-images.githubusercontent.com/46220202/207911144-9b0bb50c-dbdb-40ac-bb81-2e33a799b613.gif" />|
+|:----:|:----:|
+|온라인으로 PS 문제를 해결할 수 있습니다.|공동 편집 기능으로 같이 코드를 편집할 수 있습니다.|
+||<img src="https://user-images.githubusercontent.com/46220202/207912548-fea8e9b1-81b2-447f-bb9d-fccd5dc38eff.png"/>|
+|문제를 풀면서 음성으로 그룹원들과 대화를 나눌 수 있습니다.|문제를 풀어보세요!|
 
 <br/>
-
-> 문제를 풀면서 음성으로 그룹원들과 대화를 나눌 수 있습니다.
-
-<br/>
-
 
 # 🥛Team 요구르트
 |J083_박세현|J101_서혜민|J153_이재권|J194_조진우|
