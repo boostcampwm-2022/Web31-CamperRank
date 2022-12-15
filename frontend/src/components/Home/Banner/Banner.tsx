@@ -36,7 +36,7 @@ const Banner = () => {
     setTimeout(() => {
       setWidth(window.innerWidth);
       setThrottle(false);
-    }, 400);
+    }, 300);
   };
 
   useEffect(() => {
