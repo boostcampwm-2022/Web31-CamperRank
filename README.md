@@ -51,7 +51,6 @@
 |:----:|:----:|
 |온라인으로 PS 문제를 해결할 수 있습니다.|공동 편집 기능으로 같이 코드를 편집할 수 있습니다.|
 |<img src="https://user-images.githubusercontent.com/62196278/208002548-e1054df1-8fae-44e0-a3cf-06778bcbdbee.png" width= "400" height="400"/>|<img src="https://user-images.githubusercontent.com/46220202/207912548-fea8e9b1-81b2-447f-bb9d-fccd5dc38eff.png" width= "400" height="400"/>|
-|:----:|:----:|
 |문제를 풀면서 음성으로 그룹원들과 대화를 나눌 수 있습니다.|문제를 풀어보세요!|
 
 <br/>
