@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { gradingState } from '../../recoils';
 import { useRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
 
 type ObjType = {
   [index: string]: string;
@@ -73,7 +72,6 @@ const Result = () => {
   const [point, setPoint] = useState('');
   const [cases, setCases] = useState<any>([]);
   const [number, setNumber] = useState(0);
-  const navigate = useNavigate();
 
   useEffect(() => {
     setPoint('');
@@ -118,12 +116,9 @@ const Result = () => {
     } else {
       if (grading.kind === '제출') {
         const { solvedResult } = grading.result;
-        if (solvedResult === 'Success') {
-          alert('정답입니다!');
-          navigate('/problems');
-          return;
-        }
-        setResult('틀렸습니다!');
+        solvedResult === 'Success'
+          ? setResult('정답입니다!')
+          : setResult('틀렸습니다!');
       }
       setCases([]);
     }
