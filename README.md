@@ -44,6 +44,56 @@
 </div>
 
 <br/>
+<br>
+
+# 🎁로컬 구동 방법
+```
+git clone https://github.com/boostcampwm-2022/Web31-CamperRank.git
+```
+## 필요 파일
+### backend/.env
+```
+# development
+GRADING_SERVER_URL=http://localhost:4000/grade-server/v1/grading
+MYSQL_DATABASE=camperRank
+MYSQL_HOST=
+MYSQL_PASSWORD=
+MYSQL_PORT=3306
+MYSQL_USERNAME=
+SERVERLESS_GRADE_JAVASCRIPT=
+SERVERLESS_GRADE_PYTHON=
+JWT_SECRETKEY=
+```
+### frontend/.env
+```
+# development
+VITE_CLIENT_URL="http://127.0.0.1:5173/"
+VITE_SERVER_URL="http://127.0.0.1:3000/api"
+VITE_SOCKET_SERVER_URL="ws://127.0.0.1:3333"
+VITE_SOCKET_URL="ws://127.0.0.1:4444/"
+```
+## 구동 명령어
+```
+#각 디렉토리 공통
+yarn install
+
+cd backend
+yarn start:dev
+
+cd frontend
+yarn dev
+
+cd frontend
+npx y-webrtc
+
+cd socket
+yarn dev
+
+cd grading
+yarn start
+```
+
+<br>
 
 # 🎯프로젝트 주요 기능
 
