@@ -47,7 +47,7 @@
 
 # 🎯프로젝트 주요 기능
 
-|<img src="https://user-images.githubusercontent.com/46220202/207910934-2f993898-927f-42dc-8c1b-4822e75e7771.gif" width= "400" height="400"/>|<img src="https://user-images.githubusercontent.com/46220202/207911144-9b0bb50c-dbdb-40ac-bb81-2e33a799b613.gif" width= "400" height="400"/>|
+|<img src="https://user-images.githubusercontent.com/46220202/207910934-2f993898-927f-42dc-8c1b-4822e75e7771.gif" width= "400" height="400"/>|<img src="https://user-images.githubusercontent.com/62196278/208003205-8a58dac4-3a5d-43e4-b69b-839a43749a98.gif" width= "400" height="400"/>|
 |:----:|:----:|
 |온라인으로 PS 문제를 해결할 수 있습니다.|공동 편집 기능으로 같이 코드를 편집할 수 있습니다.|
 |<img src="https://user-images.githubusercontent.com/62196278/208002548-e1054df1-8fae-44e0-a3cf-06778bcbdbee.png" width= "400" height="400"/>|<img src="https://user-images.githubusercontent.com/46220202/207912548-fea8e9b1-81b2-447f-bb9d-fccd5dc38eff.png" width= "400" height="400"/>|
