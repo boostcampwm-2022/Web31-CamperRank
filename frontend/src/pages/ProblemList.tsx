@@ -57,11 +57,9 @@ const ProblemList = () => {
       search: '',
       check: false,
     });
-    console.log('fetch', fetchURL);
     fetch(fetchURL)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setList(Object.values(res));
       });
   }, [user]);
