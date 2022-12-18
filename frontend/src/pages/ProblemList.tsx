@@ -48,16 +48,20 @@ const ProblemList = () => {
 
   useEffect(() => {
     const { ID } = user;
-    const fetchURL = ID ? `${URL}/problem?loginId=${ID}` : `${URL}/problem`;
+    const fetchURL = ID
+      ? `${URL}/problem?loginId=${ID}`
+      : `${URL}/problem?loginId=0`;
     setFilter({
       solved: '푼 상태',
       level: '문제 레벨',
       search: '',
       check: false,
     });
+    console.log('fetch', fetchURL);
     fetch(fetchURL)
       .then((res) => res.json())
       .then((res) => {
+        console.log(res);
         setList(Object.values(res));
       });
   }, [user]);
