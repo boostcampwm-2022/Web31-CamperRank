@@ -12,6 +12,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -26,6 +27,7 @@ import { GradeResultSolvedDto } from './dto/grade-result-solved.dto';
 import { isFalsy } from '../utils/boolUtils';
 import * as process from 'process';
 import { ProgrammingLanguage } from './entities/ProgrammingLanguage.enum';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('solved')
 @ApiTags('답안 제출 기록 관련 API')
@@ -60,7 +62,8 @@ export class SolvedController {
     return failList.length === 0 ? SolvedResult.Success : SolvedResult.Fail;
   }
 
-  // @Post()
+  @Post('local')
+  @UseGuards(AuthGuard())
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: '문제 답안 제출 기록 생성 API',
@@ -122,6 +125,7 @@ export class SolvedController {
   }
 
   @Post()
+  @UseGuards(AuthGuard())
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: '문제 답안 제출 기록 생성 API',
@@ -177,6 +181,7 @@ export class SolvedController {
   }
 
   // @Post('test-case')
+  @UseGuards(AuthGuard())
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 답안 제출 기록 생성 API',
@@ -212,6 +217,7 @@ export class SolvedController {
   }
 
   @Post('test-case')
+  @UseGuards(AuthGuard())
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 답안 제출 기록 생성 API',
@@ -288,6 +294,7 @@ export class SolvedController {
   }
 
   @Patch(':solvedId')
+  @UseGuards(AuthGuard())
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 답안 제출 기록 수정 API',
@@ -323,6 +330,7 @@ export class SolvedController {
   }
 
   @Delete(':solvedId')
+  @UseGuards(AuthGuard())
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 답안 제출 기록 삭제 API',

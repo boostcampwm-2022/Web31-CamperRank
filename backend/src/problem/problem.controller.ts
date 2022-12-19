@@ -13,6 +13,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -21,6 +22,7 @@ import { CreateProblemDto } from './dto/create-problem.dto';
 import { UpdateProblemDto } from './dto/update-problem.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SimpleProblemDto } from './dto/simple-problem.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('problem')
 @ApiTags('문제 API')
@@ -28,6 +30,7 @@ export class ProblemController {
   constructor(private readonly problemService: ProblemService) {}
 
   @Post()
+  @UseGuards(AuthGuard())
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: '문제 추가 API',
@@ -128,6 +131,7 @@ export class ProblemController {
   }
 
   @Patch(':problemId')
+  @UseGuards(AuthGuard())
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 정보 수정 API',
@@ -161,6 +165,7 @@ export class ProblemController {
   }
 
   @Delete(':problemId')
+  @UseGuards(AuthGuard())
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: '문제 정보 삭제 API',

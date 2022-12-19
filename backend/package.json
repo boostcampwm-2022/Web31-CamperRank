@@ -16,7 +16,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "lint:changed-since-dev": "eslint $(git diff --name-only --diff-filter=d origin/dev | grep  -E \"(.js$|.ts$|.tsx$)\")",
+    "lint:changed-since": "eslint $(git diff --name-only --diff-filter=d origin/main | grep  -E \"(.js$|.ts$|.tsx$)\")",
+    "test:changed-since-dev": "jest --changedSince=origin/dev",
+    "test:changed-since": "jest --changedSince=origin/main"
   },
   "dependencies": {
     "@nestjs/axios": "^1.0.0",

@@ -27,19 +27,10 @@ export class AppController {
 
   @Get('dummy')
   async createDummy() {
-    const simpleUserDto1 = await this.usersService.create(
-      new CreateUserDto('loginId1', '12341234'),
-    );
-
-    const simpleUserDto2 = await this.usersService.create(
-      new CreateUserDto('loginId2', '12341234'),
-    );
-
-    const simpleUserDto3 = await this.usersService.create(
-      new CreateUserDto('loginId3', '12341234'),
-    );
-
-    const simpleProblemDto1 = await this.problemService.create(
+    await this.usersService.create(new CreateUserDto('loginId1', '12341234'));
+    await this.usersService.create(new CreateUserDto('loginId2', '12341234'));
+    await this.usersService.create(new CreateUserDto('loginId3', '12341234'));
+    await this.problemService.create(
       new CreateProblemDto(
         'A + B = ?',
         1,
@@ -68,8 +59,7 @@ export class AppController {
         ),
       ),
     );
-
-    const simpleProblemDto2 = await this.problemService.create(
+    await this.problemService.create(
       new CreateProblemDto(
         'A * B = ?',
         2,
@@ -98,8 +88,7 @@ export class AppController {
         ),
       ),
     );
-
-    const simpleProblemDto3 = await this.problemService.create(
+    await this.problemService.create(
       new CreateProblemDto(
         'A / B = ?',
         2,
@@ -128,8 +117,7 @@ export class AppController {
         ),
       ),
     );
-
-    const simpleProblemDto4 = await this.problemService.create(
+    await this.problemService.create(
       new CreateProblemDto(
         'A % B = ?',
         2,
@@ -158,8 +146,7 @@ export class AppController {
         ),
       ),
     );
-
-    const simpleProblemDto5 = await this.problemService.create(
+    await this.problemService.create(
       new CreateProblemDto(
         'A ** B = ?',
         3,
@@ -188,8 +175,7 @@ export class AppController {
         ),
       ),
     );
-
-    const simpleProblemDto6 = await this.problemService.create(
+    await this.problemService.create(
       new CreateProblemDto(
         'A + B + C = ?',
         3,
@@ -219,8 +205,7 @@ export class AppController {
         ),
       ),
     );
-
-    const simpleProblemDto7 = await this.problemService.create(
+    await this.problemService.create(
       new CreateProblemDto(
         'A + B - C = ?',
         3,
@@ -250,8 +235,7 @@ export class AppController {
         ),
       ),
     );
-
-    const simpleProblemDto8 = await this.problemService.create(
+    await this.problemService.create(
       new CreateProblemDto(
         'A + B * C = ?',
         3,
@@ -281,8 +265,7 @@ export class AppController {
         ),
       ),
     );
-
-    const simpleProblemDto9 = await this.problemService.create(
+    await this.problemService.create(
       new CreateProblemDto(
         'A + B / C = ?',
         3,
@@ -312,8 +295,7 @@ export class AppController {
         ),
       ),
     );
-
-    const simpleProblemDto10 = await this.problemService.create(
+    await this.problemService.create(
       new CreateProblemDto(
         'A * B * C = ?',
         3,
@@ -343,8 +325,7 @@ export class AppController {
         ),
       ),
     );
-
-    const simpleProblemDto11 = await this.problemService.create(
+    await this.problemService.create(
       new CreateProblemDto(
         'A - B - C = ?',
         3,
@@ -374,7 +355,6 @@ export class AppController {
         ),
       ),
     );
-
     const simpleProblemDtoDemo = await this.problemService.create(
       new CreateProblemDto(
         '동전',
@@ -409,28 +389,23 @@ export class AppController {
     );
 
     //A + B
-    const simpleTestCaseDto1 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(1, 1, JSON.stringify([1, 2]), JSON.stringify(3)),
     );
-
-    const simpleTestCaseDto2 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(1, 2, JSON.stringify([6, 7]), JSON.stringify(13)),
     );
-
-    const simpleTestCaseDto3 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(1, 3, JSON.stringify([10, 10]), JSON.stringify(20)),
     );
-
     //A * B
-    const simpleTestCaseDto4 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(2, 1, JSON.stringify([3, 2]), JSON.stringify(6)),
     );
-
-    const simpleTestCaseDto5 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(2, 2, JSON.stringify([6, 7]), JSON.stringify(42)),
     );
-
-    const simpleTestCaseDto6 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         2,
         3,
@@ -438,39 +413,31 @@ export class AppController {
         JSON.stringify(100),
       ),
     );
-
     //A / B
-    const simpleTestCaseDto7 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(3, 1, JSON.stringify([4, 2]), JSON.stringify(2)),
     );
-
-    const simpleTestCaseDto8 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(3, 2, JSON.stringify([10, 2]), JSON.stringify(5)),
     );
-
-    const simpleTestCaseDto9 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(3, 3, JSON.stringify([10, 5]), JSON.stringify(2)),
     );
-
     //A % B
-    const simpleTestCaseDto10 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(4, 1, JSON.stringify([4, 2]), JSON.stringify(0)),
     );
-
-    const simpleTestCaseDto11 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(4, 2, JSON.stringify([10, 7]), JSON.stringify(3)),
     );
-
-    const simpleTestCaseDto12 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(4, 3, JSON.stringify([9, 5]), JSON.stringify(4)),
     );
-
     //A ** B
-    const simpleTestCaseDto13 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(5, 1, JSON.stringify([4, 2]), JSON.stringify(16)),
     );
-
-    const simpleTestCaseDto14 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         5,
         2,
@@ -478,17 +445,14 @@ export class AppController {
         JSON.stringify(1000),
       ),
     );
-
-    const simpleTestCaseDto15 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(5, 3, JSON.stringify([3, 2]), JSON.stringify(9)),
     );
-
     //A + B + C
-    const simpleTestCaseDto16 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(6, 1, JSON.stringify([4, 2, 3]), JSON.stringify(9)),
     );
-
-    const simpleTestCaseDto17 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         6,
         2,
@@ -496,8 +460,7 @@ export class AppController {
         JSON.stringify(22),
       ),
     );
-
-    const simpleTestCaseDto18 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         6,
         3,
@@ -505,22 +468,18 @@ export class AppController {
         JSON.stringify(23),
       ),
     );
-
     //A + B - C
-    const simpleTestCaseDto19 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(7, 1, JSON.stringify([4, 2, 3]), JSON.stringify(3)),
     );
-
-    const simpleTestCaseDto20 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(7, 2, JSON.stringify([9, 3, 9]), JSON.stringify(3)),
     );
-
-    const simpleTestCaseDto21 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(7, 3, JSON.stringify([7, 7, 9]), JSON.stringify(5)),
     );
-
     //A + B * C
-    const simpleTestCaseDto22 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         8,
         1,
@@ -528,30 +487,24 @@ export class AppController {
         JSON.stringify(10),
       ),
     );
-
-    const simpleTestCaseDto23 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(8, 2, JSON.stringify([3, 3, 2]), JSON.stringify(9)),
     );
-
-    const simpleTestCaseDto24 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(8, 3, JSON.stringify([2, 2, 2]), JSON.stringify(6)),
     );
-
     //A + B / C
-    const simpleTestCaseDto25 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(9, 1, JSON.stringify([4, 3, 3]), JSON.stringify(4)),
     );
-
-    const simpleTestCaseDto26 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(9, 2, JSON.stringify([3, 3, 1]), JSON.stringify(6)),
     );
-
-    const simpleTestCaseDto27 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(9, 3, JSON.stringify([2, 4, 2]), JSON.stringify(4)),
     );
-
     //A * B * C
-    const simpleTestCaseDto28 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         10,
         1,
@@ -559,8 +512,7 @@ export class AppController {
         JSON.stringify(24),
       ),
     );
-
-    const simpleTestCaseDto29 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         10,
         2,
@@ -568,8 +520,7 @@ export class AppController {
         JSON.stringify(18),
       ),
     );
-
-    const simpleTestCaseDto30 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         10,
         3,
@@ -577,9 +528,8 @@ export class AppController {
         JSON.stringify(16),
       ),
     );
-
     //A - B - C
-    const simpleTestCaseDto31 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         11,
         1,
@@ -587,8 +537,7 @@ export class AppController {
         JSON.stringify(-1),
       ),
     );
-
-    const simpleTestCaseDto32 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         11,
         2,
@@ -596,8 +545,7 @@ export class AppController {
         JSON.stringify(0),
       ),
     );
-
-    const simpleTestCaseDto33 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         11,
         3,
@@ -605,8 +553,7 @@ export class AppController {
         JSON.stringify(2),
       ),
     );
-
-    const simpleTEstCaseDemoDto1 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         simpleProblemDtoDemo.problemId,
         1,
@@ -614,8 +561,7 @@ export class AppController {
         JSON.stringify(2),
       ),
     );
-
-    const simpleTEstCaseDemoDto2 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         simpleProblemDtoDemo.problemId,
         2,
@@ -623,8 +569,7 @@ export class AppController {
         JSON.stringify(5),
       ),
     );
-
-    const simpleTEstCaseDemoDto3 = await this.testCaseService.create(
+    await this.testCaseService.create(
       new CreateTestCaseDto(
         simpleProblemDtoDemo.problemId,
         3,
@@ -632,8 +577,7 @@ export class AppController {
         JSON.stringify(4),
       ),
     );
-
-    const simpleSolvedDto1 = await this.solvedService.create(
+    await this.solvedService.create(
       new CreateSolvedDto(
         1,
         'loginId1',
@@ -641,8 +585,7 @@ export class AppController {
         ProgrammingLanguage.JavaScript,
       ),
     );
-
-    const simpleSolvedDto2 = await this.solvedService.create(
+    await this.solvedService.create(
       new CreateSolvedDto(
         2,
         'loginId1',
@@ -650,8 +593,7 @@ export class AppController {
         ProgrammingLanguage.JavaScript,
       ),
     );
-
-    const simpleSolvedDto3 = await this.solvedService.create(
+    await this.solvedService.create(
       new CreateSolvedDto(
         3,
         'loginId1',
@@ -659,8 +601,7 @@ export class AppController {
         ProgrammingLanguage.JavaScript,
       ),
     );
-
-    const simpleSolvedDto4 = await this.solvedService.create(
+    await this.solvedService.create(
       new CreateSolvedDto(
         1,
         'loginId1',
@@ -668,8 +609,7 @@ export class AppController {
         ProgrammingLanguage.JavaScript,
       ),
     );
-
-    const simpleSolvedDto5 = await this.solvedService.create(
+    await this.solvedService.create(
       new CreateSolvedDto(
         2,
         'loginId2',
@@ -677,8 +617,7 @@ export class AppController {
         ProgrammingLanguage.JavaScript,
       ),
     );
-
-    const simpleSolvedDto6 = await this.solvedService.create(
+    await this.solvedService.create(
       new CreateSolvedDto(
         3,
         'loginId2',
@@ -686,8 +625,7 @@ export class AppController {
         ProgrammingLanguage.JavaScript,
       ),
     );
-
-    const simpleSolvedDto7 = await this.solvedService.create(
+    await this.solvedService.create(
       new CreateSolvedDto(
         1,
         'loginId3',
@@ -695,8 +633,7 @@ export class AppController {
         ProgrammingLanguage.JavaScript,
       ),
     );
-
-    const simpleSolvedDto8 = await this.solvedService.create(
+    await this.solvedService.create(
       new CreateSolvedDto(
         2,
         'loginId2',
@@ -704,8 +641,7 @@ export class AppController {
         ProgrammingLanguage.JavaScript,
       ),
     );
-
-    const simpleSolvedDto9 = await this.solvedService.create(
+    await this.solvedService.create(
       new CreateSolvedDto(
         3,
         'loginId3',
@@ -713,7 +649,6 @@ export class AppController {
         ProgrammingLanguage.JavaScript,
       ),
     );
-
     return {
       resultCode: HttpStatus.OK,
     };
