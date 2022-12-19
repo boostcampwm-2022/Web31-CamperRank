@@ -91,8 +91,6 @@ export const gradingController = async (req: any, res: any) => {
       testCaseOutput,
     } = req.body;
 
-    console.log(req.body);
-
     const fileName = uuid();
     const plClassifier = PLClassifier(language);
     const filePath = "./" + fileName + plClassifier.ext;
@@ -105,22 +103,21 @@ export const gradingController = async (req: any, res: any) => {
       {
         maxBuffer: 1024 * 1024,
         timeout: 10000,
+        // uid: 1001,
       }
     );
 
-    const stdout = spawnResult.stdout.toString();
-    const stderr = spawnResult.stderr.toString();
-    const status = spawnResult.status;
-    const signal = spawnResult.signal;
-    const error = spawnResult.error;
+    const {stdout, stderr, status, signal, error} = spawnResult;
     fs.unlinkSync(filePath);
 
-    const strings = stdout.split(IDENTIFY_CODE);
+    // signal에 대한 처리 필요
+
+    const strings = stdout.toString().split(IDENTIFY_CODE);
     const userPrint = strings[0].replace(/\\r\\n/gi, "\n");
     const userAnswer = strings[1].trim();
 
     if (
-      stderr.length === 0 &&
+      stderr.toString().length === 0 &&
       JSON.stringify(testCaseOutput) === JSON.stringify(JSON.parse(userAnswer))
     ) {
       res.status(200).json({
@@ -149,121 +146,6 @@ export const gradingController = async (req: any, res: any) => {
   }
 };
 
-export const startGrade = async function (req: any, res: any) {
-  try {
-    console.log("data", req.body.data);
-    let {
-      solvedId,
-      problemId,
-      userCode,
-      language,
-      testCaseInput,
-      testCaseOutput,
-    } = req.body;
-    let filePath = "";
-    let codeStyle = "";
-    let fileList = [];
-    const fileName = Math.floor(Math.random() * 100000000);
-
-    problemId = problemId || "undefined";
-
-    if (language === "Python") {
-      const pythonText = fs.readFileSync(__dirname + "/python.txt", "utf-8");
-      codeStyle = "python3";
-      filePath = __dirname + "/../../" + fileName + ".py";
-      userCode = "import sys \n\n" + userCode + "\n\n" + pythonText;
-      fileList.push(filePath);
-
-      if (testCaseInput !== undefined) {
-        for (let i = 0; i < testCaseInput.length; i++) {
-          if (i !== 0) {
-            userCode += ",";
-          }
-          userCode += `sys.argv[${i + 1}]`;
-          fileList.push(testCaseInput[i]);
-        }
-      }
-      userCode += ")\nprint('##########')\nprint(answer)";
-    } else if (language === "JavaScript") {
-      codeStyle = "node";
-      filePath = __dirname + "/../../" + fileName + ".js";
-      fileList.push(filePath);
-      userCode += "\n\n" + "let answer = solution(";
-      if (testCaseInput !== undefined) {
-        for (let i = 1; i < testCaseInput.length + 1; i++) {
-          if (i !== 1) {
-            userCode += ",";
-          }
-          userCode += `process.argv[${i + 1}]`;
-          fileList.push(testCaseInput[i - 1]);
-        }
-      }
-      userCode += ")\n\tconsole.log('##########')\n\tconsole.log(answer)";
-    }
-    console.log(userCode);
-
-    fs.writeFileSync(filePath, `${userCode}`);
-
-    const codeResult = spawnSync(codeStyle, fileList, {
-      maxBuffer: 1000,
-      /* timeout 3s */
-      timeout: 3000,
-      // uid: 1001
-    });
-    const resultText = codeResult.stdout.toString();
-    const errText = codeResult.stderr.toString();
-    let solutionText = "";
-    let answerText = "";
-    if (resultText.split("##########\n").length < 2) {
-      solutionText = "";
-      answerText = resultText.split("##########\n")[0];
-    } else {
-      solutionText = resultText.split("##########\n")[0];
-      answerText = resultText.split("##########\n")[1] || "";
-    }
-
-    fs.unlinkSync(filePath);
-
-    if (errText.length > 0 || errText === null) {
-      return res.json({
-        solvedId: solvedId,
-        result: "fail",
-        resultCode: 2000,
-        msg: "채점 실패",
-      });
-    } else {
-      if (answerText == testCaseOutput) {
-        return res.json({
-          solvedId: solvedId,
-          result: "success",
-          userPrint: solutionText,
-          userAnswer: answerText,
-          resultCode: 1000,
-          msg: "정답",
-        });
-      } else {
-        return res.json({
-          solvedId: req.body.data.solvedId,
-          result: "fail",
-          userPrint: solutionText,
-          userAnswer: answerText,
-          resultCode: 1001,
-          msg: "오답",
-        });
-      }
-    }
-  } catch (err) {
-    console.log(err);
-    console.log(`Api - grade problem error\n: ${JSON.stringify(err)}`);
-
-    return res.json({
-      solvedId: req.body.data.solvedId,
-      result: "fail",
-      resultCode: 2000,
-      msg: "채점 실패",
-    });
-  }
-};
 
 export const startDocker = async function (req: any, res: any) {
   try {
