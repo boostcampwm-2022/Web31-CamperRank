@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
+        with:
+          ref: dev
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -28,7 +30,9 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm clean-install
+        run: |
+          cd backend
+          npm clean-install
 
       - name: lint backend source code
         run: npm run lint
@@ -41,6 +45,8 @@ jobs:
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
+        with:
+          ref: dev
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -56,7 +62,9 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm clean-install
+        run: |
+          cd backend
+          npm clean-install
 
       - name: Run test
         run: npm run test
@@ -67,6 +75,8 @@ jobs:
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
+        with:
+          ref: dev
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -82,7 +92,9 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm clean-install
+        run: |
+          cd backend
+          npm clean-install
 
       - name: Run build
         run: npm run build
