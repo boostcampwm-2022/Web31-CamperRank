@@ -35,7 +35,9 @@ jobs:
           npm clean-install
 
       - name: lint backend source code
-        run: npm run lint
+        run: |
+          cd backend
+          npm run lint
 
 
   test:
@@ -67,7 +69,9 @@ jobs:
           npm clean-install
 
       - name: Run test
-        run: npm run test
+        run: |
+          cd backend
+          npm run test
 
   build:
     name: build backend source code
@@ -97,4 +101,6 @@ jobs:
           npm clean-install
 
       - name: Run build
-        run: npm run build
+        run: |
+          cd backend
+          npm run build
