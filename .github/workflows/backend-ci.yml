@@ -7,28 +7,82 @@ on:
     branches: [ main, dev ]
 
 jobs:
-  ci:
-    name: ci backend source code
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-        node-version: [ 16.x ]
-
-    runs-on: ${{ matrix.os }}
-
+  lint:
+    name: lint backend source code
+    runs-on: ubuntu-18.04
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
-        with:
-          ref: dev
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v3
+
+      - name: use cache for dependencies
+        id: cached-backend-dependencies
+        uses: actions/cache@v3
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
-          cache-dependency-path: "./backend/package-lock.json"
-      - run: |
-          cd backend
-          npm install
-          npm test
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: | 
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: lint backend source code
+        run: npm run lint
+
+
+  test:
+    name: ci backend source code
+
+    runs-on: ubuntu-18.04
+    steps:
+      - name: checkout source code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+
+      - name: use cache for dependencies
+        id: cached-backend-dependencies
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: | 
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Run test
+        run: npm run test
+
+  build:
+    name: build backend source code
+    runs-on: ubuntu-18.04
+    steps:
+      - name: checkout source code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+
+      - name: use cache for dependencies
+        id: cached-backend-dependencies
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Run build
+        run: npm run build

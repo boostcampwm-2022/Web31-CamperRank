@@ -101,11 +101,7 @@ describe('UsersService', () => {
       password: hashedPassword,
       userStatus: 0,
     });
-
-    const userRepositorySaveBySpy = jest
-      .spyOn(userRepository, 'save')
-      .mockResolvedValue(mockedUser);
-
+    jest.spyOn(userRepository, 'save').mockResolvedValue(mockedUser);
     const simpleUserDto1 = await userService.create(createUserDto);
 
     // 검색했을 떄 찾은 결과가 있는 경우
@@ -390,14 +386,9 @@ describe('UsersService', () => {
       userStatus: 0,
     });
 
-    const userRepositoryFindOneBySpy1 = jest
-      .spyOn(userRepository, 'findOneBy')
-      .mockResolvedValue(null);
-
+    jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(null);
     jest.spyOn(userRepository, 'save').mockResolvedValue(mockedUser);
-
-    const savedSimpleUserDto = await userService.create(createUserDto);
-
+    await userService.create(createUserDto);
     const userRepositoryFindOneBySpy2 = jest
       .spyOn(userRepository, 'findOneBy')
       .mockResolvedValue(null);
@@ -436,8 +427,7 @@ describe('UsersService', () => {
       .mockResolvedValue(null);
 
     jest.spyOn(userRepository, 'save').mockResolvedValue(mockedUser);
-
-    const savedSimpleUserDto = await userService.create(createUserDto);
+    await userService.create(createUserDto);
 
     // 저장되는 경우
     expect(userRepositoryFindOneBySpy1).toBeCalledWith({
@@ -477,9 +467,7 @@ describe('UsersService', () => {
       .mockResolvedValue(null);
 
     jest.spyOn(userRepository, 'save').mockResolvedValue(mockedUser);
-
-    const savedSimpleUserDto = await userService.create(createUserDto);
-
+    await userService.create(createUserDto);
     const userRepositoryFindOneBySpy2 = jest
       .spyOn(userRepository, 'findOneBy')
       .mockResolvedValue(null);
@@ -514,9 +502,7 @@ describe('UsersService', () => {
       .mockResolvedValue(null);
 
     jest.spyOn(userRepository, 'save').mockResolvedValue(mockedUser);
-
-    const savedSimpleUserDto = await userService.create(createUserDto);
-
+    await userService.create(createUserDto);
     const userRepositoryFindOneBySpy2 = jest
       .spyOn(userRepository, 'findOneBy')
       .mockResolvedValue(null);
@@ -555,9 +541,7 @@ describe('UsersService', () => {
       .mockResolvedValue(null);
 
     jest.spyOn(userRepository, 'save').mockResolvedValue(mockedUser);
-
-    const savedSimpleUserDto = await userService.create(createUserDto);
-
+    await userService.create(createUserDto);
     const userRepositoryFindOneBySpy2 = jest
       .spyOn(userRepository, 'findOneBy')
       .mockResolvedValue(null);
@@ -596,9 +580,7 @@ describe('UsersService', () => {
       .mockResolvedValue(null);
 
     jest.spyOn(userRepository, 'save').mockResolvedValue(mockedUser);
-
-    const savedSimpleUserDto = await userService.create(createUserDto);
-
+    await userService.create(createUserDto);
     const foundSimpleUserDto = await userService.findOneUser({
       userId: null,
     });
@@ -627,9 +609,7 @@ describe('UsersService', () => {
       .mockResolvedValue(null);
 
     jest.spyOn(userRepository, 'save').mockResolvedValue(mockedUser);
-
-    const savedSimpleUserDto = await userService.create(createUserDto);
-
+    await userService.create(createUserDto);
     const foundSimpleUserDto = await userService.findOneUser({
       userId: null,
     });
@@ -658,9 +638,7 @@ describe('UsersService', () => {
       .mockResolvedValue(null);
 
     jest.spyOn(userRepository, 'save').mockResolvedValue(mockedUser);
-
-    const savedSimpleUserDto = await userService.create(createUserDto);
-
+    await userService.create(createUserDto);
     const foundSimpleUserDto = await userService.findOneUser({});
 
     // 저장되는 경우
@@ -687,9 +665,7 @@ describe('UsersService', () => {
       .mockResolvedValue(null);
 
     jest.spyOn(userRepository, 'save').mockResolvedValue(mockedUser);
-
-    const savedSimpleUserDto = await userService.create(createUserDto);
-
+    await userService.create(createUserDto);
     const foundSimpleUserDto = await userService.findOneUser({
       userId: undefined,
       loginId: undefined,
@@ -718,9 +694,7 @@ describe('UsersService', () => {
       .mockResolvedValue(null);
 
     jest.spyOn(userRepository, 'save').mockResolvedValue(mockedUser);
-
-    const savedSimpleUserDto = await userService.create(createUserDto);
-
+    await userService.create(createUserDto);
     const foundSimpleUserDto = await userService.findOneUser({
       userId: null,
       loginId: null,
