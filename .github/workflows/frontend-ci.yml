@@ -10,9 +10,6 @@ jobs:
   lint:
     name: lint backend source code
     runs-on: ubuntu-18.04
-    defaults:
-      run:
-        working-directory: './frontend/**'
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
@@ -31,30 +28,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-#      - name: Install Dependencies
-#        if: steps.cache.outputs.cache-hit != 'true'
-#        run: |
-#          cd frontend
-#          yarn install
-#
-#      - name: lint frontend source code
-#        run: |
-#          cd frontend
-#          yarn run lint
-
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install
+        run: |
+          cd frontend
+          yarn install
 
       - name: lint frontend source code
-        run: yarn run lint
+        run: |
+          cd frontend
+          yarn run lint
 
   test:
     name: ci frontend source code
     runs-on: ubuntu-18.04
-    defaults:
-      run:
-        working-directory: './frontend/**'
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
@@ -73,30 +60,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-#      - name: Install Dependencies
-#        if: steps.cache.outputs.cache-hit != 'true'
-#        run: |
-#          cd frontend
-#          yarn install
-#
-#      - name: Run test
-#        run: |
-#          cd frontend
-#          yarn run test
-
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install
+        run: |
+          cd frontend
+          yarn install
 
       - name: Run test
-        run: yarn run test
+        run: |
+          cd frontend
+          yarn run test
 
   build:
     name: ci frontend source code
     runs-on: ubuntu-18.04
-    defaults:
-      run:
-        working-directory: './frontend/**'
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
@@ -115,20 +92,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-#      - name: Install Dependencies
-#        if: steps.cache.outputs.cache-hit != 'true'
-#        run: |
-#          cd frontend
-#          yarn install
-#
-#      - name: Run test
-#        run: |
-#          cd frontend
-#          yarn build
-
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install
+        run: |
+          cd frontend
+          yarn install
 
       - name: Run test
-        run: yarn build
+        run: |
+          cd frontend
+          yarn build

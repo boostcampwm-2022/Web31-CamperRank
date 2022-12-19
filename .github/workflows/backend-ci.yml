@@ -10,9 +10,6 @@ jobs:
   lint:
     name: lint backend source code
     runs-on: ubuntu-18.04
-    defaults:
-      run:
-        working-directory: './backend/**'
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
@@ -33,18 +30,19 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm clean-install
+        run: |
+          cd backend
+          npm clean-install
 
       - name: lint backend source code
-        run: npm run lint
+        run: |
+          cd backend
+          npm run lint
 
 
   test:
     name: ci backend source code
     runs-on: ubuntu-18.04
-    defaults:
-      run:
-        working-directory: './backend/**'
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
@@ -65,17 +63,18 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm clean-install
+        run: |
+          cd backend
+          npm clean-install
 
       - name: Run test
-        run: npm run test
+        run: |
+          cd backend
+          npm run test
 
   build:
     name: build backend source code
     runs-on: ubuntu-18.04
-    defaults:
-      run:
-        working-directory: './backend/**'
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
@@ -96,7 +95,11 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm clean-install
+        run: |
+          cd backend
+          npm clean-install
 
       - name: Run build
-        run: npm run build
+        run: |
+          cd backend
+          npm run build
