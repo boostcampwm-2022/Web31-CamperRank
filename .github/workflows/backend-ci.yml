@@ -42,7 +42,6 @@ jobs:
 
   test:
     name: ci backend source code
-
     runs-on: ubuntu-18.04
     steps:
       - name: checkout source code

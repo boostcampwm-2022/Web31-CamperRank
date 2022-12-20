@@ -7,28 +7,98 @@ on:
     branches: [ main, dev ]
 
 jobs:
-  ci:
-    name: ci frontend source code
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-        node-version: [ 16.x ]
-
-    runs-on: ${{ matrix.os }}
-
+  lint:
+    name: lint backend source code
+    runs-on: ubuntu-18.04
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
         with:
           ref: dev
 
-      - name: Cache yarn dependencies
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+
+      - name: use cache for dependencies
+        id: cached-backend-dependencies
         uses: actions/cache@v3
-        id: yarn-cache
         with:
-          path: node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock')}}
-      - run: |
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
           cd frontend
           yarn install
-          yarn test
+
+      - name: lint frontend source code
+        run: |
+          cd frontend
+          yarn run lint
+
+  test:
+    name: ci frontend source code
+    runs-on: ubuntu-18.04
+    steps:
+      - name: checkout source code
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+
+      - name: use cache for dependencies
+        id: cached-frontend-dependencies
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          cd frontend
+          yarn install
+
+      - name: Run test
+        run: |
+          cd frontend
+          yarn run test
+
+  build:
+    name: ci frontend source code
+    runs-on: ubuntu-18.04
+    steps:
+      - name: checkout source code
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+
+      - name: use cache for dependencies
+        id: cached-frontend-dependencies
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          cd frontend
+          yarn install
+
+      - name: Run test
+        run: |
+          cd frontend
+          yarn build

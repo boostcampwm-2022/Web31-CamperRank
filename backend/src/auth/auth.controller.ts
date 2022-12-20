@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards, Req } from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthUserDto } from '../users/dto/auth-user.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -15,7 +15,7 @@ export class AuthController {
   // jwt 인증을 위한 useGuards + AuthGuard .. passport 활용
   // 토큰이 없거나 일치하지 않으면 401
   @Post('/jwtLogin')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard('jwt'))
   authTest(@Req() req) {
     const userId = req.user.loginId;
     return { userId: userId };
