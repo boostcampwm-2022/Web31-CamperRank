@@ -32,7 +32,7 @@ const FooterWrapper = styled.div`
   height: 16rem;
 `;
 
-export const Sign = () => {
+const Sign = () => {
   const { pathname } = useLocation();
   return (
     <MainWrapper>
@@ -49,3 +49,5 @@ export const Sign = () => {
     </MainWrapper>
   );
 };
+
+export default Sign;

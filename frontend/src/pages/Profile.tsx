@@ -29,7 +29,7 @@ const FooterWrapper = styled.div`
   min-height: 20rem;
 `;
 
-export const Profile = () => {
+const Profile = () => {
   return (
     <Wrapper>
       <HeaderWrapper>
@@ -42,3 +42,5 @@ export const Profile = () => {
     </Wrapper>
   );
 };
+
+export default Profile;

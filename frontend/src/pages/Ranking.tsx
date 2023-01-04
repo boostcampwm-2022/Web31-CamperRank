@@ -58,7 +58,7 @@ const compare = (a: UserSolvedInfo, b: UserSolvedInfo) =>
 
 const URL = import.meta.env.VITE_SERVER_URL;
 
-export const Ranking = () => {
+const Ranking = () => {
   const { user } = useUserState();
   const { isLoggedIn } = useMemo(() => user, [user, user.isLoggedIn]);
   const [userList, setUserList] = useState<Array<UserTableInfo>>([]);
@@ -106,3 +106,5 @@ export const Ranking = () => {
     </Wrapper>
   );
 };
+
+export default Ranking;
