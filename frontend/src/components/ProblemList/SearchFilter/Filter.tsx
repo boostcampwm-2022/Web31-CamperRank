@@ -50,6 +50,9 @@ const Filter = ({ content }: FilterType) => {
       setOpen(false);
     }
   };
+  const handleMouseEnter = () => {
+    const modalComponent = import('./Modal');
+  };
   const Modal = lazy(() => import('./Modal'));
 
   useEffect(() => {
@@ -60,7 +63,11 @@ const Filter = ({ content }: FilterType) => {
   }, []);
 
   return (
-    <FilterWrapper ref={filterRef} onClick={() => setOpen(!open)}>
+    <FilterWrapper
+      ref={filterRef}
+      onMouseEnter={handleMouseEnter}
+      onClick={() => setOpen(!open)}
+    >
       {name === '상태' ? solved : level}
       <ModalButton
         src={SelectButton}
