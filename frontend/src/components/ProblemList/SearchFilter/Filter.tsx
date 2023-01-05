@@ -1,7 +1,13 @@
-import React, { useState, useRef, useEffect, memo } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  memo,
+  lazy,
+  Suspense,
+} from 'react';
 import styled from 'styled-components';
 import { SelectButton } from '../../../assets/icons';
-import Modal from './Modal';
 import { FilterType } from '@types';
 import { useRecoilState } from 'recoil';
 import { filterState } from '../../../recoils';
@@ -44,6 +50,7 @@ const Filter = ({ content }: FilterType) => {
       setOpen(false);
     }
   };
+  const Modal = lazy(() => import('./Modal'));
 
   useEffect(() => {
     window.addEventListener('click', handleClickOutside);
@@ -59,13 +66,15 @@ const Filter = ({ content }: FilterType) => {
         src={SelectButton}
         alt={'필터 드롭다운 이미지'}
       ></ModalButton>
-      {open && (
-        <Modal
-          onClick={() => setOpen(!open)}
-          name={name}
-          elements={elements}
-        ></Modal>
-      )}
+      <Suspense fallback={null}>
+        {open && (
+          <Modal
+            onClick={() => setOpen(!open)}
+            name={name}
+            elements={elements}
+          ></Modal>
+        )}
+      </Suspense>
     </FilterWrapper>
   );
 };
