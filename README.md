@@ -101,8 +101,7 @@ yarn start
 온라인으로 PS 문제를 해결할 수 있습니다.
 <br>
 <br>
-<img src="https://user-images.githubusercontent.com/62196278/
-208003205-8a58dac4-3a5d-43e4-b69b-839a43749a98.gif" />
+<img src="https://user-images.githubusercontent.com/62196278/208003205-8a58dac4-3a5d-43e4-b69b-839a43749a98.gif"/>
 공동 편집 기능으로 같이 코드를 편집할 수 있습니다.
 <br>
 <br>
