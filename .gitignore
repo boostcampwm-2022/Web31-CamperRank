@@ -1,9 +1,4 @@
 ### VisualStudioCode template
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 *.code-workspace
 
 # Local History for Visual Studio Code
@@ -194,7 +189,6 @@ dist
 .tern-port
 
 # Stores VSCode versions used for testing VSCode extensions
-.vscode-test
 
 # yarn v2
 .yarn/cache
@@ -208,3 +202,7 @@ dist
 .flaskenv*
 !.env.project
 !.env.vault
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
+branch_structure.json
